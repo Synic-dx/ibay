@@ -1,8 +1,7 @@
 "use server";
 /**
  * FEATURE: Safety: reports and admin moderation
- * WHAT: report() lets anyone signed in report a listing, message or person
- *       (CAPTCHA first). Admin actions: hide / unhide a listing, ban / unban a
+ * WHAT: report() lets anyone signed in report a listing, message or person. Admin actions: hide / unhide a listing, ban / unban a
  *       person, and resolve a report. Admin actions check role = 'admin'.
  */
 import { revalidatePath } from "next/cache";
@@ -10,15 +9,13 @@ import { z } from "zod";
 import { getViewer } from "@/lib/auth/session";
 import { db } from "@/lib/supabase/server";
 import { fail, invalid, ok, type ActionResult } from "@/lib/action-result";
-import { checkCaptcha, rateLimit } from "@/lib/security/guard";
+import { rateLimit } from "@/lib/security/guard";
 import { reportSchema } from "@/lib/validation/market";
 
-/** File a report (CAPTCHA, then Zod, then a rate limit). */
+/** File a report (Zod, then a rate limit). */
 export async function report(input: z.input<typeof reportSchema>): Promise<ActionResult<null>> {
   const viewer = await getViewer();
   if (!viewer) return fail("Sign in to report.", undefined, "AUTH");
-  const capErr = await checkCaptcha(input.captchaToken, "report");
-  if (capErr) return fail(capErr, { captchaToken: capErr }, "CAPTCHA");
   const parsed = reportSchema.safeParse(input);
   if (!parsed.success) return invalid(parsed.error);
   if (!(await rateLimit(`report:${viewer.id}`, 3600, 10))) return fail("Too many reports in an hour.");

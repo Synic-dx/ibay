@@ -2,7 +2,7 @@
 /**
  * FEATURE: Requests UI [RUBRIC:CRUD-CREATE] [RUBRIC:CRUD-UPDATE] [RUBRIC:VALIDATION-CLIENT]
  * RequestSheet  post or edit a request: text (5 to 120), category, budget
- *               (up to 40), needed-by chips (today to +30 days), CAPTCHA on new posts
+ *               (up to 40), needed-by chips (today to +30 days)
  * VoteButton    "I need this too"
  * ReplySheet    "I have this": description, price, optional photo
  * OwnerBar      Edit / Found it / Delete (confirm + Undo) for the request owner
@@ -15,7 +15,6 @@ import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
 import { Sheet } from "@/components/ui/sheet";
 import { useApp } from "@/components/app-context";
-import { Captcha } from "@/features/captcha/captcha";
 import { useNoValidate } from "@/lib/hooks/use-novalidate";
 import { dayLabel, istDay } from "@/lib/format";
 import { requestSchema, type RequestInput } from "@/lib/validation/market";
@@ -39,8 +38,6 @@ export function RequestSheet({
 }) {
   const router = useRouter();
   const noValidate = useNoValidate();
-  const [token, setToken] = useState<string | null>(null);
-  const [capErr, setCapErr] = useState<string | null>(null);
   const [pending, start] = useTransition();
   const form = useForm<RequestInput>({
     resolver: noValidate ? undefined : zodResolver(requestSchema),
@@ -55,12 +52,10 @@ export function RequestSheet({
 
   const onSubmit = handleSubmit((v) =>
     start(async () => {
-      if (!editId && !token && !noValidate) return setCapErr("Please complete the security check.");
-      const r = editId ? await updateRequest(editId, v) : await createRequest({ ...v, captchaToken: token ?? undefined });
+      const r = editId ? await updateRequest(editId, v) : await createRequest(v);
       if (!r.ok) {
         for (const [k, m] of Object.entries(r.fieldErrors ?? {})) {
-          if (k === "captchaToken") setCapErr(m);
-          else setError(k as keyof RequestInput, { message: m });
+          setError(k as keyof RequestInput, { message: m });
         }
         if (!r.fieldErrors) toast.error(r.formError);
         return;
@@ -142,7 +137,6 @@ export function RequestSheet({
             </span>
           )}
         </div>
-        {!editId && <Captcha onVerify={(t) => (setToken(t), t && setCapErr(null))} error={capErr} id="req-captcha" />}
         <button className="btn block" type="submit" disabled={pending}>
           {pending ? <span className="spin" /> : <Icon name="send" />}
           {editId ? "Save changes" : "Post request"}

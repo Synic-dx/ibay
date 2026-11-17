@@ -6,8 +6,7 @@
  *   - the CAPTCHA is checked first, so bots can't make us send OTP emails
  *   - the domain is checked on the server (never trust the browser)
  *   - only a bcrypt hash of the code is stored; codes expire in 10 minutes
- *   - 5 wrong tries lock that code; resend has a 30 s cooldown and needs the
- *     CAPTCHA again after 2 resends
+ *   - 5 wrong tries lock that code; resend has a 30 s cooldown
  *   - rate limits per email (5 codes / 15 min) and per IP (20 / 15 min)
  *   - the session is an httpOnly, sameSite=lax cookie set by Auth.js
  */
@@ -26,13 +25,11 @@ import { sendOtpEmail } from "@/lib/email";
 
 const OTP_TTL_MS = 10 * 60 * 1000;
 const RESEND_COOLDOWN_MS = 30 * 1000;
-const FREE_RESENDS = 2;
 
 /**
  * Step 1: send a sign-in code.
  * @param input email (+ name when creating an account) and the CAPTCHA token
  * @param resend true when the user tapped "Resend"
- * @returns { needsCaptcha } on resend once the free resends are used up
  */
 export async function requestOtp(input: LoginInput, resend = false): Promise<ActionResult<{ devCode?: string; cooldown: number }>> {
   // 1. Validate the email shape and domain on the server.
@@ -46,17 +43,16 @@ export async function requestOtp(input: LoginInput, resend = false): Promise<Act
   const okIp = await rateLimit(`otp:ip:${ip}`, 900, 20);
   if (!okEmail || !okIp) return fail("Too many codes requested. Wait 15 minutes and try again.", undefined, "RATE");
 
-  // 3. Resend rules: 30 s cooldown, and the CAPTCHA again after 2 resends.
+  // 3. Resend rules: 30 s cooldown. The CAPTCHA is only checked on the first request.
   const { data: last } = await db().from("email_otps").select("id,created_at,resends").eq("email", email).is("used_at", null).order("created_at", { ascending: false }).limit(1).maybeSingle();
   const resends = resend && last ? last.resends + 1 : 0;
   if (resend && last && Date.now() - new Date(last.created_at).getTime() < RESEND_COOLDOWN_MS) {
     return fail("Wait 30 seconds before asking for another code.", undefined, "COOLDOWN");
   }
-  const captchaNeeded = !resend || resends > FREE_RESENDS;
-  if (captchaNeeded) {
+  if (!resend) {
     // [RUBRIC:CAPTCHA] verified before any database write or email.
-    const capErr = await checkCaptcha(captchaToken, resend ? "otp-resend" : "otp-request");
-    if (capErr) return fail(capErr, { captchaToken: capErr }, resend ? "CAPTCHA_RESEND" : "CAPTCHA");
+    const capErr = await checkCaptcha(captchaToken, "otp-request");
+    if (capErr) return fail(capErr, { captchaToken: capErr }, "CAPTCHA");
   }
 
   // 4. Make a code, store only its hash.

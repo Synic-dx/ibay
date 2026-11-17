@@ -1,7 +1,7 @@
 "use server";
 /**
- * FEATURE: Requests CRUD ("I am looking for a...") [RUBRIC:CRUD-CREATE] [RUBRIC:CRUD-UPDATE] [RUBRIC:CRUD-DELETE] [RUBRIC:CAPTCHA]
- * WHAT: Owners post (CAPTCHA), edit text / budget / needed-by, close ("Found it"),
+ * FEATURE: Requests CRUD ("I am looking for a...") [RUBRIC:CRUD-CREATE] [RUBRIC:CRUD-UPDATE] [RUBRIC:CRUD-DELETE]
+ * WHAT: Owners post, edit text / budget / needed-by, close ("Found it"),
  *       delete (with Undo) a request. Anyone signed in can upvote and reply
  *       "I have this" with a photo and price; repliers can edit or delete their reply.
  * WHO: every action re-checks the session and ownership on the server.
@@ -12,7 +12,7 @@ import { getViewer } from "@/lib/auth/session";
 import { db } from "@/lib/supabase/server";
 import { fail, invalid, ok, type ActionResult } from "@/lib/action-result";
 import { friendlyDbError } from "@/lib/db-errors";
-import { checkCaptcha, rateLimit } from "@/lib/security/guard";
+import { rateLimit } from "@/lib/security/guard";
 import { replySchema, requestSchema, type RequestInput } from "@/lib/validation/market";
 import { notify, startConversation } from "@/features/chat/service";
 
@@ -29,12 +29,10 @@ async function ownRequest(id: string, viewerId: string) {
   return data && data.author_id === viewerId ? data : null;
 }
 
-/** Posts a request (CAPTCHA first, then the same Zod schema as the form). */
+/** Posts a request (validated with the same Zod schema as the form). */
 export async function createRequest(input: RequestInput): Promise<ActionResult<{ id: string }>> {
   const viewer = await getViewer();
   if (!viewer) return fail("Sign in to post a request.", undefined, "AUTH");
-  const capErr = await checkCaptcha(input.captchaToken, "post-request");
-  if (capErr) return fail(capErr, { captchaToken: capErr }, "CAPTCHA");
   const parsed = requestSchema.safeParse(input);
   if (!parsed.success) return invalid(parsed.error);
   if (!(await rateLimit(`request:${viewer.id}`, 3600, 10))) return fail("You have posted a lot in the last hour. Try again later.");

@@ -253,8 +253,6 @@ function OtpStep({
   const [digits, setDigits] = useState(["", "", "", "", "", ""]);
   const [err, setErr] = useState<string | null>(null);
   const [cool, setCool] = useState(30);
-  const [needCap, setNeedCap] = useState(false);
-  const [token, setToken] = useState<string | null>(null);
   const [pending, start] = useTransition();
   const refs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -303,14 +301,12 @@ function OtpStep({
 
   const resend = () =>
     start(async () => {
-      const r = await requestOtp({ email, captchaToken: token ?? undefined }, true);
+      const r = await requestOtp({ email }, true);
       if (!r.ok) {
-        if (r.code === "CAPTCHA_RESEND") setNeedCap(true);
         setErr(r.formError ?? "Couldn't resend.");
         return;
       }
       setCool(30);
-      setNeedCap(false);
       toast("New code sent");
     });
 
@@ -357,7 +353,6 @@ function OtpStep({
       <button type="button" className="btn block" onClick={() => verify(digits.join(""))} disabled={pending}>
         {pending ? <span className="spin" /> : null}Verify
       </button>
-      {needCap && <Captcha onVerify={setToken} id="resend-captcha" />}
       <div className="between sm">
         <span className="faint">Expires in 10 min</span>
         <button type="button" className="btn quiet small" onClick={resend} disabled={cool > 0 || pending}>

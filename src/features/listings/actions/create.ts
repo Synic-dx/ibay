@@ -1,9 +1,9 @@
 "use server";
 /**
- * FEATURE: Create a listing (the "C" in CRUD) [RUBRIC:CRUD-CREATE] [RUBRIC:CAPTCHA] [RUBRIC:VALIDATION-SERVER]
+ * FEATURE: Create a listing (the "C" in CRUD) [RUBRIC:CRUD-CREATE] [RUBRIC:VALIDATION-SERVER]
  * WHAT: Saves the 3-step sell form. The new listing appears in search at once.
  * WHO CAN USE IT: signed-in, not banned students (10 new listings an hour).
- * FLOW: session -> CAPTCHA -> Zod (same schema as the form) -> rate limit ->
+ * FLOW: session -> Zod (same schema as the form) -> rate limit ->
  *       check the photos really uploaded -> insert listing + photos + audit row
  *       -> refresh home/browse/My listings -> the form redirects to the item page.
  */
@@ -11,7 +11,7 @@ import { getViewer } from "@/lib/auth/session";
 import { db } from "@/lib/supabase/server";
 import { fail, invalid, ok, type ActionResult } from "@/lib/action-result";
 import { friendlyDbError } from "@/lib/db-errors";
-import { checkCaptcha, rateLimit } from "@/lib/security/guard";
+import { rateLimit } from "@/lib/security/guard";
 import { verifyPhotos } from "@/lib/uploads";
 import { listingSchema, type ListingInput } from "@/lib/validation/listing";
 import { columnsFor, refreshListingPages } from "./shared";
@@ -25,10 +25,6 @@ export async function createListing(input: ListingInput): Promise<ActionResult<{
   // 1. Make sure the user is signed in.
   const viewer = await getViewer();
   if (!viewer) return fail("Please sign in again.", undefined, "AUTH");
-
-  // 2. Check the CAPTCHA token first (stops spam posts), before any database work.
-  const capErr = await checkCaptcha(input.captchaToken, "create-listing");
-  if (capErr) return fail(capErr, { captchaToken: capErr }, "CAPTCHA");
 
   // 3. Validate again on the server with the same schema (never trust the browser).
   const parsed = listingSchema.safeParse(input);

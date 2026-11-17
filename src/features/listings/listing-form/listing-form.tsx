@@ -3,7 +3,7 @@
  * FEATURE: The 3-step sell / edit form [RUBRIC:CRUD-CREATE] [RUBRIC:CRUD-UPDATE] [RUBRIC:VALIDATION-CLIENT]
  * WHAT: Step 1 deal type, photos, title (category guessed from the title);
  *       step 2 price, original price, purchase month, size and specs;
- *       step 3 condition, description, bundle, live preview, CAPTCHA (new listings).
+ *       step 3 condition, description, bundle, live preview.
  * EDIT MODE: the same form prefilled, with locked fields and a short reason,
  *       the edit history and a red "Delete listing" danger zone.
  * VALIDATION: React Hook Form + the shared Zod schema. Errors show on blur and
@@ -19,7 +19,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
 import { useApp } from "@/components/app-context";
-import { Captcha } from "@/features/captcha/captcha";
 import { useNoValidate } from "@/lib/hooks/use-novalidate";
 import { ago, ageMonths, ageText, ageTone, MONTHS, unitWord } from "@/lib/format";
 import {
@@ -80,8 +79,6 @@ export function ListingForm({ categories, initial, edit }: { categories: Categor
   const { viewer } = useApp();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [pending, start] = useTransition();
-  const [token, setToken] = useState<string | null>(null);
-  const [capReset, setCapReset] = useState(0);
   const [formErr, setFormErr] = useState<string | null>(null);
   const [pickCat, setPickCat] = useState(false);
   const [delOpen, setDelOpen] = useState(false);
@@ -148,18 +145,13 @@ export function ListingForm({ categories, initial, edit }: { categories: Categor
           toast("Please fix the highlighted fields");
           return;
         }
-        if (!edit && !token) {
-          setError("captchaToken", { message: "Please complete the security check." });
-          return;
-        }
       }
-      const values = { ...getValues(), categoryId: catId || getValues().categoryId, captchaToken: noValidate ? undefined : (token ?? undefined) } as ListingInput;
+      const values = { ...getValues(), categoryId: catId || getValues().categoryId } as ListingInput;
       const r = edit ? await updateListing(edit.id, values) : await createListing(values);
       if (!r.ok) {
         // [RUBRIC:VALIDATION-SERVER] map the server's field errors onto the same inputs.
         const fe = r.fieldErrors ?? {};
         for (const [k, m] of Object.entries(fe)) setError(k as FieldPath<Values>, { message: m });
-        if (fe.captchaToken) setCapReset((n) => n + 1);
         const keys = Object.keys(fe);
         if (keys.some((k) => STEP_FIELDS[1].includes(k))) setStep(1);
         else if (keys.some((k) => STEP_FIELDS[2].includes(k))) setStep(2);
@@ -620,15 +612,6 @@ export function ListingForm({ categories, initial, edit }: { categories: Categor
                   {viewer?.room ? `, room ${viewer.room}` : ""}. Change it in your profile.
                 </span>
               </div>
-              {!edit && (
-                <div className="field">
-                  <span className="label">
-                    <Icon name="shield" />
-                    Security check
-                  </span>
-                  <Captcha onVerify={(tk) => (setToken(tk), tk && form.clearErrors("captchaToken" as FieldPath<Values>))} resetKey={capReset} error={err("captchaToken")} id="post-captcha" />
-                </div>
-              )}
               {edit && edit.history.length > 0 && (
                 <div className="panel pad">
                   <h3 style={{ marginBottom: 6 }}>
