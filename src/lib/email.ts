@@ -31,6 +31,8 @@ export async function sendOtpEmail(to: string, code: string): Promise<boolean> {
       <p style="font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;letter-spacing:.2em;margin:8px 0">${code}</p>
       <p style="font-size:13px;color:#3F6068">It expires in 10 minutes. If you didn't ask for it, you can ignore this email.</p>`),
   });
+  // WHY: log Resend's reason (e.g. "domain is not verified") so setup problems are easy to spot.
+  if (error) console.error(`[i-bay] Resend could not send the sign-in code from ${env.resendFrom}:`, error.message);
   return !error;
 }
 

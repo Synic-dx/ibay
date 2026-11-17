@@ -20,7 +20,7 @@ import { plumeDelta } from "@/lib/plume";
 import { PhotoTile } from "@/features/listings/components/parts";
 import { useOpenChat } from "@/features/chat/use-open-chat";
 import { advanceDeal, rateDeal } from "./actions";
-import { canRate, stagesFor, type Deal } from "./queries";
+import { canRate, stagesFor, type Deal } from "./stages";
 
 const ANCH: [number, string][] = [[-10, "Terrible"], [-5, "Bad"], [0, "Okay"], [5, "Good"], [10, "Perfect"]];
 const TAGS_POS = ["On time", "As described", "Friendly", "Fair price", "Returned in good shape"];

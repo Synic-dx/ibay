@@ -20,6 +20,8 @@ const nextConfig: NextConfig = {
     ],
   },
   turbopack: {
+    // WHY: a package-lock.json higher up (in the user folder) confused Turbopack about the project root.
+    root: __dirname,
     rules: {
       "*.css": {
         loaders: ["@tailwindcss/turbopack"],
