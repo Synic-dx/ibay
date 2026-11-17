@@ -1,0 +1,101 @@
+/**
+ * App-only additions on top of the prototype CSS: things a real app needs that
+ * a click-through prototype did not (links styled as cards, toasts from sonner,
+ * loading skeletons, the dev CAPTCHA banner, the demo-mode pill, admin bits).
+ * Everything uses the same tokens, so light and dark themes keep working.
+ */
+
+/* Cards and rows are real links in the app; keep their text colour. */
+a.pc, a.lrow, a.tile, a.ctile, a.story, a.moment, a.hcard, a.slide, a.dl, a.thr, a.dk-row, a.lchip,
+a.er-ph, a.er-t, a.sellerc, a.mini, a.ctxbar, a.dk-ctx, a.tcell, a.brand, a.dact-b, a.dloc, a.spill,
+a.panel, a.vp, a.rqlink, a.plain { color: inherit; }
+a.pc:hover, a.lrow:hover { text-decoration: none; }
+
+/* The app shell wraps every page (the prototype used #shell). */
+#shell { min-height: 100dvh; }
+body { background: var(--bg); }
+
+/* Toasts (sonner) styled like the prototype's dark pill. */
+.ibay-toast {
+  background: #0b1e22 !important; color: #fff !important; border: 0 !important; border-radius: 16px !important;
+  box-shadow: var(--shg) !important; font-family: var(--font-poppins), Poppins, system-ui, sans-serif !important;
+  font-size: 13px !important; padding: 11px 16px !important;
+}
+[data-theme=dark] .ibay-toast { background: #e6ecee !important; color: #0f1314 !important; }
+.ibay-toast [data-button] { background: transparent !important; color: var(--mint) !important; font-weight: 600 !important; }
+[data-theme=dark] .ibay-toast [data-button] { color: #02637a !important; }
+
+/* Loading skeletons. */
+.sk { background: linear-gradient(90deg, var(--sunken) 25%, var(--surface-2) 50%, var(--sunken) 75%); background-size: 200% 100%; animation: sk 1.2s infinite; border-radius: 14px; }
+@keyframes sk { to { background-position: -200% 0; } }
+
+/* Yellow banner shown when CAPTCHA_PROVIDER=off in development. */
+.capoff { display: flex; gap: 8px; align-items: center; padding: 10px 12px; border-radius: 12px; background: var(--warn-soft); color: var(--warn-ink); font-size: 12.5px; font-weight: 600; }
+.caperr { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border-radius: 12px; background: var(--bad-soft); color: var(--bad); font-size: 12.5px; }
+
+/* "Demo mode" pill in the header. */
+.demopill { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-jetbrains), monospace; font-size: 9.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn-ink); white-space: nowrap; }
+
+/* Form helpers. */
+.fhint { font-size: 12px; color: var(--ink-3); display: flex; justify-content: space-between; gap: 8px; }
+.fhint .cnt-txt { font-family: var(--font-jetbrains), monospace; }
+.input[aria-invalid=true] { box-shadow: var(--shw), 0 0 0 2px var(--bad) !important; }
+.formerr { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; background: var(--bad-soft); color: var(--bad); font-size: 13px; font-weight: 500; }
+.spin { width: 16px; height: 16px; border-radius: 99px; border: 2.5px solid currentColor; border-right-color: transparent; animation: spin .7s linear infinite; display: inline-block; }
+.locked { display: flex; align-items: center; gap: 4px; font-size: 11.5px; color: var(--ink-3); }
+
+/* Photo reorder thumbnails in the sell form. */
+.thumbs .th { position: relative; width: 84px; height: 84px; border-radius: 14px; overflow: hidden; background: var(--photo); box-shadow: var(--shr); touch-action: none; cursor: grab; }
+.thumbs .th img { width: 100%; height: 100%; object-fit: cover; }
+.thumbs .th .rm { position: absolute; top: 4px; right: 4px; width: 24px; height: 24px; border-radius: 99px; background: rgba(0,0,0,.6); color: #fff; display: grid; place-items: center; }
+.thumbs .th .cv { position: absolute; left: 4px; bottom: 4px; }
+
+/* Bulk action bar on My listings. */
+.bulkbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; border-radius: 16px; background: var(--brand-soft); color: var(--brand-ink); font-weight: 600; font-size: 13px; margin-bottom: 10px; }
+.tbl input[type=checkbox], .mcards input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--brand); }
+.pager { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 12px; font-size: 13px; color: var(--ink-2); }
+
+/* Mayu tool-result cards stay inside the bubble. */
+.bm .mini { color: inherit; }
+.bm a { text-decoration: underline; }
+
+/* Visually hidden but readable by screen readers. */
+.vh { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Filter chips that can be removed. */
+.fchip { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 0 6px 0 12px; border-radius: 999px; background: var(--brand-soft); color: var(--brand-ink); font-size: 12.5px; font-weight: 600; }
+.fchip button { width: 22px; height: 22px; border-radius: 99px; display: grid; place-items: center; }
+.fchip button:hover { background: rgba(0,0,0,.08); }
+
+/* Keep fixed bottom bars above the iOS home indicator and give pages room for them. */
+@media (max-width: 1079px) { .withtabs { padding-bottom: calc(104px + var(--safe-b)); } }
+
+/* Product cards: the title link stretches over the whole card; the heart stays clickable on top. */
+.pc .tt a { color: inherit; }
+.pc .tt a::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.pc .heart { z-index: 2; }
+.pc .tt a:focus-visible { box-shadow: none; }
+.pc:has(.tt a:focus-visible) { box-shadow: var(--shr), var(--focus); }
+.ph .ticket { pointer-events: none; }
+.ph img.fill { position: absolute; inset: 0; margin: auto; }
+
+/* Category picker in the desktop search (Radix DropdownMenu renders it in a portal). */
+[data-radix-popper-content-wrapper] .dsc-m { position: static; display: grid; animation: mpop .16s cubic-bezier(.2,.9,.3,1); }
+.dsc-b[data-state=open] { background: var(--sunken); }
+.dsc-b[data-state=open] .dsc-chev { transform: rotate(180deg); }
+.dsc-i[data-highlighted] { background: var(--sunken); outline: none; }
+.dsc-i[data-state=checked] { background: var(--brand-soft); color: var(--brand-ink); font-weight: 600; }
+.dsc-i[data-state=checked] .icon { color: var(--brand-ink); }
+.dmenu a { text-decoration: none; }
+.dcats a { white-space: nowrap; font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: 99px; display: flex; align-items: center; gap: 5px; color: var(--ink-2); }
+.dcats a:hover { background: var(--sunken); color: var(--ink); }
+.dcats a.on { background: var(--brand-soft); color: var(--brand-ink); }
+.dcats a.dall { background: var(--brand); color: var(--on-brand); margin-right: 8px; font-weight: 700; }
+@media (max-width: 1079px) { .dsc-m { display: grid; grid-template-columns: repeat(2, 1fr); width: min(92vw, 420px); background: var(--surface); border-radius: 18px; padding: 8px; box-shadow: var(--shg); } }
+
+/* Theme toggle on the item gallery sits in the top-right corner like the other round buttons. */
+.gal .fbtn.thm { right: 12px; }
+.vcard .vc-buy > a.btn { display: flex; }
+
+/* My listings has five stat tiles on desktop. */
+@media (min-width: 1080px) { .stats4 { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; } }
