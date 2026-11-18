@@ -1,7 +1,7 @@
 /**
  * FEATURE: Root layout
  * WHAT: Fonts (Poppins for UI, JetBrains Mono for labels and numbers), theme
- *       (next-themes on data-theme, system default, no flash), toasts, and the
+ *       (next-themes on data-theme, light by default; dark only after the toggle; no flash), toasts, and the
  *       client app context (who is signed in, header counts, feature flags).
  */
 import type { Metadata, Viewport } from "next";
@@ -29,10 +29,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#02505F" },
-    { media: "(prefers-color-scheme: dark)", color: "#0F1314" },
-  ],
+  themeColor: "#02505F",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
@@ -45,7 +42,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={`${poppins.variable} ${mono.variable}`} suppressHydrationWarning>
       <body>
-        <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="data-theme" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
           <QueryProvider>
           <AppProvider
             viewer={
