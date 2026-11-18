@@ -97,6 +97,10 @@ export function TabBar() {
         <Icon name="compass" />
         Explore
       </Link>
+      <Link className={`tab ${on("/map")}`} href="/map">
+        <Icon name="pin" />
+        Map
+      </Link>
       <Link className="tab" href="/sell" aria-label="Sell" onClick={gate("Sign in to list something on i-bay", "/sell")}>
         <span className="sellfab">
           <Icon name="plus" strokeWidth={2.6} />

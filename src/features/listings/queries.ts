@@ -8,6 +8,7 @@ import "server-only";
 import { db } from "@/lib/supabase/server";
 import { istDay } from "@/lib/format";
 import { nextFreeLabel } from "@/features/rentals/slots";
+import { getNearbyResidences } from "@/features/map/proximity";
 import type { Viewer } from "@/lib/auth/session";
 import type { ListingCard, ListingDetail, ListingPhoto, ListingStatus } from "./types";
 
@@ -192,8 +193,14 @@ export async function visibleCatalogue(viewer: Viewer | null): Promise<ListingCa
   return withNextFree(cards);
 }
 
-/** Whether a viewer may see a food drop (same hostel only). */
-export const canSeeDrop = (c: ListingCard, viewer: Viewer | null) => c.mode !== "drop" || (viewer != null && viewer.hostel === c.pickupHostel);
+/** Whether a viewer may see a food drop (same hostel or within 250m walking radius). */
+export const canSeeDrop = (c: ListingCard, viewer: Viewer | null) => {
+  if (c.mode !== "drop") return true;
+  if (!viewer?.hostel) return false;
+  if (viewer.hostel === c.pickupHostel) return true;
+  const nearby = getNearbyResidences(c.pickupHostel, 250);
+  return nearby.includes(viewer.hostel);
+};
 
 /**
  * The item page. Owners see their listing in any state; everyone else only
