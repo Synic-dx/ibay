@@ -15,7 +15,7 @@ import type { ListingCard, ListingDetail, ListingPhoto, ListingStatus } from "./
 // as plain objects; mapCard() below turns them into the typed ListingCard.
 export const CARD_SELECT = (
   "id,title,mode,category_id,price,mrp,rent_unit,deposit,reserve_price,buy_now_price,ends_at,status,purchased_on,condition," +
-  "ticket_info,is_bundle,bundle_contents,bundle_items,price_drop_amount,price_dropped_at,pickup_hostel,views,saves,brand,model,size,tags," +
+  "ticket_info,is_bundle,bundle_contents,bundle_items,price_drop_amount,price_dropped_at,pickup_hostel,pickup_lat,pickup_lng,views,saves,brand,model,size,tags," +
   "created_at,updated_at,deleted_at," +
   "seller:profiles!listings_seller_id_fkey(id,name,hostel,plume,rated_deals,avatar_url,avatar_color,response_note,banned)," +
   "images:listing_images(url,fit,position,public_id),bids(count)") as "*";
@@ -50,6 +50,8 @@ export function mapCard(r: Row, saved: Set<string> = new Set()): ListingCard {
     priceDropAmount: r.price_drop_amount,
     priceDroppedAt: r.price_dropped_at,
     pickupHostel: r.pickup_hostel,
+    pickupLat: r.pickup_lat != null ? Number(r.pickup_lat) : null,
+    pickupLng: r.pickup_lng != null ? Number(r.pickup_lng) : null,
     seller: {
       id: s.id,
       name: s.name ?? "Student",
@@ -202,7 +204,7 @@ export async function getListingDetail(id: string, viewer: Viewer | null): Promi
   if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
   const { data: r } = await db()
     .from("listings")
-    .select(CARD_SELECT + ",description,specs,seal_status,expires_on,status_before_delete")
+    .select(CARD_SELECT + ",description,specs,seal_status,expires_on,status_before_delete,pickup_note")
     .eq("id", id)
     .maybeSingle();
   if (!r) return null;
@@ -232,6 +234,7 @@ export async function getListingDetail(id: string, viewer: Viewer | null): Promi
     ...card,
     nextFree: card.mode === "rent" && card.rentUnit === "hour" ? nextFreeLabel(books) : undefined,
     description: (row.description as string) ?? "",
+    pickupNote: mine ? ((row.pickup_note as string | null) ?? null) : null,
     photos,
     specs: ((row.specs as unknown[]) ?? []).map((s) => (Array.isArray(s) ? { k: String(s[0]), v: String(s[1]) } : (s as { k: string; v: string }))),
     sealStatus: (row.seal_status as string) ?? null,

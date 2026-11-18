@@ -14,6 +14,7 @@
  *   specs:   up to 12 pairs; supplements need a seal status and an expiry that isn't past
  */
 import { z } from "zod";
+import { HOSTELS } from "./auth";
 
 export const MODES = ["sell", "rent", "auction", "drop"] as const;
 export const CONDITIONS = ["New", "Like new", "Very good", "Good", "Fair", "Opened"] as const;
@@ -93,6 +94,10 @@ const common = {
   bundleContents: z.string().max(1000).default(""),
   sealStatus: z.string().optional(),
   expiresOn: z.string().optional(),
+  pickupHostel: z.enum(HOSTELS).optional(),
+  pickupLat: z.number().optional(),
+  pickupLng: z.number().optional(),
+  pickupNote: z.string().trim().max(300, { error: "Keep handover note under 300 characters." }).optional(),
   /** Optimistic concurrency token (edit only): the updated_at you loaded. */
   updatedAt: z.string().optional(),
   captchaToken: z.string().optional(),
@@ -169,7 +174,7 @@ export type ListingData = z.output<typeof listingSchema>;
 export const STEP_FIELDS: Record<1 | 2 | 3, string[]> = {
   1: ["mode", "title", "categoryId", "photos"],
   2: ["price", "mrp", "purchasedOn", "rentUnit", "deposit", "buyNow", "durationHours", "availableMinutes", "size", "specs", "sealStatus", "expiresOn"],
-  3: ["condition", "description", "bundleContents", "captchaToken"],
+  3: ["condition", "description", "bundleContents", "pickupHostel", "pickupLat", "pickupLng", "pickupNote", "captchaToken"],
 };
 
 /** Quick inline price edit from the My listings table. */

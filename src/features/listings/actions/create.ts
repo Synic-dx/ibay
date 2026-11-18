@@ -46,7 +46,7 @@ export async function createListing(input: ListingInput): Promise<ActionResult<{
       ...columnsFor(d),
       seller_id: viewer.id,
       mode: d.mode,
-      pickup_hostel: viewer.hostel,
+      pickup_hostel: d.pickupHostel || viewer.hostel,
       ends_at: d.mode === "auction" ? new Date(now + d.durationHours * 3600e3).toISOString() : d.mode === "drop" ? new Date(now + d.availableMinutes * 60e3).toISOString() : null,
     })
     .select("id")

@@ -44,6 +44,9 @@ export function columnsFor(d: ListingData) {
     expires_on: d.expiresOn || null,
     is_bundle: d.isBundle,
     bundle_contents: d.isBundle ? d.bundleContents.split("\n").map((x) => x.trim()).filter(Boolean).slice(0, 20) : [],
+    pickup_lat: d.pickupLat ?? null,
+    pickup_lng: d.pickupLng ?? null,
+    pickup_note: d.pickupNote ?? null,
     tags: tagsFor(d),
   };
 }

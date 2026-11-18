@@ -56,3 +56,23 @@ export function getNearbyResidences(residenceName: string, radiusMeters = 250): 
 
   return nearby;
 }
+
+export function findNearestLandmark(
+  lat: number,
+  lng: number
+): { location: CampusLocation; distanceMeters: number } | null {
+  if (!locations.length) return null;
+  let nearest: CampusLocation | null = null;
+  let minDistance = Infinity;
+
+  for (const loc of locations) {
+    const dist = calculateDistanceMeters(lat, lng, loc.lat, loc.lng);
+    if (dist < minDistance) {
+      minDistance = dist;
+      nearest = loc;
+    }
+  }
+
+  return nearest ? { location: nearest, distanceMeters: minDistance } : null;
+}
+
