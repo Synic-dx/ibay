@@ -99,3 +99,7 @@ body { background: var(--bg); }
 
 /* My listings has five stat tiles on desktop. */
 @media (min-width: 1080px) { .stats4 { grid-template-columns: repeat(5, minmax(0, 1fr)) !important; } }
+
+/* WHY: the sign-in dialog turns off clicks outside itself, but Google / hCaptcha add the
+   picture puzzle to the page body. Turn clicks back on for those popups. */
+iframe[src*="google.com/recaptcha"], iframe[src*="recaptcha.net/recaptcha"], iframe[src*="hcaptcha.com"] { pointer-events: auto !important; }

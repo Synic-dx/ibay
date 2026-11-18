@@ -14,6 +14,14 @@ import { Icon } from "@/components/ui/icon";
 import { useApp } from "@/components/app-context";
 import { AuthPanel, Onboarding } from "./auth-panel";
 
+/** True when the event came from a CAPTCHA puzzle popup (Google reCAPTCHA or hCaptcha). */
+function isCaptchaPopup(t: EventTarget | null) {
+  const el = t instanceof Element ? t : null;
+  const frame = el?.tagName === "IFRAME" ? el : el?.querySelector?.("iframe");
+  const active = document.activeElement;
+  return [frame, active].some((n) => n instanceof HTMLIFrameElement && /recaptcha|hcaptcha/.test(n.src));
+}
+
 export function AuthModal() {
   const { auth, closeAuth, flags, viewer } = useApp();
   const router = useRouter();
@@ -26,7 +34,14 @@ export function AuthModal() {
       <Dialog.Portal>
         <Dialog.Overlay className="blurwrap" />
         <div className="blurwrap" style={{ background: "transparent", backdropFilter: "none", pointerEvents: "none" }}>
-          <Dialog.Content className="authcard" aria-labelledby="authT" style={{ pointerEvents: "auto" }}>
+          <Dialog.Content
+            className="authcard"
+            aria-labelledby="authT"
+            style={{ pointerEvents: "auto" }}
+            // WHY: the CAPTCHA picture puzzle sits outside this dialog; using it must not close sign-in.
+            onInteractOutside={(e) => isCaptchaPopup(e.target) && e.preventDefault()}
+            onFocusOutside={(e) => isCaptchaPopup(e.target) && e.preventDefault()}
+          >
             <Dialog.Description className="vh">Sign in with your IIM Indore account</Dialog.Description>
             <Dialog.Close className="x" aria-label="Close">
               <Icon name="x" />
