@@ -16,6 +16,7 @@ vi.mock("@/lib/supabase/server", () => ({
     from: vi.fn().mockReturnValue({
       insert: vi.fn().mockResolvedValue({ error: null }),
     }),
+    rpc: vi.fn().mockResolvedValue({ data: [], error: null }),
   }),
 }));
 
@@ -41,5 +42,9 @@ describe("POST /api/mayu", () => {
     const res = await POST(req);
     expect(res.status).toBe(200);
     expect(res.headers.get("Content-Type")).toContain("application/x-ndjson");
+
+    const text = await res.text();
+    expect(text).toContain('"t":"done"');
+    expect(text).toContain('"t":"text"');
   });
 });

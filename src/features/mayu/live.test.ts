@@ -4,11 +4,10 @@ dotenv.config({ path: ".env.local" });
 
 import { runGeminiCascade } from "./cascade";
 
-describe("Live Gemini Cascade Integration", () => {
-  it("streams response or gracefully handles quota with fallback", async () => {
-    const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
-    expect(apiKey).toBeDefined();
+const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
 
+describe.skipIf(!apiKey)("Live Gemini Cascade Integration", () => {
+  it("streams response or gracefully handles quota with fallback", async () => {
     let textAcc = "";
     const res = await runGeminiCascade({
       messages: [{ role: "user", content: "What is Plume?" }],

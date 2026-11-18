@@ -60,6 +60,8 @@ export async function runGeminiCascade({
   const google = createGoogleGenerativeAI({ apiKey });
 
   for (const modelName of GEMINI_FALLBACK_MODELS) {
+    let receivedAny = false;
+    let textAcc = "";
     try {
       const result = streamText({
         model: google(modelName),
@@ -69,9 +71,6 @@ export async function runGeminiCascade({
         tools: mayuTools(viewer, onCards),
         stopWhen: isStepCount(4),
       });
-
-      let receivedAny = false;
-      let textAcc = "";
 
       for await (const part of result.stream) {
         if (part.type === "text-delta") {
@@ -93,8 +92,15 @@ export async function runGeminiCascade({
         return { success: true, modelUsed: modelName };
       }
     } catch (err) {
-      console.warn(`[Mayu Cascade] Model ${modelName} failed, attempting next in cascade:`, err instanceof Error ? err.message : err);
-      // Try next model in candidate list
+      console.warn(`[Mayu Cascade] Model ${modelName} failed:`, err instanceof Error ? err.message : err);
+      // If tokens were already sent to client, do not restart with a fresh model to prevent message concatenation
+      if (receivedAny) {
+        break;
+      }
+      // If error is not a retryable quota/model issue (e.g. auth failed), abort cascade immediately
+      if (!isRateLimitOrModelError(err)) {
+        break;
+      }
       continue;
     }
   }

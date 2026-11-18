@@ -91,7 +91,7 @@ export function MayuLauncher() {
           <Peacock size={40} />
         </button>
       )}
-      <Sheet open={mayuOpen} onOpenChange={setMayuOpen} tall title="Mayu" subtitle="Finds things on i-bay · GPT-4o">
+      <Sheet open={mayuOpen} onOpenChange={setMayuOpen} tall title="Mayu" subtitle="Finds things on i-bay · Gemini">
         <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 10, paddingBottom: 10 }} aria-live="polite">
           {msgs.map((m, i) =>
             m.role === "user" ? (

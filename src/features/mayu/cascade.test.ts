@@ -12,5 +12,7 @@ describe("Gemini Cascade Configuration", () => {
     expect(isRateLimitOrModelError(new Error("429 Too Many Requests"))).toBe(true);
     expect(isRateLimitOrModelError(new Error("models/gemini-xxx is not found"))).toBe(true);
     expect(isRateLimitOrModelError(new Error("random other error"))).toBe(false);
+    expect(isRateLimitOrModelError(new Error("API_KEY_INVALID"))).toBe(false);
+    expect(isRateLimitOrModelError(new Error("PERMISSION_DENIED"))).toBe(false);
   });
 });
