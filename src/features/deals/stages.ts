@@ -13,6 +13,7 @@ export type Deal = {
   stage: number;
   createdAt: string;
   listing: ListingCard;
+  handoverNote?: string | null;
   other: { id: string; name: string; plume: number; ratedDeals: number; hostel: string };
   myRating: { score: number; editableUntil: string; reason: string; tags: string[] } | null;
 };

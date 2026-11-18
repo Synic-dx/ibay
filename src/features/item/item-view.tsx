@@ -31,6 +31,7 @@ import { useOpenChat } from "@/features/chat/use-open-chat";
 import { DatesSheet, HoursSheet } from "@/features/rentals/booking-sheets";
 import { ReportButton } from "@/features/admin/report-sheet";
 import { BidSheet, BuySheet, CloseAuctionSheet, OfferSheet, SoldSheet } from "./sheets";
+import PickupSnippet from "@/features/map/components/pickup-snippet";
 import type { ListingCard, ListingDetail } from "@/features/listings/types";
 
 export type Review = { id: string; score: number; reason: string; tags: string[]; raterName: string; createdAt: string };
@@ -608,6 +609,13 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
                 ))}
               </div>
             </div>
+            <PickupSnippet
+              pickupHostel={l.pickupHostel}
+              pickupLat={l.pickupLat}
+              pickupLng={l.pickupLng}
+              viewerHostel={viewer?.hostel}
+              title={l.title}
+            />
             <div className="panel pad">
               <h3 style={{ marginBottom: 8 }}>About this item</h3>
               <ul className="bullets">

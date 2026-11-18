@@ -158,3 +158,6 @@ export function findCampusRoute(
     coordinates: routeCoords,
   };
 }
+
+export { findCampusRoute as findShortestCampusPath };
+

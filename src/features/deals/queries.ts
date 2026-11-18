@@ -19,7 +19,7 @@ export async function listDeals(userId: string): Promise<Deal[]> {
     .select(
       "id,kind,amount,deposit,stage,created_at,buyer_id,seller_id," +
         "buyer:profiles!transactions_buyer_id_fkey(id,name,plume,rated_deals,hostel),seller:profiles!transactions_seller_id_fkey(id,name,plume,rated_deals,hostel)," +
-        `listing:listings(${CARD_SELECT})`,
+        `listing:listings(${CARD_SELECT},pickup_note)`,
     )
     .or(`buyer_id.eq.${userId},seller_id.eq.${userId}`)
     .order("created_at", { ascending: false });
@@ -43,6 +43,7 @@ export async function listDeals(userId: string): Promise<Deal[]> {
       stage: d.stage,
       createdAt: d.created_at,
       listing: mapCard(d.listing),
+      handoverNote: d.listing?.pickup_note ?? null,
       other: { id: o.id, name: o.name, plume: Number(o.plume), ratedDeals: o.rated_deals, hostel: o.hostel },
       myRating: r ? { score: r.score, editableUntil: r.editable_until, reason: r.reason, tags: r.tags } : null,
     };

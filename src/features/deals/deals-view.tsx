@@ -19,6 +19,7 @@ import { ago, fmt } from "@/lib/format";
 import { plumeDelta } from "@/lib/plume";
 import { PhotoTile } from "@/features/listings/components/parts";
 import { useOpenChat } from "@/features/chat/use-open-chat";
+import HandoverCard from "@/features/map/components/handover-card";
 import { advanceDeal, rateDeal } from "./actions";
 import { canRate, stagesFor, type Deal } from "./stages";
 
@@ -166,6 +167,7 @@ function RateSheet({ d, onClose }: { d: Deal; onClose: () => void }) {
 }
 
 export function DealsView({ deals, tab }: { deals: Deal[]; tab: string }) {
+  const { viewer } = useApp();
   const { open: openChat } = useOpenChat();
   const [handover, setHandover] = useState<Deal | null>(null);
   const [rate, setRate] = useState<Deal | null>(null);
@@ -220,6 +222,7 @@ export function DealsView({ deals, tab }: { deals: Deal[]; tab: string }) {
                   ];
                 })}
               </ol>
+              <HandoverCard deal={d} viewerHostel={viewer?.hostel} />
               {rated ? (
                 <span className="sm faint row" style={{ gap: 4 }}>
                   <Icon name="check" className="icon i16" />

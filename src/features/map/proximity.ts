@@ -76,3 +76,28 @@ export function findNearestLandmark(
   return nearest ? { location: nearest, distanceMeters: minDistance } : null;
 }
 
+export interface WalkingEffort {
+  distanceMeters: number;
+  steps: number;
+  durationMinutes: number;
+}
+
+export function calculateWalkingEffort(
+  viewerHostel: string,
+  destLat: number,
+  destLng: number
+): WalkingEffort | null {
+  if (!viewerHostel || viewerHostel === "Day scholar") return null;
+  const origin = getResidenceCoordinates(viewerHostel);
+  if (!origin) return null;
+  const dist = calculateDistanceMeters(origin.lat, origin.lng, destLat, destLng);
+  const steps = Math.round(dist / 0.78);
+  const durationMinutes = Math.max(1, Math.round(dist / 75));
+  return {
+    distanceMeters: dist,
+    steps,
+    durationMinutes,
+  };
+}
+
+
