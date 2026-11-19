@@ -15,6 +15,7 @@ import { friendlyDbError } from "@/lib/db-errors";
 import { fmt } from "@/lib/format";
 import { ratingSchema, type RatingInput } from "@/lib/validation/market";
 import { notify, startConversation } from "@/features/chat/service";
+import { formatHandoverSchedule } from "./scheduling";
 
 const WHEN = ["Today, evening", "Tomorrow, morning", "Tomorrow, evening", "Ask in chat"];
 
@@ -22,20 +23,165 @@ const WHEN = ["Today, evening", "Tomorrow, morning", "Tomorrow, evening", "Ask i
  * "Buy now" / "I want this": creates the deal and messages the seller.
  * Nothing is charged; payment is UPI or cash at handover.
  */
-export async function requestBuy(listingId: string, when: number): Promise<ActionResult<{ conversationId: string | null }>> {
+export async function requestBuy(
+  listingId: string,
+  scheduledTime?: string | number | null,
+  note?: string
+): Promise<ActionResult<{ conversationId: string | null }>> {
   const viewer = await getViewer();
   if (!viewer) return fail("Sign in to buy.", undefined, "AUTH");
-  if (!z.uuid().safeParse(listingId).success || !WHEN[when]) return fail("Pick a pickup time.");
-  const { data: l } = await db().from("listings").select("id,seller_id,price,mode,status,deleted_at").eq("id", listingId).maybeSingle();
-  if (!l || l.status !== "active" || l.deleted_at || l.mode !== "sell") return fail("This item is no longer available.");
+  if (!z.uuid().safeParse(listingId).success) return fail("Invalid listing ID.");
+
+  const { data: l } = await db()
+    .from("listings")
+    .select("id,seller_id,price,mode,status,deleted_at,pickup_hostel")
+    .eq("id", listingId)
+    .maybeSingle();
+
+  if (!l || l.status !== "active" || l.deleted_at || (l.mode !== "sell" && l.mode !== "drop")) {
+    return fail("This item is no longer available.");
+  }
   if (l.seller_id === viewer.id) return fail("You can't buy your own listing.");
-  const { data: tx, error } = await db().from("transactions").insert({ listing_id: l.id, buyer_id: viewer.id, seller_id: l.seller_id, kind: "sale", amount: l.price, pickup_note: WHEN[when] }).select("id").single();
+
+  let scheduledAtIso: string | null = null;
+  let pickupNote = note || "Pickup to be coordinated";
+
+  if (l.mode === "drop") {
+    pickupNote = "Immediate pickup · Ready now";
+  } else if (typeof scheduledTime === "string" && scheduledTime.trim()) {
+    scheduledAtIso = scheduledTime;
+    pickupNote = formatHandoverSchedule(scheduledTime);
+  } else if (typeof scheduledTime === "number" && WHEN[scheduledTime]) {
+    pickupNote = WHEN[scheduledTime];
+  }
+
+  const { data: tx, error } = await db()
+    .from("transactions")
+    .insert({
+      listing_id: l.id,
+      buyer_id: viewer.id,
+      seller_id: l.seller_id,
+      kind: "sale",
+      amount: l.price,
+      pickup_note: pickupNote,
+      handover_scheduled_at: scheduledAtIso,
+      handover_status: l.mode === "drop" ? "confirmed" : "proposed",
+      handover_proposed_by: viewer.id,
+    })
+    .select("id")
+    .single();
+
   if (error) return fail(friendlyDbError(error).message);
-  const msg = l.price ? `Hi! I'll take it at ${fmt(l.price)}. Pickup ${WHEN[when].toLowerCase()} works for me?` : `Hi! I'd love to take this. Pickup ${WHEN[when].toLowerCase()}?`;
+
+  const msg =
+    l.mode === "drop"
+      ? `Hi! I'm coming to pick up the food drop at ${l.pickup_hostel} right now.`
+      : scheduledAtIso
+      ? l.price
+        ? `Hi! I'll take it at ${fmt(l.price)}. Can we meet for handover on ${pickupNote}?`
+        : `Hi! I'd love to take this. Can we meet for handover on ${pickupNote}?`
+      : l.price
+      ? `Hi! I'll take it at ${fmt(l.price)}. Pickup ${pickupNote.toLowerCase()} works for me?`
+      : `Hi! I'd love to take this. Pickup ${pickupNote.toLowerCase()}?`;
+
   const conv = await startConversation(viewer.id, l.seller_id, l.id, msg, tx.id);
-  await notify(l.seller_id, "buy", "bag", `${viewer.name.split(" ")[0]} wants to buy your item. Reply in chat.`, conv ? `/messages/${conv}` : "/deals");
+  await notify(
+    l.seller_id,
+    "buy",
+    "bag",
+    `${viewer.name.split(" ")[0]} wants to buy your item. Reply in chat.`,
+    conv ? `/messages/${conv}` : "/deals"
+  );
   revalidatePath("/deals");
   return ok({ conversationId: conv }, "Request sent");
+}
+
+/** Confirms the proposed handover time for a deal. */
+export async function confirmHandoverTime(txId: string): Promise<ActionResult<{ txId: string; status: string }>> {
+  const viewer = await getViewer();
+  if (!viewer) return fail("Please sign in again.", undefined, "AUTH");
+  if (!z.uuid().safeParse(txId).success) return fail("Deal not found.");
+
+  const { data: tx, error: fetchErr } = await db()
+    .from("transactions")
+    .select("id, buyer_id, seller_id, handover_scheduled_at, handover_status")
+    .eq("id", txId)
+    .single();
+
+  if (fetchErr || !tx) return fail("Deal not found.");
+  if (tx.buyer_id !== viewer.id && tx.seller_id !== viewer.id) {
+    return fail("Unauthorized to update this deal.", undefined, "AUTH");
+  }
+
+  const { error } = await db()
+    .from("transactions")
+    .update({ handover_status: "confirmed" })
+    .eq("id", txId);
+
+  if (error) return fail(friendlyDbError(error).message);
+
+  const otherId = tx.buyer_id === viewer.id ? tx.seller_id : tx.buyer_id;
+  await notify(
+    otherId,
+    "deal",
+    "check",
+    `${viewer.name.split(" ")[0]} confirmed the handover meeting time.`,
+    "/deals"
+  );
+
+  revalidatePath("/deals");
+  revalidatePath("/messages");
+  return ok({ txId, status: "confirmed" }, "Handover time confirmed");
+}
+
+/** Reschedules the handover time for a deal. */
+export async function rescheduleHandoverTime(
+  txId: string,
+  newScheduledAt: string
+): Promise<ActionResult<{ txId: string; scheduledAt: string }>> {
+  const viewer = await getViewer();
+  if (!viewer) return fail("Please sign in again.", undefined, "AUTH");
+  if (!z.uuid().safeParse(txId).success) return fail("Deal not found.");
+  if (!newScheduledAt || Number.isNaN(new Date(newScheduledAt).getTime())) {
+    return fail("Please pick a valid date and time.");
+  }
+
+  const { data: tx, error: fetchErr } = await db()
+    .from("transactions")
+    .select("id, buyer_id, seller_id")
+    .eq("id", txId)
+    .single();
+
+  if (fetchErr || !tx) return fail("Deal not found.");
+  if (tx.buyer_id !== viewer.id && tx.seller_id !== viewer.id) {
+    return fail("Unauthorized to update this deal.", undefined, "AUTH");
+  }
+
+  const formatted = formatHandoverSchedule(newScheduledAt);
+  const { error } = await db()
+    .from("transactions")
+    .update({
+      handover_scheduled_at: newScheduledAt,
+      handover_status: "rescheduled",
+      handover_proposed_by: viewer.id,
+      pickup_note: formatted,
+    })
+    .eq("id", txId);
+
+  if (error) return fail(friendlyDbError(error).message);
+
+  const otherId = tx.buyer_id === viewer.id ? tx.seller_id : tx.buyer_id;
+  await notify(
+    otherId,
+    "deal",
+    "clock",
+    `${viewer.name.split(" ")[0]} proposed a new handover time: ${formatted}.`,
+    "/deals"
+  );
+
+  revalidatePath("/deals");
+  revalidatePath("/messages");
+  return ok({ txId, scheduledAt: newScheduledAt }, `Proposed new time: ${formatted}`);
 }
 
 /** Handover check: moves the deal to the next step. */
