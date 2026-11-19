@@ -112,8 +112,8 @@ export function HeroSide({ topRequest, openRequests, pendingRatings }: { topRequ
             <Icon name="arrow" className="icon i16" />
           </span>
         </span>
-        <span className="hc-pic hc-ic">
-          <Icon name="plus" className="icon i28" />
+        <span className="hc-pic hc-ic hc-sell">
+          <Icon name="packagePlus" className="icon i44" />
         </span>
       </Link>
       {pendingRatings > 0 ? (
@@ -132,8 +132,8 @@ export function HeroSide({ topRequest, openRequests, pendingRatings }: { topRequ
               <Icon name="arrow" className="icon i16" />
             </span>
           </span>
-          <span className="hc-pic hc-ic">
-            <Icon name="star" className="icon i28" />
+          <span className="hc-pic hc-ic hc-rate">
+            <Icon name="star" className="icon i44" />
           </span>
         </Link>
       ) : (
@@ -150,8 +150,8 @@ export function HeroSide({ topRequest, openRequests, pendingRatings }: { topRequ
               <Icon name="arrow" className="icon i16" />
             </span>
           </span>
-          <span className="hc-pic hc-ic">
-            <Icon name="list" className="icon i28" />
+          <span className="hc-pic hc-ic hc-request">
+            <Icon name="messagePlus" className="icon i44" />
           </span>
         </Link>
       )}

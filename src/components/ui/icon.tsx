@@ -9,9 +9,9 @@ import {
   ChevronRight, ChevronUp, CircleAlert, CircleHelp, Clock, Compass, Drama, Dumbbell, Ellipsis, Eye, Filter, Flag, Flame,
   Gavel, Gift, GraduationCap, GripVertical, Heart, Hourglass, House, Image as ImageIcon, IndianRupee, Info, KeyRound, Laptop,
   LayoutGrid, Layers, List, LoaderCircle, Lock, LogOut, Mail, MapPin, Maximize2, Menu, MessageCircle, Minus, Moon, Music,
-  Package, PartyPopper, Pause, Pencil, Play, Plus, Refrigerator, Repeat, Ruler, Search, Send, Settings, Share2, Shield,
+  Package, PackagePlus, PartyPopper, Pause, Pencil, Play, Plus, Refrigerator, Repeat, Ruler, Search, Send, Settings, Share2, Shield,
   ShieldAlert, Shirt, ShoppingBag, SlidersHorizontal, Sparkles, Star, Store, Sun, Tag, Ticket, Trash2, TrendingDown,
-  TrendingUp, Trophy, Undo2, Upload, User, Users, Utensils, Wallet, X, Zap, type LucideIcon,
+  TrendingUp, Trophy, Undo2, Upload, User, Users, Utensils, Wallet, X, Zap, MessageSquarePlus, type LucideIcon,
 } from "lucide-react";
 
 const MAP: Record<string, LucideIcon> = {
@@ -21,12 +21,12 @@ const MAP: Record<string, LucideIcon> = {
   tag: Tag, hammer: Gavel, food: Utensils, list: List, logout: LogOut, grid: LayoutGrid, cal: Calendar, send: Send,
   share: Share2, store: Store, filter: SlidersHorizontal, sort: ArrowUpDown, sparkles: Sparkles, dumbbell: Dumbbell,
   shirt: Shirt, book: BookOpen, laptop: Laptop, bed: BedDouble, fridge: Refrigerator, gift: Gift, music: Music, bike: Bike,
-  ticket: Ticket, flame: Flame, pkg: Package, package: Package, repeat: Repeat, drama: Drama, grad: GraduationCap,
+  ticket: Ticket, flame: Flame, pkg: Package, package: Package, packagePlus: PackagePlus, repeat: Repeat, drama: Drama, grad: GraduationCap,
   party: PartyPopper, zap: Zap, camera: Camera, mail: Mail, help: CircleHelp, trend: TrendingDown, trendup: TrendingUp,
   eye: Eye, ruler: Ruler, min: Minus, expand: Maximize2, edit: Pencil, users: Users, wallet: Wallet, key: KeyRound,
   lock: Lock, rupee: IndianRupee, trophy: Trophy, hourglass: Hourglass, layers: Layers, flag: Flag, settings: Settings,
   more: Ellipsis, trash: Trash2, pause: Pause, play: Play, undo: Undo2, alert: CircleAlert, spinner: LoaderCircle,
-  grip: GripVertical, upload: Upload, bookmark: Bookmark, filter2: Filter, shieldAlert: ShieldAlert,
+  grip: GripVertical, upload: Upload, bookmark: Bookmark, filter2: Filter, shieldAlert: ShieldAlert, messagePlus: MessageSquarePlus,
 };
 
 export type IconName = keyof typeof MAP | string;
