@@ -5,7 +5,13 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Marker } from "react-map-gl/maplibre";
 import { Icon } from "@/components/ui/icon";
-import { getResidenceCoordinates, calculateWalkingEffort, findNearestLandmark } from "../proximity";
+import {
+  getResidenceCoordinates,
+  calculateWalkingEffort,
+  calculateDistanceMeters,
+  findNearestLandmark,
+  findNearestResidence,
+} from "../proximity";
 import styles from "./map.module.css";
 
 const CampusMap = dynamic(() => import("./campus-map"), {
@@ -56,20 +62,41 @@ export default function PickupSnippet({
     return findNearestLandmark(coords.lat, coords.lng);
   }, [coords.lat, coords.lng]);
 
+  const nearestResidence = useMemo(() => {
+    return findNearestResidence(coords.lat, coords.lng);
+  }, [coords.lat, coords.lng]);
+
+  const effectiveHostel = useMemo(() => {
+    if (pickupLat && pickupLng && nearestResidence && nearestResidence.distanceMeters <= 80) {
+      return nearestResidence.location.name;
+    }
+    return pickupHostel;
+  }, [pickupLat, pickupLng, nearestResidence, pickupHostel]);
+
   const walkingEffort = useMemo(() => {
     if (!viewerHostel) return null;
     return calculateWalkingEffort(viewerHostel, coords.lat, coords.lng);
   }, [viewerHostel, coords.lat, coords.lng]);
 
-  const isSameHostel =
-    viewerHostel &&
-    pickupHostel &&
-    viewerHostel.toLowerCase() === pickupHostel.toLowerCase();
+  const isSameHostel = useMemo(() => {
+    if (!viewerHostel) return false;
+    // If coordinates are provided, compute direct physical distance to viewer hostel
+    if (pickupLat && pickupLng) {
+      const vCoords = getResidenceCoordinates(viewerHostel);
+      if (vCoords) {
+        const d = calculateDistanceMeters(vCoords.lat, vCoords.lng, pickupLat, pickupLng);
+        // Only if physically within 55 meters of the viewer's hostel can it be "in your hostel"
+        return d <= 55;
+      }
+    }
+    const sameName = effectiveHostel.trim().toLowerCase() === viewerHostel.trim().toLowerCase();
+    return sameName;
+  }, [viewerHostel, effectiveHostel, pickupLat, pickupLng]);
 
   const locationDisplay = useMemo(() => {
-    if (!nearestLandmark) return pickupHostel;
+    if (!nearestLandmark) return effectiveHostel;
     const landmarkName = nearestLandmark.location.name.trim();
-    const hostelName = pickupHostel.trim();
+    const hostelName = effectiveHostel.trim();
     if (landmarkName.toLowerCase() === hostelName.toLowerCase()) {
       return hostelName;
     }
@@ -79,7 +106,7 @@ export default function PickupSnippet({
     }
     // If at a specific campus facility (e.g. Sports Complex, Cafeteria)
     return `${landmarkName} · near ${hostelName}`;
-  }, [nearestLandmark, pickupHostel]);
+  }, [nearestLandmark, effectiveHostel]);
 
   return (
     <div
@@ -117,7 +144,7 @@ export default function PickupSnippet({
           </span>
         </div>
         <Link
-          href={`/map?lat=${coords.lat}&lng=${coords.lng}&name=${encodeURIComponent(pickupHostel)}`}
+          href={`/map?lat=${coords.lat}&lng=${coords.lng}&name=${encodeURIComponent(effectiveHostel)}`}
           style={{
             fontSize: "12px",
             color: "var(--brand, #02505f)",

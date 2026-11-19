@@ -1,5 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { getNearbyResidences, getResidenceCoordinates, findNearestResidence } from "@/features/map/proximity";
+import {
+  getNearbyResidences,
+  getResidenceCoordinates,
+  findNearestResidence,
+  calculateWalkingEffort,
+  calculateDistanceMeters,
+} from "@/features/map/proximity";
 
 describe("Campus Residence Proximity", () => {
   it("resolves coordinates for known residences", () => {
@@ -11,6 +17,20 @@ describe("Campus Residence Proximity", () => {
     const dpmCoords = getResidenceCoordinates("DPM Residence");
     expect(dpmCoords).not.toBeNull();
     expect(dpmCoords?.lat).toBeCloseTo(22.6242, 3);
+  });
+
+  it("calculates distance and walking effort between SR 18 and DPM Residence", () => {
+    const sr18 = getResidenceCoordinates("SR 18")!;
+    const dpm = getResidenceCoordinates("DPM Residence")!;
+
+    const dist = calculateDistanceMeters(sr18.lat, sr18.lng, dpm.lat, dpm.lng);
+    expect(dist).toBeGreaterThan(150); // It's ~206m away, definitely > 55m hostel threshold
+    expect(dist).toBeLessThan(300);
+
+    const walking = calculateWalkingEffort("SR 18", dpm.lat, dpm.lng);
+    expect(walking).not.toBeNull();
+    expect(walking?.distanceMeters).toBeGreaterThan(150);
+    expect(walking?.durationMinutes).toBeGreaterThanOrEqual(2);
   });
 
   it("finds nearest residence correctly for any coordinates", () => {

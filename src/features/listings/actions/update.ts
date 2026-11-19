@@ -73,6 +73,7 @@ export async function updateListing(id: string, input: ListingInput): Promise<Ac
 
   // 4. Mode-aware locks.
   const cols = columnsFor(d);
+  if (!cols.pickup_hostel) delete (cols as Record<string, unknown>).pickup_hostel;
   // WHY: keep existing tags (they put the item in collections such as Garba Night) and add new title words.
   const patch: Record<string, unknown> = { ...cols, tags: [...new Set([...((l.tags as string[]) ?? []), ...cols.tags])].slice(0, 30) };
   const bids = l.bids?.[0]?.count ?? 0;
