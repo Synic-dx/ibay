@@ -4,14 +4,14 @@
  *       fresh clone explains what to do instead of crashing.
  */
 import { Icon } from "@/components/ui/icon";
-import { Peacock } from "@/components/brand";
+import { Logo } from "@/components/brand";
 
 export function SetupNotice() {
   return (
     <main style={{ maxWidth: 640, margin: "40px auto" }}>
       <div className="panel pad stack" style={{ gap: 12 }}>
-        <div className="row">
-          <Peacock size={44} />
+        <div className="row" style={{ gap: 12 }}>
+          <Logo size={44} />
           <h1>i-bay needs its database keys</h1>
         </div>
         <p className="muted">

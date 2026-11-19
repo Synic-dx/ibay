@@ -17,7 +17,7 @@ import type { ListingCard } from "@/features/listings/types";
 
 type Msg = { role: "user" | "assistant"; content: string; cards?: ListingCard[]; typing?: boolean };
 
-const SUGGEST = ["Cheapest fx-991ES", "Yonex racquets", "One Piece manga", "How does Plume work?"];
+const SUGGEST = ["Cheapest fx-991ES", "Yonex racquets", "One Piece manga", "How does Feather work?"];
 const SHOW_ON = [/^\/$/, /^\/explore/, /^\/browse/, /^\/requests$/, /^\/you/, /^\/saved/];
 
 /** Renders **bold** from the answer text safely (no HTML from the model). */

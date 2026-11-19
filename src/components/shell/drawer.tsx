@@ -8,7 +8,7 @@ import Link from "@/components/ui/link";
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Icon } from "@/components/ui/icon";
-import { Avatar, Peacock, Wordmark } from "@/components/brand";
+import { Avatar, Logo, Wordmark } from "@/components/brand";
 import { useApp } from "@/components/app-context";
 import { trustLevel } from "@/lib/plume";
 import { ThemeSwitchRow } from "./theme-toggle";
@@ -43,14 +43,14 @@ export function Drawer({ categories, liveDrops }: { categories: Category[]; live
                 <div>
                   <b style={{ fontSize: 16 }}>{viewer.name}</b>
                   <div className="xs" style={{ opacity: 0.85 }}>
-                    {trustLevel(viewer.plume, viewer.ratedDeals).label} · Plume {Math.round(viewer.plume)}
+                    {trustLevel(viewer.plume, viewer.ratedDeals).label} · Feather {Math.round(viewer.plume)}
                   </div>
                 </div>
               </div>
             ) : (
               <>
-                <div className="row">
-                  <Peacock size={40} />
+                <div className="row" style={{ gap: 10 }}>
+                  <Logo size={38} />
                   <Wordmark size={26} />
                 </div>
                 <p className="sm" style={{ margin: "10px 0 12px", opacity: 0.85 }}>
@@ -115,7 +115,7 @@ export function Drawer({ categories, liveDrops }: { categories: Category[]; live
           )}
           <div className="dsec">More</div>
           <ThemeSwitchRow className="dl" />
-          {dl("help", "How Plume works", "/trust")}
+          {dl("help", "How Feather works", "/trust")}
           <button
             type="button"
             className="dl"

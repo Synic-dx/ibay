@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { getViewer } from "@/lib/auth/session";
 import { googleEnabled } from "@/lib/auth";
-import { Peacock, Wordmark } from "@/components/brand";
+import { Logo, Wordmark } from "@/components/brand";
 import { ThemeToggle } from "@/components/shell/theme-toggle";
 import { LoginCard } from "./login-card";
 
@@ -34,8 +34,8 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
     <div id="shell">
       <header className="tb">
         <div className="tb-row">
-          <Link className="brand" href="/" aria-label="i-bay home">
-            <Peacock size={30} />
+          <Link className="brand" href="/" aria-label="i-bay home" style={{ gap: 8 }}>
+            <Logo size={32} />
             <Wordmark size={23} />
           </Link>
           <ThemeToggle className="ib thm" />

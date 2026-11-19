@@ -1,23 +1,23 @@
-/** FEATURE: "How Plume works": the Plume levels and the maths, in plain words. */
+/** FEATURE: "How Feather works": the Feather levels and the maths, in plain words. */
 import type { Metadata } from "next";
 import { Icon } from "@/components/ui/icon";
 import { Peacock } from "@/components/brand";
 import { SubBar } from "@/components/shell/mobile-bars";
 import { getViewer } from "@/lib/auth/session";
 
-export const metadata: Metadata = { title: "How Plume works" };
+export const metadata: Metadata = { title: "How Feather works" };
 
 export default async function TrustPage() {
   const me = await getViewer();
   return (
     <>
-      <SubBar title="How Plume works" sub="i-bay's rating score" />
+      <SubBar title="How Feather works" sub="i-bay's rating score" />
       <main className="withtabs">
         <div className="stack" style={{ gap: 14 }}>
           <div className="panel pad stack" style={{ gap: 8 }}>
             <div className="row">
               <Peacock size={40} />
-              <h2>Plume, your campus karma</h2>
+              <h2>Feather, your campus karma</h2>
             </div>
             <p className="sm muted">
               Everyone starts at 0. After every deal, both people rate it from -10 to +10 and write why. New members move fast, people with many deals move slowly, so one bad review
@@ -52,7 +52,7 @@ export default async function TrustPage() {
             </span>
             <span className="mono xs">Δ = K(n) × (rating / 10) × w(rater)</span>
             <span className="mono xs">K(n) = max(6, 40 / √(1 + n/3))</span>
-            <span className="mono xs">w = clamp(1 + raterPlume/400, 0.5, 1.5)</span>
+            <span className="mono xs">w = clamp(1 + raterFeather/400, 0.5, 1.5)</span>
             <span className="xs faint">
               n is how many rated deals the person already has.{me ? ` You are at ${Math.round(me.plume)} with ${me.ratedDeals} deals.` : ""}
             </span>

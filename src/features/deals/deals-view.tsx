@@ -161,7 +161,7 @@ function RateSheet({ d, onClose }: { d: Deal; onClose: () => void }) {
             <div className="note">
               <Icon name="trend" />
               <span>
-                {first}&apos;s Plume: <b>{Math.round(d.other.plume)}</b> → <b style={{ color: delta >= 0 ? "var(--good)" : "var(--bad)" }}>{Math.round(d.other.plume + delta)}</b> ({delta >= 0 ? "+" : ""}
+                {first}&apos;s Feather: <b>{Math.round(d.other.plume)}</b> → <b style={{ color: delta >= 0 ? "var(--good)" : "var(--bad)" }}>{Math.round(d.other.plume + delta)}</b> ({delta >= 0 ? "+" : ""}
                 {delta})
               </span>
             </div>

@@ -10,7 +10,7 @@ describe.skipIf(!apiKey)("Live Gemini Cascade Integration", () => {
   it("streams response or gracefully handles quota with fallback", async () => {
     let textAcc = "";
     const res = await runGeminiCascade({
-      messages: [{ role: "user", content: "What is Plume?" }],
+      messages: [{ role: "user", content: "What is Feather?" }],
       viewer: null,
       apiKey: apiKey!,
       onCards: () => {},

@@ -3,12 +3,12 @@
  */
 import Link from "@/components/ui/link";
 import { Icon } from "@/components/ui/icon";
-import { Peacock, Wordmark } from "@/components/brand";
+import { Logo, Wordmark } from "@/components/brand";
 
 const COLS: [string, [string, string][]][] = [
   ["Shop", [["Getups & Costumes", "/browse?cat=preprocess"], ["Gym Corner", "/browse?cat=gym"], ["Gadgets", "/browse?cat=gadgets"], ["Manga & novels", "/browse?cat=reads"], ["All categories", "/explore"]]],
   ["Sell", [["List an item", "/sell"], ["Start an auction", "/sell?mode=auction"], ["Rent something out", "/sell?mode=rent"], ["Food drop", "/sell?mode=drop"]]],
-  ["Help", [["How Plume works", "/trust"], ["Requests board", "/requests"], ["My listings", "/my-listings"], ["Icons by Lucide (ISC licence)", "https://lucide.dev/license"]]],
+  ["Help", [["How Feather works", "/trust"], ["Requests board", "/requests"], ["My listings", "/my-listings"], ["Icons by Lucide (ISC licence)", "https://lucide.dev/license"]]],
 ];
 
 export function Footer() {
@@ -17,8 +17,8 @@ export function Footer() {
       <div className="dh-in">
         <div className="dfcols">
           <div className="dfabout">
-            <div className="row">
-              <Peacock size={34} />
+            <div className="row" style={{ gap: 10 }}>
+              <Logo size={34} />
               <Wordmark size={26} />
             </div>
             <p>IIM Indore&apos;s own campus marketplace. Buy, rent, bid or give away, with people from your own hostel.</p>

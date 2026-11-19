@@ -80,7 +80,7 @@ export default async function ProfilePage({
               style={{ gap: 0, width: "100%", marginTop: 8 }}
             >
               <div style={{ flex: 1 }}>
-                <div className="faint xs">Plume</div>
+                <div className="faint xs">Feather</div>
                 <b style={{ fontSize: 20, fontVariantNumeric: "tabular-nums" }}>
                   {u.plume > 0 ? "+" : ""}
                   {Math.round(u.plume)}

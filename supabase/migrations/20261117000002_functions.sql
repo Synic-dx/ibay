@@ -679,7 +679,7 @@ begin
     insert into public.ratings (transaction_id, rater_id, ratee_id, score, reason, tags)
     values (p_tx, p_rater, other, p_score, p_reason, coalesce(p_tags, '{}')) returning * into r;
     insert into public.notifications (user_id, kind, icon, body, link)
-    select other, 'rating', 'star', p.name || ' rated you ' || case when p_score > 0 then '+' else '' end || p_score || '. Plume ' ||
+    select other, 'rating', 'star', p.name || ' rated you ' || case when p_score > 0 then '+' else '' end || p_score || '. Feather ' ||
            case when r.delta >= 0 then '+' else '' end || r.delta || '.', '/you'
     from public.profiles p where p.id = p_rater;
   end if;

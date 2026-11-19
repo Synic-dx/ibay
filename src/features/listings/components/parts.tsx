@@ -197,7 +197,7 @@ export function TrustLine({ plume, ratedDeals, deals = true }: { plume: number; 
   const t = trustLevel(plume, ratedDeals);
   return (
     <>
-      <span className={`trust ${t.tone}`} title={`Plume ${Math.round(plume)}`}>
+      <span className={`trust ${t.tone}`} title={`Feather ${Math.round(plume)}`}>
         {t.tone === "t-good" && <Icon name="star" filled strokeWidth={0} className="icon" />}
         {t.label}
       </span>
