@@ -373,7 +373,7 @@ function OtpStep({
 
 /** First login: where should people meet you? */
 export function Onboarding({ onFinish }: { onFinish: () => void }) {
-  const [hostel, setHostel] = useState<string>("Hostel 1");
+  const [hostel, setHostel] = useState<string>("SR 01");
   const [room, setRoom] = useState("");
   const [wa, setWa] = useState("");
   const [errs, setErrs] = useState<Record<string, string>>({});

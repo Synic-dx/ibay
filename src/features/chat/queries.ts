@@ -36,7 +36,18 @@ export type Thread = {
   id: string;
   other: ChatPerson;
   listing: ListingCard | null;
-  deal: { id: string; amount: number } | null;
+  deal: {
+    id: string;
+    amount: number;
+    stage?: number;
+    kind?: "sale" | "rental" | "auction";
+    handoverScheduledAt?: string | null;
+    handoverStatus?: "proposed" | "confirmed" | "rescheduled" | "completed";
+    handoverProposedBy?: string | null;
+    deliveryOtp?: string | null;
+    returnOtp?: string | null;
+    isBuyer?: boolean;
+  } | null;
   messages: ChatMessage[];
 };
 
@@ -91,7 +102,7 @@ export async function getThread(id: string, me: string): Promise<Thread | null> 
   if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
   const { data: c } = await db()
     .from("conversations")
-    .select(`id,user_a,user_b,listing_id,transaction_id,a:profiles!conversations_user_a_fkey(${PERSON}),b:profiles!conversations_user_b_fkey(${PERSON}),tx:transactions(id,amount)`)
+    .select(`id,user_a,user_b,listing_id,transaction_id,a:profiles!conversations_user_a_fkey(${PERSON}),b:profiles!conversations_user_b_fkey(${PERSON}),tx:transactions(id,amount,stage,kind,buyer_id,seller_id,handover_scheduled_at,handover_status,handover_proposed_by,delivery_otp_plain,return_otp_plain)`)
     .eq("id", id)
     .maybeSingle();
   const conv = c as any;
@@ -105,7 +116,20 @@ export async function getThread(id: string, me: string): Promise<Thread | null> 
     id,
     other: person(conv.user_a === me ? conv.b : conv.a, true),
     listing: listingRes.data ? mapCard(listingRes.data) : null,
-    deal: conv.tx ? { id: conv.tx.id, amount: conv.tx.amount } : null,
+    deal: conv.tx
+      ? {
+          id: conv.tx.id,
+          amount: conv.tx.amount,
+          stage: conv.tx.stage,
+          kind: conv.tx.kind,
+          handoverScheduledAt: conv.tx.handover_scheduled_at ?? null,
+          handoverStatus: conv.tx.handover_status ?? "proposed",
+          handoverProposedBy: conv.tx.handover_proposed_by ?? null,
+          deliveryOtp: conv.tx.buyer_id === me ? (conv.tx.delivery_otp_plain ?? null) : null,
+          returnOtp: conv.tx.buyer_id === me ? (conv.tx.return_otp_plain ?? null) : null,
+          isBuyer: conv.tx.buyer_id === me,
+        }
+      : null,
     messages: (msgs ?? []).map((m: any) => ({
       id: m.id, kind: m.kind, body: m.body, amount: m.offer_amount, offerStatus: m.offer_status, senderId: m.sender_id,
       mine: m.sender_id === me, createdAt: m.created_at, readAt: m.read_at,

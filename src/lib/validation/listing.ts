@@ -14,6 +14,7 @@
  *   specs:   up to 12 pairs; supplements need a seal status and an expiry that isn't past
  */
 import { z } from "zod";
+import { HOSTELS } from "./auth";
 
 export const MODES = ["sell", "rent", "auction", "drop"] as const;
 export const CONDITIONS = ["New", "Like new", "Very good", "Good", "Fair", "Opened"] as const;
@@ -21,6 +22,23 @@ export const RENT_UNITS = ["hour", "day", "week", "month"] as const;
 export const AUCTION_HOURS = [6, 24, 72, 168] as const;
 export const DROP_MINUTES = [15, 30, 60, 180] as const;
 export const SEAL_STATUSES = ["Sealed", "Opened", "Opened, scoop inside"] as const;
+export const AVAILABILITY_SLOTS = [
+  "Morning (8 AM - 12 PM)",
+  "Afternoon (12 PM - 5 PM)",
+  "Evening (5 PM - 9 PM)",
+  "Late Night (9 PM - 12 AM)",
+  "Flexible / Anytime",
+] as const;
+
+export const AVAILABILITY_SLOT_CONFIG = [
+  { id: "morning", label: "Morning", sublabel: "8 AM – 12 PM", value: "Morning (8 AM - 12 PM)", icon: "sun" },
+  { id: "afternoon", label: "Afternoon", sublabel: "12 PM – 5 PM", value: "Afternoon (12 PM - 5 PM)", icon: "sun" },
+  { id: "evening", label: "Evening", sublabel: "5 PM – 9 PM", value: "Evening (5 PM - 9 PM)", icon: "sparkles" },
+  { id: "latenight", label: "Late Night", sublabel: "9 PM – 12 AM", value: "Late Night (9 PM - 12 AM)", icon: "moon" },
+  { id: "flexible", label: "Flexible", sublabel: "Anytime", value: "Flexible / Anytime", icon: "clock" },
+] as const;
+
+export type AvailabilitySlotId = (typeof AVAILABILITY_SLOT_CONFIG)[number]["id"];
 export const CATEGORY_IDS = [
   "preprocess", "formals", "ethnic", "events", "books", "exam", "gadgets", "room", "appliances", "food", "free",
   "gym", "sports", "hobbies", "reads", "travel", "clothing", "tickets",
@@ -93,6 +111,11 @@ const common = {
   bundleContents: z.string().max(1000).default(""),
   sealStatus: z.string().optional(),
   expiresOn: z.string().optional(),
+  pickupHostel: z.enum(HOSTELS).optional(),
+  pickupLat: z.number().optional(),
+  pickupLng: z.number().optional(),
+  pickupNote: z.string().trim().max(300, { error: "Keep handover note under 300 characters." }).optional(),
+  pickupSlots: z.array(z.string()).default([]),
   /** Optimistic concurrency token (edit only): the updated_at you loaded. */
   updatedAt: z.string().optional(),
   captchaToken: z.string().optional(),
@@ -169,7 +192,7 @@ export type ListingData = z.output<typeof listingSchema>;
 export const STEP_FIELDS: Record<1 | 2 | 3, string[]> = {
   1: ["mode", "title", "categoryId", "photos"],
   2: ["price", "mrp", "purchasedOn", "rentUnit", "deposit", "buyNow", "durationHours", "availableMinutes", "size", "specs", "sealStatus", "expiresOn"],
-  3: ["condition", "description", "bundleContents", "captchaToken"],
+  3: ["condition", "description", "bundleContents", "pickupHostel", "pickupLat", "pickupLng", "pickupNote", "pickupSlots", "captchaToken"],
 };
 
 /** Quick inline price edit from the My listings table. */

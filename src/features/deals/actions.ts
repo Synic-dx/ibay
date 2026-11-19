@@ -15,6 +15,9 @@ import { friendlyDbError } from "@/lib/db-errors";
 import { fmt } from "@/lib/format";
 import { ratingSchema, type RatingInput } from "@/lib/validation/market";
 import { notify, startConversation } from "@/features/chat/service";
+import { formatHandoverSchedule } from "./scheduling";
+import { generateOtp, hashOtp } from "./otp-crypto";
+export { generateOtp, hashOtp };
 
 const WHEN = ["Today, evening", "Tomorrow, morning", "Tomorrow, evening", "Ask in chat"];
 
@@ -22,20 +25,170 @@ const WHEN = ["Today, evening", "Tomorrow, morning", "Tomorrow, evening", "Ask i
  * "Buy now" / "I want this": creates the deal and messages the seller.
  * Nothing is charged; payment is UPI or cash at handover.
  */
-export async function requestBuy(listingId: string, when: number): Promise<ActionResult<{ conversationId: string | null }>> {
+export async function requestBuy(
+  listingId: string,
+  scheduledTime?: string | number | null,
+  note?: string
+): Promise<ActionResult<{ conversationId: string | null }>> {
   const viewer = await getViewer();
   if (!viewer) return fail("Sign in to buy.", undefined, "AUTH");
-  if (!z.uuid().safeParse(listingId).success || !WHEN[when]) return fail("Pick a pickup time.");
-  const { data: l } = await db().from("listings").select("id,seller_id,price,mode,status,deleted_at").eq("id", listingId).maybeSingle();
-  if (!l || l.status !== "active" || l.deleted_at || l.mode !== "sell") return fail("This item is no longer available.");
+  if (!z.uuid().safeParse(listingId).success) return fail("Invalid listing ID.");
+
+  const { data: l } = await db()
+    .from("listings")
+    .select("id,seller_id,price,mode,status,deleted_at,pickup_hostel")
+    .eq("id", listingId)
+    .maybeSingle();
+
+  if (!l || l.status !== "active" || l.deleted_at || (l.mode !== "sell" && l.mode !== "drop")) {
+    return fail("This item is no longer available.");
+  }
   if (l.seller_id === viewer.id) return fail("You can't buy your own listing.");
-  const { data: tx, error } = await db().from("transactions").insert({ listing_id: l.id, buyer_id: viewer.id, seller_id: l.seller_id, kind: "sale", amount: l.price, pickup_note: WHEN[when] }).select("id").single();
+
+  let scheduledAtIso: string | null = null;
+  let pickupNote = note || "Pickup to be coordinated";
+
+  if (l.mode === "drop") {
+    pickupNote = "Immediate pickup · Ready now";
+  } else if (typeof scheduledTime === "string" && scheduledTime.trim()) {
+    scheduledAtIso = scheduledTime;
+    pickupNote = formatHandoverSchedule(scheduledTime);
+  } else if (typeof scheduledTime === "number" && WHEN[scheduledTime]) {
+    pickupNote = WHEN[scheduledTime];
+  }
+
+  const deliveryOtp = generateOtp();
+  const deliveryOtpHash = hashOtp(deliveryOtp);
+
+  const { data: tx, error } = await db()
+    .from("transactions")
+    .insert({
+      listing_id: l.id,
+      buyer_id: viewer.id,
+      seller_id: l.seller_id,
+      kind: "sale",
+      amount: l.price,
+      pickup_note: pickupNote,
+      handover_scheduled_at: scheduledAtIso,
+      handover_status: l.mode === "drop" ? "confirmed" : "proposed",
+      handover_proposed_by: viewer.id,
+      delivery_otp_plain: deliveryOtp,
+      delivery_otp_hash: deliveryOtpHash,
+    })
+    .select("id")
+    .single();
+
   if (error) return fail(friendlyDbError(error).message);
-  const msg = l.price ? `Hi! I'll take it at ${fmt(l.price)}. Pickup ${WHEN[when].toLowerCase()} works for me?` : `Hi! I'd love to take this. Pickup ${WHEN[when].toLowerCase()}?`;
+
+  const msg =
+    l.mode === "drop"
+      ? `Hi! I'm coming to pick up the food drop at ${l.pickup_hostel} right now.`
+      : scheduledAtIso
+      ? l.price
+        ? `Hi! I'll take it at ${fmt(l.price)}. Can we meet for handover on ${pickupNote}?`
+        : `Hi! I'd love to take this. Can we meet for handover on ${pickupNote}?`
+      : l.price
+      ? `Hi! I'll take it at ${fmt(l.price)}. Pickup ${pickupNote.toLowerCase()} works for me?`
+      : `Hi! I'd love to take this. Pickup ${pickupNote.toLowerCase()}?`;
+
   const conv = await startConversation(viewer.id, l.seller_id, l.id, msg, tx.id);
-  await notify(l.seller_id, "buy", "bag", `${viewer.name.split(" ")[0]} wants to buy your item. Reply in chat.`, conv ? `/messages/${conv}` : "/deals");
+  await notify(
+    l.seller_id,
+    "buy",
+    "bag",
+    `${viewer.name.split(" ")[0]} wants to buy your item. Reply in chat.`,
+    conv ? `/messages/${conv}` : "/deals"
+  );
   revalidatePath("/deals");
   return ok({ conversationId: conv }, "Request sent");
+}
+
+/** Confirms the proposed handover time for a deal. */
+export async function confirmHandoverTime(txId: string): Promise<ActionResult<{ txId: string; status: string }>> {
+  const viewer = await getViewer();
+  if (!viewer) return fail("Please sign in again.", undefined, "AUTH");
+  if (!z.uuid().safeParse(txId).success) return fail("Deal not found.");
+
+  const { data: tx, error: fetchErr } = await db()
+    .from("transactions")
+    .select("id, buyer_id, seller_id, handover_scheduled_at, handover_status")
+    .eq("id", txId)
+    .single();
+
+  if (fetchErr || !tx) return fail("Deal not found.");
+  if (tx.buyer_id !== viewer.id && tx.seller_id !== viewer.id) {
+    return fail("Unauthorized to update this deal.", undefined, "AUTH");
+  }
+
+  const { error } = await db()
+    .from("transactions")
+    .update({ handover_status: "confirmed" })
+    .eq("id", txId);
+
+  if (error) return fail(friendlyDbError(error).message);
+
+  const otherId = tx.buyer_id === viewer.id ? tx.seller_id : tx.buyer_id;
+  await notify(
+    otherId,
+    "deal",
+    "check",
+    `${viewer.name.split(" ")[0]} confirmed the handover meeting time.`,
+    "/deals"
+  );
+
+  revalidatePath("/deals");
+  revalidatePath("/messages");
+  return ok({ txId, status: "confirmed" }, "Handover time confirmed");
+}
+
+/** Reschedules the handover time for a deal. */
+export async function rescheduleHandoverTime(
+  txId: string,
+  newScheduledAt: string
+): Promise<ActionResult<{ txId: string; scheduledAt: string }>> {
+  const viewer = await getViewer();
+  if (!viewer) return fail("Please sign in again.", undefined, "AUTH");
+  if (!z.uuid().safeParse(txId).success) return fail("Deal not found.");
+  if (!newScheduledAt || Number.isNaN(new Date(newScheduledAt).getTime())) {
+    return fail("Please pick a valid date and time.");
+  }
+
+  const { data: tx, error: fetchErr } = await db()
+    .from("transactions")
+    .select("id, buyer_id, seller_id")
+    .eq("id", txId)
+    .single();
+
+  if (fetchErr || !tx) return fail("Deal not found.");
+  if (tx.buyer_id !== viewer.id && tx.seller_id !== viewer.id) {
+    return fail("Unauthorized to update this deal.", undefined, "AUTH");
+  }
+
+  const formatted = formatHandoverSchedule(newScheduledAt);
+  const { error } = await db()
+    .from("transactions")
+    .update({
+      handover_scheduled_at: newScheduledAt,
+      handover_status: "rescheduled",
+      handover_proposed_by: viewer.id,
+      pickup_note: formatted,
+    })
+    .eq("id", txId);
+
+  if (error) return fail(friendlyDbError(error).message);
+
+  const otherId = tx.buyer_id === viewer.id ? tx.seller_id : tx.buyer_id;
+  await notify(
+    otherId,
+    "deal",
+    "clock",
+    `${viewer.name.split(" ")[0]} proposed a new handover time: ${formatted}.`,
+    "/deals"
+  );
+
+  revalidatePath("/deals");
+  revalidatePath("/messages");
+  return ok({ txId, scheduledAt: newScheduledAt }, `Proposed new time: ${formatted}`);
 }
 
 /** Handover check: moves the deal to the next step. */
@@ -49,6 +202,167 @@ export async function advanceDeal(txId: string, photos: boolean, money: boolean)
   if (t) await notify(t.buyer_id === viewer.id ? t.seller_id : t.buyer_id, "deal", "check", `${viewer.name.split(" ")[0]} confirmed the handover. You can rate the deal now.`, "/deals");
   revalidatePath("/deals");
   return ok({ stage: data as number }, "Confirmed");
+}
+
+/**
+ * Retrieves (and initializes if missing) the active 6-digit OTP for a deal.
+ * Only the buyer can call this action.
+ */
+export async function getHandoverOtp(
+  txId: string,
+  step: "pickup" | "return" = "pickup"
+): Promise<ActionResult<{ code: string; step: "pickup" | "return" }>> {
+  const viewer = await getViewer();
+  if (!viewer) return fail("Sign in to view OTP.", undefined, "AUTH");
+  if (!z.uuid().safeParse(txId).success) return fail("Invalid transaction ID.");
+
+  const { data: tx, error } = await db()
+    .from("transactions")
+    .select("id, buyer_id, seller_id, kind, stage, delivery_otp_plain, return_otp_plain")
+    .eq("id", txId)
+    .single();
+
+  if (error || !tx) return fail("Deal not found.");
+  if (tx.buyer_id !== viewer.id) {
+    return fail("Only the buyer has access to the verification code.", undefined, "AUTH");
+  }
+
+  if (step === "pickup") {
+    if (tx.delivery_otp_plain) {
+      return ok({ code: tx.delivery_otp_plain, step: "pickup" });
+    }
+    const code = generateOtp();
+    const hash = hashOtp(code);
+    await db().from("transactions").update({ delivery_otp_plain: code, delivery_otp_hash: hash }).eq("id", txId);
+    return ok({ code, step: "pickup" });
+  }
+
+  if (step === "return") {
+    if (tx.kind !== "rental") return fail("Returns only apply to rental deals.");
+    if (tx.return_otp_plain) {
+      return ok({ code: tx.return_otp_plain, step: "return" });
+    }
+    const code = generateOtp();
+    const hash = hashOtp(code);
+    await db().from("transactions").update({ return_otp_plain: code, return_otp_hash: hash }).eq("id", txId);
+    return ok({ code, step: "return" });
+  }
+
+  return fail("Invalid step.");
+}
+
+/**
+ * Regenerates the 6-digit OTP for a deal if needed (resets attempts).
+ * Only the buyer can call this action.
+ */
+export async function regenerateHandoverOtp(
+  txId: string,
+  step: "pickup" | "return" = "pickup"
+): Promise<ActionResult<{ code: string; step: "pickup" | "return" }>> {
+  const viewer = await getViewer();
+  if (!viewer) return fail("Sign in to regenerate OTP.", undefined, "AUTH");
+  if (!z.uuid().safeParse(txId).success) return fail("Invalid transaction ID.");
+
+  const { data: tx, error } = await db()
+    .from("transactions")
+    .select("id, buyer_id, kind")
+    .eq("id", txId)
+    .single();
+
+  if (error || !tx) return fail("Deal not found.");
+  if (tx.buyer_id !== viewer.id) {
+    return fail("Only the buyer can regenerate the verification code.", undefined, "AUTH");
+  }
+
+  const code = generateOtp();
+  const hash = hashOtp(code);
+
+  if (step === "pickup") {
+    await db()
+      .from("transactions")
+      .update({
+        delivery_otp_plain: code,
+        delivery_otp_hash: hash,
+        otp_attempts: 0,
+        otp_locked_until: null,
+      })
+      .eq("id", txId);
+    revalidatePath("/deals");
+    revalidatePath("/messages");
+    return ok({ code, step: "pickup" }, "New pickup code generated");
+  }
+
+  if (step === "return") {
+    if (tx.kind !== "rental") return fail("Returns only apply to rental deals.");
+    await db()
+      .from("transactions")
+      .update({
+        return_otp_plain: code,
+        return_otp_hash: hash,
+        otp_attempts: 0,
+        otp_locked_until: null,
+      })
+      .eq("id", txId);
+    revalidatePath("/deals");
+    revalidatePath("/messages");
+    return ok({ code, step: "return" }, "New return code generated");
+  }
+
+  return fail("Invalid step.");
+}
+
+/**
+ * Verifies the buyer's 6-digit OTP to confirm delivery or return.
+ * Only the seller can call this action.
+ */
+export async function verifyHandoverOtp(
+  txId: string,
+  code: string,
+  step: "pickup" | "return" = "pickup"
+): Promise<ActionResult<{ stage: number; step: "pickup" | "return" }>> {
+  const viewer = await getViewer();
+  if (!viewer) return fail("Please sign in again.", undefined, "AUTH");
+  if (!z.uuid().safeParse(txId).success) return fail("Deal not found.");
+
+  const cleanCode = code.replace(/\D/g, "");
+  if (cleanCode.length !== 6) {
+    return fail("Please enter the full 6-digit verification code.");
+  }
+
+  const candidateHash = hashOtp(cleanCode);
+
+  const { data, error } = await db().rpc("verify_handover_otp", {
+    p_tx: txId,
+    p_actor: viewer.id,
+    p_candidate_hash: candidateHash,
+    p_step: step,
+  });
+
+  if (error) {
+    const f = friendlyDbError(error);
+    return fail(f.message, undefined, "DB");
+  }
+
+  const newStage = data as number;
+
+  const { data: t } = await db()
+    .from("transactions")
+    .select("buyer_id, seller_id, kind")
+    .eq("id", txId)
+    .single();
+
+  if (t) {
+    const isReturn = step === "return";
+    const notifyMsg = isReturn
+      ? `${viewer.name.split(" ")[0]} verified the return OTP. Rental complete. You can rate the deal now.`
+      : `${viewer.name.split(" ")[0]} verified your OTP. Handover confirmed.`;
+
+    await notify(t.buyer_id, "deal", "check", notifyMsg, "/deals");
+  }
+
+  revalidatePath("/deals");
+  revalidatePath("/messages");
+  return ok({ stage: newStage, step }, step === "return" ? "Return verified" : "Handover verified");
 }
 
 /** Rate the other person after the handover (or edit your rating within 24 hours). */
@@ -69,3 +383,32 @@ export async function rateDeal(input: RatingInput): Promise<ActionResult<{ delta
   revalidatePath("/you");
   return ok({ delta: Number(r.delta), plumeAfter: Number(r.plume_after) }, "Thanks. Your rating is on their profile.");
 }
+
+/** Updates the agreed meeting spot on a deal. */
+export async function updateHandoverSpot(
+  txId: string,
+  spot: { name: string; lat: number; lng: number }
+): Promise<ActionResult<{ txId: string; spot: string }>> {
+  const viewer = await getViewer();
+  if (!viewer) return fail("Please sign in again.", undefined, "AUTH");
+  if (!z.uuid().safeParse(txId).success) return fail("Deal not found.");
+
+  const { data: tx, error: fetchErr } = await db()
+    .from("transactions")
+    .select("id, buyer_id, seller_id")
+    .eq("id", txId)
+    .single();
+
+  if (fetchErr || !tx) return fail("Transaction not found.");
+  if (tx.buyer_id !== viewer.id && tx.seller_id !== viewer.id) {
+    return fail("Unauthorized to update this deal.", undefined, "AUTH");
+  }
+
+  const label = `Spot: ${spot.name} (${spot.lat.toFixed(4)}, ${spot.lng.toFixed(4)})`;
+  const { error } = await db().from("transactions").update({ pickup_note: label }).eq("id", txId);
+  if (error) return fail(friendlyDbError(error).message);
+
+  revalidatePath("/deals");
+  return ok({ txId, spot: spot.name }, `Meeting spot updated to ${spot.name}`);
+}
+

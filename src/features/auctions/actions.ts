@@ -17,6 +17,7 @@ import { bidSchema } from "@/lib/validation/market";
 import { rateLimit } from "@/lib/security/guard";
 import { sendNoticeEmail } from "@/lib/email";
 import { ping, startConversation } from "@/features/chat/service";
+import { generateOtp, hashOtp } from "@/features/deals/actions";
 
 /**
  * Places a bid.
@@ -59,6 +60,17 @@ export async function buyNow(listingId: string): Promise<ActionResult<{ conversa
   if (!z.uuid().safeParse(listingId).success) return fail("Auction not found.");
   const { data: tx, error } = await db().rpc("auction_buy_now", { p_listing: listingId, p_buyer: viewer.id });
   if (error) return fail(friendlyDbError(error).message);
+
+  // Auto-generate delivery OTP immediately upon auction buy now
+  const deliveryOtp = generateOtp();
+  await db()
+    .from("transactions")
+    .update({
+      delivery_otp_plain: deliveryOtp,
+      delivery_otp_hash: hashOtp(deliveryOtp),
+    })
+    .eq("id", tx as string);
+
   const { data: l } = await db().from("listings").select("seller_id,price").eq("id", listingId).single();
   const conv = l ? await startConversation(viewer.id, l.seller_id, listingId, `Hi! I used Buy it now at ${fmt(l.price)}. When can I pick it up?`, tx as string) : null;
   revalidatePath(`/item/${listingId}`);

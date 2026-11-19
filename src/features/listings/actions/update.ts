@@ -22,6 +22,7 @@ import { fmt } from "@/lib/format";
 import { verifyPhotos } from "@/lib/uploads";
 import { listingSchema, quickPriceSchema, type ListingInput } from "@/lib/validation/listing";
 import { notify, startConversation } from "@/features/chat/service";
+import { generateOtp, hashOtp } from "@/features/deals/actions";
 import { columnsFor, refreshListingPages } from "./shared";
 
 /** Loads a listing for its owner, or null (so other people get "not found"). */
@@ -180,6 +181,16 @@ export async function closeAuction(id: string, bidId: string | null): Promise<Ac
   if (error) return dbFail(error);
   let conv: string | null = null;
   if (bidId && tx) {
+    // Auto-generate delivery OTP immediately upon auction close/sale
+    const deliveryOtp = generateOtp();
+    await db()
+      .from("transactions")
+      .update({
+        delivery_otp_plain: deliveryOtp,
+        delivery_otp_hash: hashOtp(deliveryOtp),
+      })
+      .eq("id", tx as string);
+
     const { data: b } = await db().from("bids").select("bidder_id,amount").eq("id", bidId).single();
     const { data: l } = await db().from("listings").select("title").eq("id", id).single();
     if (b) conv = await startConversation(viewer.id, b.bidder_id, id, `Hi! You won "${l?.title}" at ${fmt(b.amount)}. When can you pick it up?`, tx as string);

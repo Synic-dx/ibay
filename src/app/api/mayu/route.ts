@@ -3,19 +3,18 @@
  * WHAT: POST /api/mayu streams an answer as newline-delimited JSON:
  *       {"t":"text","v":"..."} pieces, {"t":"cards","v":[...]} with real
  *       listings from tool results, then {"t":"done"}.
- * MODEL: OpenAI gpt-4o through the Vercel AI SDK (streamText, temperature 0.3,
- *        read-only tools). Without OPENAI_API_KEY (or if OpenAI fails) it falls
- *        back to keyword search so the demo never breaks.
+ * MODEL: Google Gemini free-tier multi-model cascade (Gemini Flash Lite priority,
+ *        falling back down tiers on 429/quota error).
+ *        Without GEMINI_API_KEY (or if all models fail) it falls back to
+ *        instant local keyword search so the demo never breaks.
  * LIMIT: 30 questions per hour per person (per IP for guests).
  */
-import { streamText, isStepCount } from "ai";
-import { createOpenAI } from "@ai-sdk/openai";
 import { z } from "zod";
 import { getViewer } from "@/lib/auth/session";
-import { db } from "@/lib/supabase/server";
+import { db, dbReady } from "@/lib/supabase/server";
 import { clientIp, rateLimit } from "@/lib/security/guard";
-import { MAYU_SYSTEM, mayuTools } from "@/features/mayu/tools";
 import { fallbackAnswer } from "@/features/mayu/fallback";
+import { runGeminiCascade } from "@/features/mayu/cascade";
 import type { ListingCard } from "@/features/listings/types";
 
 const bodySchema = z.object({
@@ -45,44 +44,68 @@ export async function POST(req: Request) {
     async start(controller) {
       const send = (o: unknown) => controller.enqueue(encoder.encode(JSON.stringify(o) + "\n"));
       let answer = "";
-      try {
-        if (!process.env.OPENAI_API_KEY) throw new Error("no-key");
-        // 3. Ask gpt-4o with read-only tools. Cards come only from tool results.
-        const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY });
-        const result = streamText({
-          model: openai("gpt-4o"),
-          system: MAYU_SYSTEM,
-          temperature: 0.3,
-          messages,
-          tools: mayuTools(viewer, (cs) => cs.forEach((c) => cards.set(c.id, c))),
-          stopWhen: isStepCount(4),
-        });
-        for await (const part of result.stream) {
-          if (part.type === "text-delta") {
-            const p = part as unknown as { text?: string; delta?: string };
-            const v = p.text ?? p.delta ?? "";
-            answer += v;
-            send({ t: "text", v });
-          } else if (part.type === "tool-result" && cards.size) {
-            send({ t: "cards", v: [...cards.values()].slice(0, 4) });
-          } else if (part.type === "error") {
-            throw new Error("model-error");
-          }
-        }
-        if (!answer) throw new Error("empty");
-      } catch {
-        // 4. Fallback: keyword search over the same listings.
-        if (!answer) {
-          const fb = await fallbackAnswer(question, viewer);
-          answer = fb.text;
-          send({ t: "text", v: fb.text });
-          if (fb.cards.length) send({ t: "cards", v: fb.cards });
+      const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+
+      if (apiKey) {
+        try {
+          await runGeminiCascade({
+            messages,
+            viewer,
+            apiKey,
+            onCards: (cs) => cs.forEach((c) => cards.set(c.id, c)),
+            onTextDelta: (v) => {
+              answer += v;
+              send({ t: "text", v });
+            },
+            onToolResult: () => {
+              if (cards.size) {
+                send({ t: "cards", v: [...cards.values()].slice(0, 4) });
+              }
+            },
+          });
+        } catch (err) {
+          console.warn("[Mayu Route] Gemini cascade error:", err);
         }
       }
-      await db().from("ai_conversations").insert({ user_id: viewer?.id ?? null, question, answer: answer.slice(0, 2000), tool_calls: [...cards.keys()] });
+
+      // Fallback: local database keyword search over the same listings if no AI response
+      if (!answer) {
+        try {
+          if (dbReady()) {
+            const fb = await fallbackAnswer(question, viewer);
+            answer = fb.text;
+            send({ t: "text", v: fb.text });
+            if (fb.cards.length) send({ t: "cards", v: fb.cards });
+          } else {
+            answer = "I am ready to help, but the database connection is currently pending. Please check back shortly.";
+            send({ t: "text", v: answer });
+          }
+        } catch (err) {
+          console.warn("[Mayu Route] Fallback answer error:", err);
+          answer = "I could not find matches right now. Please try asking again.";
+          send({ t: "text", v: answer });
+        }
+      }
+
+      try {
+        if (dbReady()) {
+          await db().from("ai_conversations").insert({
+            user_id: viewer?.id ?? null,
+            question,
+            answer: answer.slice(0, 2000),
+            tool_calls: [...cards.keys()],
+          });
+        }
+      } catch (err) {
+        console.warn("[Mayu Route] Failed to log conversation:", err);
+      }
+
       send({ t: "done" });
       controller.close();
     },
   });
-  return new Response(stream, { headers: { "Content-Type": "application/x-ndjson; charset=utf-8", "Cache-Control": "no-store" } });
+
+  return new Response(stream, {
+    headers: { "Content-Type": "application/x-ndjson; charset=utf-8", "Cache-Control": "no-store" },
+  });
 }

@@ -4,7 +4,7 @@
  * WHAT: <RootBar> is the sticky glass top bar on Home/Explore (menu, logo,
  *       bell/avatar or Sign in, theme toggle). <SubBar> is the back + title bar
  *       on inner pages (on desktop it turns into a plain page title row).
- *       <TabBar> is the bottom bar: Home, Explore, Sell, Chats, You.
+ *       <TabBar> is the bottom bar: Home, Explore, Map, Sell, Saved, Chats, You.
  */
 import Link from "@/components/ui/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -97,11 +97,20 @@ export function TabBar() {
         <Icon name="compass" />
         Explore
       </Link>
+      <Link className={`tab ${on("/map")}`} href="/map">
+        <Icon name="pin" />
+        Map
+      </Link>
       <Link className="tab" href="/sell" aria-label="Sell" onClick={gate("Sign in to list something on i-bay", "/sell")}>
         <span className="sellfab">
           <Icon name="plus" strokeWidth={2.6} />
         </span>
         Sell
+      </Link>
+      <Link className={`tab ${on("/saved")}`} href="/saved" onClick={gate("Sign in to see your saved items", "/saved")}>
+        <Icon name="heart" />
+        {viewer && counts.saved > 0 && <span className="cnt">{counts.saved}</span>}
+        Saved
       </Link>
       <Link className={`tab ${on("/messages")}`} href="/messages" onClick={gate("Sign in to chat with buyers and sellers", "/messages")}>
         <Icon name="chat" />
@@ -109,7 +118,7 @@ export function TabBar() {
         Chats
       </Link>
       <Link className={`tab ${on("/you")}`} href="/you" onClick={gate("Sign in to see your profile, deals and saved items", "/you")}>
-        {viewer ? <Avatar name={viewer.name} url={viewer.avatarUrl} color={viewer.avatarColor} size={24} /> : <Icon name="user" />}
+        {viewer ? <Avatar name={viewer.name} url={viewer.avatarUrl} color={viewer.avatarColor} size={20} /> : <Icon name="user" />}
         You
       </Link>
     </nav>

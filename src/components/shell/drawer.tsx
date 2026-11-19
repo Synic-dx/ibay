@@ -66,6 +66,7 @@ export function Drawer({ categories, liveDrops }: { categories: Category[]; live
           <div className="dsec">Shop</div>
           {dl("home", "Home", "/")}
           {dl("grid", "All categories", "/explore")}
+          {dl("pin", "Campus Map", "/map", "3D Map", true)}
           {dl("drama", "Preprocess Store", "/browse?cat=preprocess", "Hourly", true)}
           {dl("dumbbell", "Gym Corner", "/browse?cat=gym")}
           {dl("hammer", "Live auctions", "/browse?modes=auction")}

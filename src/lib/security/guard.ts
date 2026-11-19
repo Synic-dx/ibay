@@ -5,7 +5,7 @@
  */
 import "server-only";
 import { headers } from "next/headers";
-import { db } from "@/lib/supabase/server";
+import { db, dbReady } from "@/lib/supabase/server";
 import { CAPTCHA_ERROR, verifyCaptcha } from "./captcha";
 
 /** Best guess at the visitor's IP (Vercel and most proxies set x-forwarded-for). */
@@ -21,10 +21,15 @@ export async function clientIp(): Promise<string> {
  * @param max hits allowed per window
  */
 export async function rateLimit(key: string, windowSeconds: number, max: number): Promise<boolean> {
-  const { data, error } = await db().rpc("hit_rate_limit", { p_key: key, p_window_seconds: windowSeconds, p_max: max });
-  // WHY: if the limiter itself fails we allow the request rather than lock everyone out mid-demo.
-  if (error) return true;
-  return data === true;
+  if (!dbReady()) return true;
+  try {
+    const { data, error } = await db().rpc("hit_rate_limit", { p_key: key, p_window_seconds: windowSeconds, p_max: max });
+    // WHY: if the limiter itself fails we allow the request rather than lock everyone out mid-demo.
+    if (error) return true;
+    return data === true;
+  } catch {
+    return true;
+  }
 }
 
 /**

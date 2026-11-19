@@ -1,0 +1,893 @@
+[
+  {
+    "id": "adfe4cc7-7cff-4e1f-bfb7-ce8df08dcb9f",
+    "name": "__CAMPUS_PATH_METADATA__",
+    "category": "Facilities & Utilities",
+    "lat": 22.62,
+    "lng": 75.79,
+    "description": "{\"3a85867e-82ab-463f-80ba-4452fa0c7881\":{\"type\":\"stairs\",\"step_count\":15},\"cd1ef944-c8af-4f31-9984-34ca2b0801e1\":{\"type\":\"stairs\",\"step_count\":15},\"b1569405-2610-4c82-9305-c383b7aa4b04\":{\"type\":\"stairs\",\"step_count\":15},\"c9c703f4-e7d0-4afd-827b-a3221c7413f6\":{\"type\":\"stairs\",\"step_count\":15},\"698037c3-6a42-4650-beff-3a4cb87da8a0\":{\"type\":\"stairs\",\"step_count\":15},\"659512f6-35c2-40b9-bec6-9f3dcdcf862a\":{\"type\":\"road\"},\"1a841b93-23eb-42c1-b3d7-bc79a7d90017\":{\"type\":\"road\"},\"9de6a168-4973-4b06-bb9c-946d843f2851\":{\"type\":\"road\"},\"3c7d4741-b6cb-4533-abc0-e046e58ad2ee\":{\"type\":\"road\"},\"a945a34d-59a9-4235-9e76-5209c6662f3c\":{\"type\":\"road\"},\"527e2235-5bdd-4b3d-87f7-135d571618ad\":{\"type\":\"road\"},\"c8d807b9-2a18-4237-abf9-f09eced6e599\":{\"type\":\"road\"},\"c7c5034f-0611-4638-994a-c9bee263afb6\":{\"type\":\"road\"},\"2de81b66-d194-4f04-9ac6-f4e81690248d\":{\"type\":\"road\"},\"109805a4-edbd-4b1f-a630-4718d192277a\":{\"type\":\"road\"},\"82d84ca7-42a5-47e2-974a-8057c4d0b5e6\":{\"type\":\"road\"},\"07011b54-45a4-47d5-8d0f-3b2b03c31577\":{\"type\":\"road\"},\"35a6bc12-9a96-4ae8-a0db-c9cac1f27189\":{\"type\":\"road\"},\"9a76e642-01f4-4d7b-a897-182b7e679739\":{\"type\":\"road\"},\"daee3d3f-6c10-4e0f-b9b3-f6821bd5c875\":{\"type\":\"road\"},\"be3eb124-b7b4-410b-8b48-3c87aed0aea3\":{\"type\":\"road\"},\"e35ec0a6-f99d-49fa-8ebf-e3b75b5f804c\":{\"type\":\"road\"},\"211aeb83-3d6e-4a95-bbef-5f8b2410bed1\":{\"type\":\"road\"},\"2d36319e-133c-4234-bfd0-a11b49ca3a8c\":{\"type\":\"road\"},\"240fa38b-2297-4e9a-855e-7c50ff3c394e\":{\"type\":\"road\"},\"cf5977df-febf-4a39-a7d6-f63156208ac7\":{\"type\":\"road\"},\"7cccf954-0ec5-41c4-9ffe-335e524b2b9a\":{\"type\":\"road\"},\"1313f625-5066-4f93-9bb2-50e1f74d0dbb\":{\"type\":\"road\"},\"1f211706-cc31-44c7-9cf8-44f5b6c6d090\":{\"type\":\"road\"},\"a6827066-9229-4ebe-bf07-9a7f994e38f5\":{\"type\":\"road\"},\"001f1e35-9720-4bd6-b594-76decac7f07e\":{\"type\":\"road\"},\"2574f379-65bf-4d6e-8bb9-4c7867726cda\":{\"type\":\"road\"},\"b5a06787-13c5-4cf8-9c5f-460bc0bab6fd\":{\"type\":\"road\"},\"563e8b3e-e5c6-4c83-8e9d-eb338458ef49\":{\"type\":\"road\"},\"6071c462-1036-486d-b9ed-d180a869c995\":{\"type\":\"road\"},\"c96fbe2c-0fc4-44dd-92ab-9498cbf2bcc2\":{\"type\":\"road\"},\"923e63c7-9ca1-493a-9c31-786dc1fab990\":{\"type\":\"road\"},\"89eaf7b5-d9e9-4534-bd2d-f98c96ca7d05\":{\"type\":\"road\"},\"45655be7-ae95-4152-ac6b-1438c8820a47\":{\"type\":\"road\"},\"aabe88d0-1cbf-4cbd-be53-baac7d55d50a\":{\"type\":\"road\"},\"6f836052-6de6-4d4e-9773-84c36fb66950\":{\"type\":\"road\"},\"f235fbcf-65bf-4b27-a53b-1ef3669f63ad\":{\"type\":\"road\"},\"5b7678e1-783c-4179-87d0-875c35485634\":{\"type\":\"road\"},\"d6cd9fcd-90b2-4ba6-84de-fc1bb78b39ec\":{\"type\":\"road\"},\"710188a7-5184-4e6a-ad89-22379cd68aa7\":{\"type\":\"road\"},\"c18ea042-f5f5-4bea-b6fb-acc97032557f\":{\"type\":\"road\"},\"e050dc9e-2548-4ff8-8f40-bcf46953c266\":{\"type\":\"road\"},\"fd66cc7e-a636-4970-828c-9532c566288b\":{\"type\":\"road\"},\"6cc88391-0884-4ac7-acb7-54b8f79ce2df\":{\"type\":\"road\"},\"aac67fab-a12a-47a6-9297-0f677bbdcd85\":{\"type\":\"road\"},\"3fc783b6-c6d9-4cd6-a634-bcec90651a21\":{\"type\":\"road\"},\"98240007-1906-4239-8190-c9231e108db9\":{\"type\":\"road\"},\"ad471877-7e9a-4d2f-b5e5-a9904ad56a5c\":{\"type\":\"road\"},\"9059ade9-aedc-42d7-b85b-e2fb55bb9dba\":{\"type\":\"road\"},\"63a12bde-0705-4a4a-a7a4-0592fc5b238b\":{\"type\":\"road\"},\"285960b1-7466-4352-9edb-f7c300ffb16c\":{\"type\":\"road\"},\"15a1dafa-87f3-452d-a27b-552f7b73c7a1\":{\"type\":\"road\"},\"afa43ebb-ab7d-4ece-a094-2ee9a07b7111\":{\"type\":\"road\"},\"f1763755-f20b-423c-bd92-e4af4c448ae8\":{\"type\":\"road\"},\"ddb4f899-624d-4552-b3d6-dc2d6b15da54\":{\"type\":\"road\"},\"6a726150-440f-46ea-a15d-aca407aa9a3e\":{\"type\":\"road\"},\"800bdc1b-3ed3-4f55-810b-8828808072a4\":{\"type\":\"road\"},\"da1fa39e-f0bc-4f96-b35b-30ea7baa1fa0\":{\"type\":\"road\"},\"e9d57ea9-8ac0-49b5-9fce-bfa98782c7e1\":{\"type\":\"road\"},\"9b016d83-6706-46b0-a807-a31d23b668f6\":{\"type\":\"road\"},\"4ef8e04f-e782-48e1-b332-60893aa606af\":{\"type\":\"road\"},\"110da23b-1536-471d-a7bd-c6397766ee28\":{\"type\":\"road\"},\"06f56eb2-d5dd-4e20-ad36-0da81c466bd1\":{\"type\":\"road\"},\"47e2862b-e80e-4093-977b-d3fdc7461347\":{\"type\":\"road\"},\"612a69f1-55aa-4f9f-b69c-ca9bd54d3137\":{\"type\":\"road\"},\"9ce20e14-7852-4ea2-9067-46cd6ddad00c\":{\"type\":\"road\"},\"fc9ce39f-b293-497b-ad3f-3270447df98c\":{\"type\":\"road\"},\"2a8de529-8561-4f23-9b85-7057d01db32b\":{\"type\":\"road\"},\"32ea551e-cab9-4545-b078-41ee15dccb83\":{\"type\":\"road\"},\"a2694852-0b8c-4f0a-b65f-17dbda12b626\":{\"type\":\"road\"},\"30b0b61f-ed3a-4d8e-85a3-78ea8a67045c\":{\"type\":\"road\"},\"2f88697c-18de-46a0-be4c-787eb92539bc\":{\"type\":\"road\"},\"54fe4252-b0f6-45c9-ade9-873c246fb1fa\":{\"type\":\"road\"},\"7a748fd0-d823-4b0d-b86b-9e9d07ed9183\":{\"type\":\"road\"},\"a9f5d534-99f1-4a92-895e-dc4ba03bfa7e\":{\"type\":\"road\"},\"1b849ea7-5705-4c41-bbee-8fde1484595e\":{\"type\":\"road\"},\"4d845cf9-d020-4c3f-b72e-53f5849f2b6d\":{\"type\":\"road\"},\"fae7c117-2159-4554-b9b6-049637a109d2\":{\"type\":\"road\"},\"2e0d2e7f-46ff-4d9e-8efe-9e8c12b0962f\":{\"type\":\"road\"},\"64738529-f7a4-4f4e-9b08-76577cd86e2f\":{\"type\":\"road\"},\"ac2035dd-5eef-4b0f-b739-2ebf4bffccee\":{\"type\":\"road\"},\"1d237a1a-725c-4224-b355-ecae56f41f14\":{\"type\":\"road\"},\"2c63702f-f9e5-4c2b-94c3-3e4ffe854c12\":{\"type\":\"road\"},\"5f6817dc-3131-43ba-a2bf-e4c8eb4aef98\":{\"type\":\"road\"},\"78f70c0d-e5ab-423a-8444-aa5f31f10385\":{\"type\":\"road\"},\"101c4c65-a5a9-42eb-ac09-815b675dae24\":{\"type\":\"road\"},\"50bc1fac-7ab7-488d-a295-93e124355092\":{\"type\":\"road\"},\"2911d12b-1bad-4d0b-9d28-db99891d26f0\":{\"type\":\"road\"},\"334a6415-e9e6-4d73-a941-28cf76670daa\":{\"type\":\"road\"},\"3dfad464-7ebb-4213-9397-e4e2c8f57f98\":{\"type\":\"road\"},\"6353173f-22ab-485c-9ddc-1f331c277721\":{\"type\":\"road\"},\"574dd739-afb5-4860-ba3f-8c902db68d63\":{\"type\":\"road\"},\"f6349a82-fc03-4cbe-be2e-50dd55fa631c\":{\"type\":\"road\"},\"47341c63-07c8-4d1c-b856-8dd49e1411df\":{\"type\":\"road\"},\"66922734-f5e0-47eb-a5a4-22adc5f4f2a7\":{\"type\":\"road\"},\"ad8abd37-fa60-42e8-9bab-a4af1b32cfd9\":{\"type\":\"road\"},\"e8574ca1-07d2-4d32-a7a1-6198f85e01d8\":{\"type\":\"road\"},\"e22317ff-3032-4ac2-b2d7-d8d89ab91b83\":{\"type\":\"road\"},\"2231b23e-9a78-4c13-9728-282192e49fe6\":{\"type\":\"road\"},\"28094add-9d24-4e4b-8142-17160730d680\":{\"type\":\"road\"},\"de6f29c6-3f49-4d69-b881-10808d2dbdd0\":{\"type\":\"road\"},\"393f4b30-41d1-4313-870c-e3e79dd7b8e0\":{\"type\":\"road\"},\"7ad80531-dc0e-4f05-a789-a1cf15d63557\":{\"type\":\"road\"},\"ce18f43d-8a91-48f9-bb3b-11a9115d5a24\":{\"type\":\"road\"},\"2495fbda-4e19-4d34-8301-a0db6f89a111\":{\"type\":\"road\"},\"46f70b5d-9bee-4549-bd52-41562eac29c5\":{\"type\":\"road\"},\"4fb5938a-1f61-4d9d-bbd1-e4659c50644a\":{\"type\":\"road\"},\"326beb30-a74f-4b49-abbb-b19b3cfa2fd5\":{\"type\":\"road\"},\"f256318a-6593-4b4a-873f-24cca4c9f139\":{\"type\":\"road\"},\"323bd913-e3b6-4f2d-bfa9-298f443c7c94\":{\"type\":\"road\"},\"7f07d5a5-05b8-49ec-91d7-e9edccedad80\":{\"type\":\"road\"},\"89367a84-bd3a-4cb8-9029-ee0de47290f4\":{\"type\":\"road\"},\"63d8a26e-01ee-4b25-83df-2c712e751662\":{\"type\":\"road\"},\"59e8267d-2d64-4930-b2cf-32fdf392a6d1\":{\"type\":\"road\"},\"c1979c4f-db22-4578-aad3-458012647050\":{\"type\":\"road\"},\"97c4253e-0166-4e99-aee2-861e25f23697\":{\"type\":\"road\"},\"27740d2b-fb38-4aaf-8018-64544fbdf1bf\":{\"type\":\"road\"},\"5db63c56-94b8-4489-8d0c-d966624667ef\":{\"type\":\"road\"},\"2704d8e1-d9f6-4ea4-b5ea-5f18352c2b30\":{\"type\":\"road\"},\"54686e92-2886-4fa7-8c08-45f7e26a479e\":{\"type\":\"road\"},\"b370546b-af07-42b2-ab0f-f491b7bdf878\":{\"type\":\"road\"},\"6eb0acd6-ae23-4846-8bea-43efda60f582\":{\"type\":\"road\"},\"7e4c6b78-18c6-4c15-8057-500af4596380\":{\"type\":\"road\"},\"8291e21c-e319-493c-88d8-730d3c7be216\":{\"type\":\"road\"},\"588d7d62-9cab-4486-968e-4efc02ab0a9c\":{\"type\":\"road\"},\"5b00b236-ec66-42bd-9fa2-ff0194ac4a74\":{\"type\":\"road\"},\"038f9b6f-497e-41aa-a629-56a8e64b3b49\":{\"type\":\"road\"},\"fe2677e9-243e-4be7-bf2d-960f6511d6d1\":{\"type\":\"road\"},\"d268a5a6-b5e6-4f1c-ae90-ed27ae93b819\":{\"type\":\"road\"},\"f94148f1-fa74-4caf-a82f-1bb22fc94315\":{\"type\":\"road\"},\"be4a4840-9f61-400b-ab42-e8a682001762\":{\"type\":\"road\"},\"fd7e7ceb-0d4f-421b-9ad8-8be8f168fe0c\":{\"type\":\"road\"},\"9f80dbce-4fef-43eb-a2c4-67352604e04d\":{\"type\":\"road\"},\"31910d8f-faa1-4f95-92b7-b0a881ecc7d0\":{\"type\":\"road\"},\"4308424b-a61e-4ae5-8f36-f4fdae29c181\":{\"type\":\"road\"},\"a20396d9-c4ec-4529-8a92-897fad73baac\":{\"type\":\"road\"},\"acdf9a6a-d1f0-48e5-a17a-4c4d83040fbb\":{\"type\":\"road\"},\"4d593b76-8f7a-4847-9dfd-fe9b0ad0a76b\":{\"type\":\"road\"},\"c2835c94-4dd3-4919-8024-01e955b2cea7\":{\"type\":\"road\"},\"37fe3ea6-3300-4809-8e36-eb3e0820d714\":{\"type\":\"road\"},\"a6c15341-2307-4fa3-af06-de8a0b5d87d2\":{\"type\":\"road\"},\"cdad1bbf-bd9c-4023-8877-fe034fe119aa\":{\"type\":\"road\"},\"19e80c98-8bd3-4267-8f99-35a3f68a274d\":{\"type\":\"road\"},\"8475d7ab-ac07-4267-8fb7-1ab05734262e\":{\"type\":\"road\"},\"55624a28-4f44-48e0-b444-a808bfb771da\":{\"type\":\"road\"},\"b26d97f6-1bfa-4ecf-90da-6d7c720e3218\":{\"type\":\"road\"},\"84b3edc7-6407-41b9-90fd-845d8abb7dc0\":{\"type\":\"road\"},\"5f0f3d69-d3af-4e6c-bcf8-9104643cf2e4\":{\"type\":\"road\"},\"0291c8cb-2d03-4605-8061-7ea0c3c37301\":{\"type\":\"road\"},\"8e1fd440-814a-4cfe-9d4a-0a2e65f828b4\":{\"type\":\"road\"},\"3b5bce9b-475c-4d94-8cc4-bdd85e443b4c\":{\"type\":\"road\"},\"9613998d-c7ad-4a8c-91c8-a357e06a5d90\":{\"type\":\"road\"},\"34277272-67c1-4f9e-a210-12395dfb84b4\":{\"type\":\"road\"},\"c382d7be-bc15-46d5-93c7-da7aed0772f0\":{\"type\":\"road\"},\"8e5428cb-361c-46b7-b8a6-214d28aba396\":{\"type\":\"road\"},\"2cb250d3-2468-465e-9bb7-b81f141b5cd5\":{\"type\":\"road\"},\"941f5f3d-8cac-4e42-ac78-65ec2743b8fd\":{\"type\":\"road\"},\"401cff60-4e7c-4b6e-97de-fd1352fcf588\":{\"type\":\"road\"},\"660798bc-6d44-4e0b-8ae0-aef9550edca8\":{\"type\":\"road\"},\"84711701-74cd-4e4c-b4fb-23e7b61cbe55\":{\"type\":\"road\"},\"6d999c6e-b90e-432e-9faf-17c2152b4aa3\":{\"type\":\"road\"},\"668d828d-1715-4890-83e8-2344c9f1565f\":{\"type\":\"road\"},\"0d3e8e0e-6c26-4a08-828d-a98e9fccaef5\":{\"type\":\"road\"},\"34ed61ad-08a9-4f12-8822-5aa9a95e07ce\":{\"type\":\"road\"},\"191eee39-f6b4-4913-8c25-7e5163111eaf\":{\"type\":\"road\"},\"9d5e91db-ed2a-43cd-a2db-44db7726a043\":{\"type\":\"road\"},\"a08eccef-4cc4-43fe-a025-1cd4ddff348b\":{\"type\":\"road\"},\"fd11f0e6-6559-4d0a-9133-1ac4bd513866\":{\"type\":\"road\"},\"42ca76cb-ca79-424c-8f13-0b639f10aa2e\":{\"type\":\"road\"},\"94dd656d-0f76-4463-af26-99a6d35bd042\":{\"type\":\"road\"},\"c50ba098-d95d-4aca-a415-1fbcff60688a\":{\"type\":\"road\"},\"a4729c04-b8d1-4819-b16e-67d3b7545348\":{\"type\":\"road\"},\"d978c70b-47a6-4666-8115-3b30cd9b8c44\":{\"type\":\"road\"},\"f4dcfe3a-a24b-4c06-860a-f2b3aad5fc4a\":{\"type\":\"road\"},\"67ea6167-0b68-4853-997f-5aabed6d8f47\":{\"type\":\"road\"},\"66700691-154f-42a3-a05a-0e089b7f6f20\":{\"type\":\"road\"},\"e824c3fa-57f4-41f7-bcb8-779cba0fa39c\":{\"type\":\"road\"},\"5912b400-c636-4d37-ac74-9718e1078d3d\":{\"type\":\"road\"},\"23cb8bed-0963-4584-bcb5-0e01bd4e1d49\":{\"type\":\"road\"},\"f8a33a5e-2b16-41fb-bf1e-f746da7f4e97\":{\"type\":\"road\"},\"01c478f2-1c32-4504-8420-710501ea52e5\":{\"type\":\"road\"},\"eec19a50-23ff-4dd7-93e9-667416956089\":{\"type\":\"road\"},\"11867562-b0f7-41aa-a54d-5d23a242e1a8\":{\"type\":\"road\"},\"cdb71597-bbad-4e4b-b944-6ff4a207d89d\":{\"type\":\"road\"},\"8e89f34c-47a3-432e-a120-2b8ee38edf31\":{\"type\":\"road\"},\"86099b3d-febd-472f-b46e-ebdb9e277d89\":{\"type\":\"road\"},\"f9725b15-8a8c-477f-bf2e-a97f4dd99928\":{\"type\":\"road\"},\"c2982b9d-7d26-4b0e-ad49-62a18af93ff0\":{\"type\":\"road\"},\"8af5ecc5-2af7-4f2d-96d3-76bb7e5a3235\":{\"type\":\"road\"},\"a19f67dc-99ec-4802-93c4-d976720d1c9f\":{\"type\":\"road\"},\"8d155012-b58e-44da-a48b-cf36632ae323\":{\"type\":\"road\"},\"70f55897-b12f-4535-80cb-2c2cba4e579e\":{\"type\":\"road\"},\"1e382ff2-7e0e-41c3-a8f3-3161e853e327\":{\"type\":\"road\"},\"7bf21cff-8b2e-4dce-bc9b-bd9147285e4f\":{\"type\":\"road\"},\"5b103cf4-9cbf-4261-8d7b-5f71d2641aad\":{\"type\":\"road\"},\"6537aeb8-431f-4323-b021-daf9f6262044\":{\"type\":\"road\"},\"7a5a1997-e1a1-443d-9cde-33a44f8d5190\":{\"type\":\"road\"},\"8f38213a-3089-4a00-b12e-8a1aab003c04\":{\"type\":\"road\"},\"5c775c86-4198-49e4-81de-0041d1b867a9\":{\"type\":\"road\"},\"53e5f1ad-5bff-4cd3-9ca3-4d4757a61ce2\":{\"type\":\"road\"},\"43b8c8cf-bc6e-456b-9dbc-dcdcbb16fc13\":{\"type\":\"road\"},\"55d5ea88-97f4-44f2-870b-37a0ff037d8d\":{\"type\":\"road\"},\"5e53ecc8-24f9-4824-ac2e-b7951a183a33\":{\"type\":\"road\"},\"8609e129-aef2-4b6a-8da2-f151aa1bdc5a\":{\"type\":\"road\"},\"4b971d16-f552-447c-bfa7-7fe38fe5ef98\":{\"type\":\"road\"},\"f8a176ea-af18-4768-9771-61b17e3b42bb\":{\"type\":\"road\"},\"3e32b85c-4d96-469b-988a-66310af5b49d\":{\"type\":\"road\"},\"6b44b9a9-782f-41c2-8345-17f2c88949f4\":{\"type\":\"road\"},\"e169fbe7-3c64-4d7b-88a6-61ebbbc81c7c\":{\"type\":\"road\"},\"087418f5-8ba4-465f-bcb0-de063897c1cd\":{\"type\":\"road\"},\"272287dd-ffee-4539-a234-314e09d00c7b\":{\"type\":\"road\"},\"2d41d25e-06e1-4c41-bef9-f568e9d33742\":{\"type\":\"road\"},\"bee3c8cc-a6b6-48c7-9cd9-e608c839c3a3\":{\"type\":\"road\"},\"3e7a1b5e-45a5-4479-9f37-3a986fd81bf3\":{\"type\":\"road\"},\"ad9c6813-ef1b-4bf7-bebe-3a653dba47ba\":{\"type\":\"road\"},\"10a3532e-6064-4039-b48e-f3f1bfb6651c\":{\"type\":\"road\"},\"7c8e7f26-4274-4bda-b987-ea92399c3821\":{\"type\":\"road\"},\"d5f6581b-c7f7-42c5-9bf6-ac763515ecf4\":{\"type\":\"road\"},\"05a2f390-edd7-4846-8755-ca1d4fbd413f\":{\"type\":\"road\"},\"6be84dd8-6b33-41ce-aee2-5a092732e7b0\":{\"type\":\"road\"},\"8d1c6d15-4c7f-425f-acca-5d75fd12bf8a\":{\"type\":\"road\"},\"a125a74d-58d4-4f57-99a5-3ebd6737b516\":{\"type\":\"road\"},\"dabe036f-34c4-4e88-85df-8a6d126659ce\":{\"type\":\"road\"},\"c1a53bf5-d350-472f-9d6d-8234f747c4cc\":{\"type\":\"road\"},\"136f32b3-6788-4619-aad5-9e75ad544660\":{\"type\":\"road\"},\"7be54a22-0c7a-4885-8315-4a198305fd67\":{\"type\":\"road\"},\"e038ed71-07c4-40fb-b5ed-51e42bde645a\":{\"type\":\"road\"},\"5932c747-f212-4432-8235-2c86901c6db2\":{\"type\":\"road\"},\"59b867fd-efb4-48b1-a588-566eb78526eb\":{\"type\":\"road\"},\"7508798a-cc25-4548-87e1-119285064f31\":{\"type\":\"road\"},\"91100b6c-d568-4bb1-b8bd-2a9b666ed13d\":{\"type\":\"road\"},\"ad5298fb-ec0d-4b66-9f42-02af4b1c4f37\":{\"type\":\"road\"},\"e947a882-1259-4beb-bc69-de1d97dc4c7e\":{\"type\":\"road\"},\"34c04d9e-350d-4fc2-8bfe-fc04e80760f4\":{\"type\":\"road\"},\"e7ae2859-266e-41b1-95b3-9a291318ae4c\":{\"type\":\"road\"},\"0ad09cd7-ccdb-46fe-a568-ed8933b224ad\":{\"type\":\"road\"},\"e0f145b4-7b29-489c-a0fb-067258feac5a\":{\"type\":\"road\"},\"a8b70458-5008-4183-af97-0a1d710ae1c0\":{\"type\":\"road\"},\"e575d535-ef83-47dc-87ec-2ed67ed1e6e2\":{\"type\":\"road\"},\"24c07ef8-af23-479f-ac40-fa9eb0cf1346\":{\"type\":\"road\"},\"907f58c4-6ff4-4284-a1e2-45e737f0545b\":{\"type\":\"road\"},\"a2e5cc79-005d-48f6-941e-69d0936fddc8\":{\"type\":\"road\"},\"a970f6bd-eb25-4afd-9f54-f86d7fcff4ee\":{\"type\":\"road\"},\"e654c779-dacc-43b0-8eb6-7a0d19294cc0\":{\"type\":\"road\"},\"f2bcb9e8-36fb-4333-b662-4dbcfd3cea42\":{\"type\":\"road\"},\"08cd0b42-dca4-425f-938a-1f7318b24c15\":{\"type\":\"road\"},\"7a17d21f-4845-4644-a14c-dc967a8a436e\":{\"type\":\"road\"},\"9ca1daf4-9edc-4bb7-8152-86673746f454\":{\"type\":\"road\"},\"ba2af5a0-7d9d-4b42-8175-25180a187f2f\":{\"type\":\"road\"},\"9c643687-04dc-4628-8088-c7cd20d5dd54\":{\"type\":\"road\"},\"f5f7aae7-de6f-4c28-8120-c77126df2f76\":{\"type\":\"road\"},\"a1a1d77c-a323-40f9-b212-f596840cba03\":{\"type\":\"road\"},\"68e093e9-79d7-48a8-8412-2860a8432c41\":{\"type\":\"road\"},\"c5c89801-1d7e-495f-84ee-eac9619f24d0\":{\"type\":\"road\"},\"8d9357f3-8530-495e-b41c-d97a6afe90a7\":{\"type\":\"road\"},\"26ba990d-a553-41d9-ae8b-ea7b64fced87\":{\"type\":\"road\"},\"94415ad1-a025-42b1-b62f-ef0749acc941\":{\"type\":\"road\"},\"7f4e19be-0614-4a99-8d99-98a74455daa3\":{\"type\":\"road\"},\"4fbd59a1-17a3-4077-8ab3-4b7b309c7c32\":{\"type\":\"road\"},\"d468d45b-3109-4836-bb27-21d60dff2c30\":{\"type\":\"road\"},\"873612cc-a2d7-415b-83c2-a3369b5b6b39\":{\"type\":\"road\"},\"eea91d4a-661a-4440-8eff-cf944c2745b1\":{\"type\":\"road\"},\"1c46179f-01a9-4ceb-86f1-69686cb8bfcc\":{\"type\":\"road\"},\"65e809e6-7682-4b0e-8b4b-72147a55a4cc\":{\"type\":\"road\"},\"f8c6b564-7a47-4d59-91b9-acd1be0a42b1\":{\"type\":\"road\"},\"7822bff4-9d60-49ec-b0ed-c1214585e5c2\":{\"type\":\"road\"},\"df516723-d19a-4fc0-9da2-f546fd9880fb\":{\"type\":\"road\"},\"d80c226e-2243-4490-b0c9-e26e6146e975\":{\"type\":\"road\"},\"bca9164d-9679-4f04-9e62-496db9003e2a\":{\"type\":\"road\"},\"1a68ffdb-00da-4376-a6f3-f688aff8f4bd\":{\"type\":\"road\"},\"cdec529d-71ed-427f-83e4-ec1469aff76a\":{\"type\":\"road\"},\"c837db16-4793-4109-affa-b35fb7d78140\":{\"type\":\"road\"},\"ed22aea9-2aa9-4360-97f7-0b92c65e2f08\":{\"type\":\"road\"},\"855e1509-77ae-46fb-a738-6ca5a158a23e\":{\"type\":\"road\"},\"946e78cb-0f82-4957-8d05-c7745196e763\":{\"type\":\"road\"},\"1783f82b-967f-49bb-a830-de1d0413b02e\":{\"type\":\"road\"},\"c74c049f-41d7-4389-bfaa-2f71841d282d\":{\"type\":\"road\"},\"2dd304d1-f541-45ab-b7ca-856a8b5a5772\":{\"type\":\"road\"},\"a6951567-88eb-4add-98a1-8570db6072cd\":{\"type\":\"road\"},\"aaf6f241-c9f7-4bb0-a050-a7fe2ffa2895\":{\"type\":\"road\"},\"5125f13d-e28c-4077-97a2-8800c3278828\":{\"type\":\"road\"},\"74a149d5-e923-4522-8dce-e46d19be3e09\":{\"type\":\"road\"},\"b198d7fb-754f-46dd-96b5-f22ac04fb76e\":{\"type\":\"road\"},\"999f4e1c-0b35-407d-bd4c-1ec5e8b99e00\":{\"type\":\"road\"},\"1a4331c7-171c-4354-8933-dda2e67a8796\":{\"type\":\"road\"},\"efbdd019-faa1-4c16-8ade-b0a2070f6d56\":{\"type\":\"road\"},\"db91b0a9-ee3c-4899-b600-ffca89c41dc7\":{\"type\":\"road\"},\"d73df36d-e2cf-420e-8622-323ce699e854\":{\"type\":\"road\"},\"5424ad95-eff0-424f-a27d-10b1dcde09ed\":{\"type\":\"road\"},\"1aee0269-48a9-4ecf-93ae-cbb407141d40\":{\"type\":\"road\"},\"0d1b4105-8ab3-4bde-bc42-bf2b6f8c450c\":{\"type\":\"road\"},\"a36f7cb9-f992-4c78-9507-dc11d6539dc3\":{\"type\":\"road\"},\"c451cf76-bcf5-4e32-8bca-661e0503b73a\":{\"type\":\"road\"},\"7ff78118-a036-4897-90d9-8e6df8013d7b\":{\"type\":\"road\"},\"6b72ae73-ee11-45e8-9c34-7beeb32d75e4\":{\"type\":\"road\"},\"a6805b32-3799-4fc6-94dc-d316efec2683\":{\"type\":\"road\"},\"9120efc6-9852-435b-8dc9-4e2cd8d38cec\":{\"type\":\"road\"},\"cabc7fb1-b8c8-4bf2-8868-e4c9c8752486\":{\"type\":\"road\"},\"58b05865-3a50-465a-8e0d-226d6ec802cd\":{\"type\":\"road\"},\"1f9c8c18-2e95-4b0c-a0ef-c8689c9d56a8\":{\"type\":\"road\"},\"bb8a8d52-7348-4dbf-9a28-148b4436fee8\":{\"type\":\"road\"},\"9e0f8cb1-9785-485e-aa84-b444ed6df84c\":{\"type\":\"road\"},\"cf26afc8-effa-44e9-834f-81afe87240ca\":{\"type\":\"road\"},\"eedc390f-7231-4513-9090-84477e775ee6\":{\"type\":\"road\"},\"cc90c143-4a35-4b84-98c8-e61550ab824c\":{\"type\":\"road\"},\"010bf4eb-27d9-4e7d-ab30-b28ea60fcecb\":{\"type\":\"road\"},\"de4119a4-7236-4e37-8bfb-2066912d7a11\":{\"type\":\"road\"},\"315003e4-0534-479c-a126-905d17ea1788\":{\"type\":\"road\"},\"bc73b613-b588-444c-b546-3e972a17997f\":{\"type\":\"road\"},\"0e1653c9-70ea-4883-9c51-ddd126a84e86\":{\"type\":\"road\"},\"bb845174-a2f7-4350-bee9-a9896684993d\":{\"type\":\"road\"},\"d999ae11-d17f-4fbc-ab27-bcfb1559ef42\":{\"type\":\"road\"},\"ba3aea66-644b-424c-800a-2adf380fc6c5\":{\"type\":\"road\"},\"f54341f6-efc7-4e74-a192-ec5dee026e07\":{\"type\":\"road\"},\"c833a593-9ded-460d-b385-984ee9fc4bb1\":{\"type\":\"road\"},\"5a65d8e9-5dab-4d67-ab0f-603c39e392f4\":{\"type\":\"road\"},\"c361f1e8-16ca-4cfe-ad8f-876afa8eb3c4\":{\"type\":\"road\"},\"9c28c2c3-4764-4c95-8c5d-e59912259399\":{\"type\":\"road\"},\"07c3364e-b6eb-4184-b093-d9527a75e659\":{\"type\":\"road\"},\"35f0a134-246a-4f10-8bcc-d17138af43d1\":{\"type\":\"road\"},\"17e651da-657b-4f59-be70-7d1b7c3055e5\":{\"type\":\"road\"},\"81d14673-b98c-4fc9-8e3d-175bea0bd2b8\":{\"type\":\"road\"},\"e653b030-49ff-426d-a043-9bfed7244fb1\":{\"type\":\"road\"},\"b9faa313-e0a9-4aa1-81fa-920706e55708\":{\"type\":\"road\"},\"561257af-a8c3-4b9c-a98b-193df89ba0c8\":{\"type\":\"road\"},\"c888bf15-0edd-484d-94a3-7639947c61b9\":{\"type\":\"road\"},\"2a2ad600-820c-4f01-8580-8bc9b9976fc9\":{\"type\":\"road\"},\"e441ea65-4ac1-42a3-8f4f-743500c439a2\":{\"type\":\"road\"},\"c049c27e-7aaf-420b-bf4a-428c9d1715a6\":{\"type\":\"road\"},\"69761c29-a0ce-4547-b1cd-699c55079e1b\":{\"type\":\"road\"},\"89c0fa62-34e4-43f7-b3cb-803077c38fa5\":{\"type\":\"road\"},\"6d446ce3-db19-4b05-a1b4-38b3b785b383\":{\"type\":\"road\"},\"c9e514ce-adb6-475d-80e4-31db5dc3fdd1\":{\"type\":\"road\"},\"04e37dd0-f0c9-4ee2-aeb4-e7a0692f141b\":{\"type\":\"road\"},\"7ac35062-c7f4-4390-bad5-48fab0f1da2e\":{\"type\":\"road\"},\"0ea7bffb-d313-47af-b173-0803642e0260\":{\"type\":\"road\"},\"82ea3699-287e-41b6-ad43-66757815aecb\":{\"type\":\"road\"},\"c2480d2f-a224-4f12-ad74-0d48d64a6323\":{\"type\":\"road\"},\"55214fb5-7318-4424-9bb7-0bd0d66618c2\":{\"type\":\"road\"},\"62edfa9a-fa83-42da-9ede-f0972988b97e\":{\"type\":\"road\"},\"965e9ced-5152-442b-822e-786f32c4c2dd\":{\"type\":\"road\"},\"6bbc286e-91cd-4d09-94e1-9b3b599fa7c6\":{\"type\":\"road\"},\"5267b357-8517-431b-a6c0-f74b5b08f19f\":{\"type\":\"road\"},\"99b0cbf2-ea1d-4d53-8a64-095cad2b3266\":{\"type\":\"road\"},\"8a7324ec-aba7-48b2-b99e-caaaabec7c08\":{\"type\":\"road\"},\"5edd55b7-3270-498c-b69e-7db4360e18f6\":{\"type\":\"road\"},\"9a6a5914-bcf7-4d7c-a095-4fe9dd5cc9c3\":{\"type\":\"road\"},\"6b3b884f-8309-46dd-b57c-83d78c92d0e1\":{\"type\":\"road\"},\"eb76d5aa-0543-48d7-b627-a8549bcae14d\":{\"type\":\"road\"},\"41ace471-59a1-47a2-9295-69825746b489\":{\"type\":\"road\"},\"9a1f7c26-e203-4ed6-bb93-9c41da131a0d\":{\"type\":\"road\"},\"d4adb5a4-3247-4c58-8666-f258d4bacceb\":{\"type\":\"road\"},\"7bb68dab-e183-4c25-97c3-e35a424fc633\":{\"type\":\"road\"},\"10c534c3-0882-4f1c-a281-6ccc8ffe801a\":{\"type\":\"road\"},\"3f84a5d9-9b24-4f25-84da-3ba5d7fabfd9\":{\"type\":\"road\"},\"c07a59d2-7988-40b9-8e1e-2ade678b1f64\":{\"type\":\"road\"},\"a6b85033-9c89-410a-bd76-2510100a0003\":{\"type\":\"road\"},\"91800dc3-cdee-4417-b245-ce572f28c30c\":{\"type\":\"road\"},\"7af94af7-3718-4ad4-ae69-6a5972c8bb0c\":{\"type\":\"road\"},\"1c63909d-d0a6-4403-a92f-bc48a27ba389\":{\"type\":\"road\"},\"03f3fa20-fd59-45e4-8ce5-23bdea71ec3a\":{\"type\":\"road\"},\"1642c2dd-f77a-42bf-b1d5-0c9845e2e296\":{\"type\":\"road\"},\"9fca7d84-72c0-4346-bbb9-c0bb5192e99f\":{\"type\":\"road\"},\"1577eb8a-1747-426b-8231-180c38e2421d\":{\"type\":\"road\"},\"7b036a00-a3d6-4317-a163-43cde3dad8a4\":{\"type\":\"road\"},\"0c92f797-d494-4a68-8e8b-a1b5cd2af1c7\":{\"type\":\"road\"},\"147e6b59-53d6-4706-a79b-6311e52f698e\":{\"type\":\"road\"},\"af7500b4-77df-48e9-8793-887f373c93f8\":{\"type\":\"road\"},\"5252d94b-81b6-47ac-b8f6-83006a150a60\":{\"type\":\"road\"},\"11d3bff5-084a-4b00-8ae8-0eb832252b32\":{\"type\":\"road\"},\"dda56624-8180-4374-86db-9fd2086ba65a\":{\"type\":\"road\"},\"8bbfbda5-7163-4e5b-8f65-2b1d563f6764\":{\"type\":\"road\"},\"dc24313b-3515-47dd-bf66-5939308c3d39\":{\"type\":\"road\"},\"d668f2d3-5323-4bb5-ba24-a0c316b83790\":{\"type\":\"road\"},\"359db7e0-c1b7-4a2a-876f-ae506460e273\":{\"type\":\"road\"},\"9bc15764-d7f7-4267-b420-b1c00eb334e0\":{\"type\":\"road\"},\"7ef98da3-fdb2-4903-bf22-8b20f8f37e95\":{\"type\":\"road\"},\"3502ba61-22b0-404b-bfc6-9b86e901146e\":{\"type\":\"road\"},\"4d0d8bb1-ba4e-400e-9b90-3ccf9a308976\":{\"type\":\"road\"},\"ce0854f1-6ac5-45e0-96a1-ec0e454989b2\":{\"type\":\"road\"},\"30731c34-6880-4a1b-b50c-cc1b8a5f1afa\":{\"type\":\"road\"},\"d7d588f9-1238-4c0c-b955-dc1270f9ec9e\":{\"type\":\"road\"},\"4bbc54ab-9634-4d05-8cf6-d4206b52df1d\":{\"type\":\"road\"},\"cb6ba868-eb52-47bd-95d1-4f12b9d48834\":{\"type\":\"road\"},\"cb85b146-6cba-41ef-ab64-052f854126ad\":{\"type\":\"road\"},\"b2ad8389-6fed-4282-ba1a-69cccf5cc27a\":{\"type\":\"road\"},\"164be62d-0cc6-460e-b2bd-da16c59b6d99\":{\"type\":\"road\"},\"2dc92226-ba9e-47ab-b72a-ad59b24d7220\":{\"type\":\"road\"},\"1335a08a-85d6-44aa-9ad0-95aae737fd84\":{\"type\":\"road\"},\"d8ba7721-1a05-4b52-b5fa-8e87354aec17\":{\"type\":\"road\"},\"a89b1c89-a007-4588-969d-4e8739143171\":{\"type\":\"road\"},\"052bc2dd-e367-4bec-9148-b4575b3a68ee\":{\"type\":\"road\"},\"c4180784-64cd-4abd-936a-cd81c59cebd6\":{\"type\":\"road\"},\"d975389c-d2c6-42e0-a406-4c64dd9323ba\":{\"type\":\"road\"},\"3ba2ae09-4c67-4d23-8558-934ce7dcafef\":{\"type\":\"road\"},\"844c6d9c-d12d-407c-bb30-da6f73430740\":{\"type\":\"road\"},\"187530a0-4888-41a3-a53f-ea0725813212\":{\"type\":\"road\"},\"b41a2bd5-66a8-4aea-97ed-a678f09f5178\":{\"type\":\"road\"},\"ae1fb6a8-e9c5-4479-b915-81a8542d7db2\":{\"type\":\"road\"},\"e4601691-51ee-46de-8d7c-ec49dbed586d\":{\"type\":\"road\"},\"ae118a28-cb61-4d61-a2ff-c423968331e5\":{\"type\":\"road\"},\"63b6b518-ae58-421b-be23-db5b06626b2b\":{\"type\":\"road\"},\"5c7151d0-32e3-468a-836f-6066675a19e2\":{\"type\":\"road\"},\"9499fbc8-ed72-440f-8896-4c6c753c7e01\":{\"type\":\"road\"},\"eed31a62-b506-4717-9847-306be5225095\":{\"type\":\"road\"},\"92d423f5-02b3-40d6-b5e9-7a028a0c7700\":{\"type\":\"road\"},\"8b53ec1c-9023-4dbf-ad48-5266f81115f4\":{\"type\":\"road\"},\"2eb11927-b248-4564-b69b-c5851971e192\":{\"type\":\"road\"},\"b89819fc-31cc-40ef-93a1-62562d4a8376\":{\"type\":\"road\"},\"28d199e6-47c9-46df-8b24-9c4f2e086a62\":{\"type\":\"road\"},\"cf9fc687-d6d4-442f-a021-a8880eee048e\":{\"type\":\"road\"},\"31b1ba52-235c-4b6c-965b-ee3948e663bd\":{\"type\":\"road\"},\"46d0a16c-5429-4b70-973a-894a7fadeb31\":{\"type\":\"road\"},\"0c5164a7-3946-4b5e-a9ef-701011bf33ef\":{\"type\":\"road\"},\"6d62d938-a33c-4c1f-bafc-18fb3ae007a0\":{\"type\":\"road\"},\"b839eebe-7249-436d-9884-fbf0ee1ebe9e\":{\"type\":\"road\"},\"e6f7d0da-fe33-4442-87c9-2215000e7b15\":{\"type\":\"road\"},\"19240af0-d59b-4e3b-8993-988ea2848693\":{\"type\":\"road\"},\"fad63e47-0678-46e4-a5ac-45bafab30897\":{\"type\":\"road\"},\"9a925ea1-fa9f-41dc-bf78-ab1bb0ff8ebc\":{\"type\":\"road\"},\"3a8f2d98-90d5-4ebc-b562-d86a00c0f636\":{\"type\":\"road\"},\"b416293a-647b-461a-a7bd-4eb589c24876\":{\"type\":\"road\"},\"23f35fda-f8de-4f58-911d-83641032955e\":{\"type\":\"road\"},\"b9fa6fd2-d3fe-4a1a-a2cd-a1e561b70517\":{\"type\":\"road\"},\"dc5526d0-81d6-4657-990c-3f0ea121f540\":{\"type\":\"road\"},\"a0c63146-9c7e-4391-877c-9be74062dd2e\":{\"type\":\"road\"},\"df8d4e20-58ec-4c7b-8c82-dcdd4634e7a1\":{\"type\":\"road\"},\"b05230ed-3128-4c59-895f-3abf94b74ce3\":{\"type\":\"road\"},\"3190603b-81a5-4878-851c-7f408b3352db\":{\"type\":\"road\"},\"b21ecb7b-73cc-4a22-a63e-f810e2393d24\":{\"type\":\"road\"},\"6a7583a2-9b15-49ff-8178-56cf5d6fdea4\":{\"type\":\"road\"},\"304c2461-bf74-43e8-b70b-3b8370ce0fc8\":{\"type\":\"road\"},\"8438e062-bbd0-4433-930b-3051f465175c\":{\"type\":\"road\"},\"0ea86da1-0890-4981-9aec-ac33b9ec734e\":{\"type\":\"road\"},\"17c774fe-d823-47fd-a2fe-eac37bd98b77\":{\"type\":\"road\"},\"8ae77c9f-6919-4208-9a96-abd030354444\":{\"type\":\"road\"},\"d5105927-3ca2-49e4-850a-99d47be2c1bf\":{\"type\":\"road\"},\"55cdd036-384e-4e1c-845c-c98c4239a339\":{\"type\":\"road\"},\"51777f92-213a-4580-9033-a045eb7923cf\":{\"type\":\"road\"},\"356afb8b-8965-49b9-ad91-cdd1b3f4d062\":{\"type\":\"road\"},\"3ffbe96d-eae2-4a2d-b92f-f92066c0b4b9\":{\"type\":\"road\"},\"8581d83a-fa12-4372-92ad-94296a2c4a85\":{\"type\":\"road\"},\"264b96f0-a3e3-4453-ba89-eddcafea62ed\":{\"type\":\"road\"},\"acabea26-c99c-467f-8a34-ed4c63248bc5\":{\"type\":\"road\"},\"be119008-1350-4707-a203-2d139914cc92\":{\"type\":\"road\"},\"974c1855-664a-4882-9162-6e6e84619e0f\":{\"type\":\"road\"},\"4814c8de-ad4b-4486-9314-61b5c7c30d34\":{\"type\":\"road\"},\"0a5e658b-42cc-4df0-a221-ccc480df04cf\":{\"type\":\"road\"},\"191f79fc-e131-4a34-bbf2-5142b009c1e7\":{\"type\":\"road\"},\"c2b71376-c8e6-4fe7-8fc7-a1d33fa3f513\":{\"type\":\"road\"},\"fb10fe4c-51f5-45be-b6ec-fb3862252848\":{\"type\":\"road\"},\"af27436f-8821-4172-8534-bf560b9ed7d2\":{\"type\":\"road\"},\"462eb1ca-95fc-4b69-85e7-5e443eb59b96\":{\"type\":\"road\"},\"bbc29c67-1835-4c54-8163-ba19e3b5a119\":{\"type\":\"road\"},\"12cf0795-d67d-413f-8847-24158d748943\":{\"type\":\"road\"},\"999974ee-46b5-4336-a59a-58283656f0bb\":{\"type\":\"road\"},\"2bb1f49c-fd9e-43c0-bfb5-24ebfb21b9ea\":{\"type\":\"road\"},\"f1db9482-9cf7-4ccf-85ec-492ee4c52bde\":{\"type\":\"road\"},\"1aeb4448-17bb-4a84-9d55-d306f752a34b\":{\"type\":\"road\"},\"b625fd1a-865b-405b-bbc4-8778c2a56aa6\":{\"type\":\"road\"},\"7ed4f428-c11d-43d9-80d6-0c5f0fc0ab9e\":{\"type\":\"road\"},\"bc971d22-5e5e-4558-a702-abf1f4f56a6a\":{\"type\":\"road\"},\"c4ca0298-563a-4d49-84b5-8f9bd518193a\":{\"type\":\"road\"},\"a4e8095d-575e-47cc-97bb-b818f60e23c4\":{\"type\":\"road\"},\"f3076e02-875c-4e56-8a08-6e9d0b798135\":{\"type\":\"road\"},\"cbe12763-a2fa-4810-b65f-84fd4699f5b2\":{\"type\":\"road\"},\"93843355-f803-40ab-8e4b-62d550b0377c\":{\"type\":\"road\"},\"9f1b47b0-dd56-4ebd-a98e-73b80fb65c2b\":{\"type\":\"road\"},\"bb36e959-919c-4698-b45d-dc8937f3c10e\":{\"type\":\"road\"},\"9632baaa-621d-4a18-9011-54818dba14eb\":{\"type\":\"road\"},\"b803abea-28c3-4a56-9d58-f7301aacf5af\":{\"type\":\"road\"},\"3d682788-bbb1-4979-8674-77f7bbfb1b18\":{\"type\":\"road\"},\"fe6ea736-a893-4181-a2b4-b600f1440090\":{\"type\":\"road\"},\"55e2c952-911d-4982-9566-e0f8dec9ac41\":{\"type\":\"road\"},\"27ca33e3-536e-435a-ab7f-dfebda3066b0\":{\"type\":\"road\"},\"f1694354-253a-4464-b5ec-f53bd2f7615b\":{\"type\":\"road\"},\"5a374964-2f9f-4a06-a823-fdefc1812413\":{\"type\":\"road\"},\"9b22a8ab-3adb-4f4a-a76e-eb571a803e10\":{\"type\":\"road\"},\"0e0ca460-a6fa-4244-9de3-cd7346b8266d\":{\"type\":\"road\"},\"aca16b42-5ad8-40a8-8d16-fc13a1e73f15\":{\"type\":\"road\"},\"58ada6e3-91a0-4db1-a021-853636c491d1\":{\"type\":\"road\"},\"41774e7c-6913-4455-9173-c796daa9aecc\":{\"type\":\"road\"},\"b2ae4061-5946-41a9-a85a-69c047c5da0e\":{\"type\":\"road\"},\"102913d2-9b4a-4ec1-a32f-3a63ba93d25c\":{\"type\":\"road\"},\"8219d4b6-d5af-4c4a-978b-272e43b431d7\":{\"type\":\"road\"},\"cac80c46-ded6-4ed1-9753-b113174dd455\":{\"type\":\"road\"},\"377394fe-dcce-4be0-8d2f-8f662728b34e\":{\"type\":\"road\"},\"9a57c4af-d489-4aeb-b9e1-6ba76ae588ca\":{\"type\":\"road\"},\"4e4efae3-c99c-4717-966c-1790aa34ea82\":{\"type\":\"road\"},\"ba820378-4ee5-4d22-a2ba-8a42b02c4b37\":{\"type\":\"road\"},\"ff790ddc-bda1-4bf1-ba18-d9fd10c27472\":{\"type\":\"road\"},\"3e8e5ec1-bb33-493a-ac62-77884e153f0f\":{\"type\":\"road\"},\"e93adadf-cb35-427b-b16f-27bf28eb0ce8\":{\"type\":\"road\"},\"c7ea7725-6260-4142-aea8-8781bef0882f\":{\"type\":\"road\"},\"6a6fe0aa-7fdb-4d7e-9dbd-d9cc57dce83a\":{\"type\":\"road\"},\"37adbf61-15a3-454d-88dd-b049664edd29\":{\"type\":\"road\"},\"27d09cfd-329f-4e55-9670-763cfe07015d\":{\"type\":\"road\"},\"d8564c8f-5a08-4c33-9691-5546f37d1943\":{\"type\":\"road\"},\"39ead61b-db52-4ee0-9557-a1f8223ddb8a\":{\"type\":\"road\"},\"e9d052ab-cf04-4886-bb18-cb9e68eee045\":{\"type\":\"road\"},\"e9b4c04f-e28b-48ed-9a7d-8f628f1d251c\":{\"type\":\"road\"},\"1fb4eb72-d4c2-4b6f-84c1-959b212f8916\":{\"type\":\"road\"},\"3720c9de-6575-4cb4-b1e8-bf1529b90713\":{\"type\":\"road\"},\"72b88e14-3b95-4299-9083-5ae2ed86b7c3\":{\"type\":\"road\"},\"3ae13128-f7eb-49b5-b303-949412df8951\":{\"type\":\"road\"},\"79081763-83cd-4516-b51b-bed9fa182028\":{\"type\":\"road\"},\"531dbeab-e3a1-4030-a30d-eed69a6963f5\":{\"type\":\"road\"},\"62a3dbbd-8155-42a3-b057-d37e8586c958\":{\"type\":\"road\"},\"c5e9b49b-8684-4376-b2b9-c86507cc0312\":{\"type\":\"walkway\",\"distance_meters\":41,\"step_count\":null,\"name\":null},\"cb386c34-83a8-4ee9-bb9d-e0d6772802e0\":{\"type\":\"walkway\",\"distance_meters\":24,\"step_count\":null,\"name\":null},\"c91b4662-0f33-43d1-94e4-c36cc0c67c6d\":{\"type\":\"road\",\"distance_meters\":48,\"step_count\":null,\"name\":null},\"c7f951d9-039b-4ede-9ce2-d9a8f60d2a62\":{\"type\":\"road\",\"distance_meters\":40,\"step_count\":null,\"name\":null},\"3814783d-e806-48da-b845-889e4c19535a\":{\"type\":\"road\",\"distance_meters\":40,\"step_count\":null,\"name\":null},\"c6d56229-657b-4171-a979-a3bc5df65f31\":{\"type\":\"road\",\"distance_meters\":24,\"step_count\":null,\"name\":null},\"6c087da1-f991-41a9-b685-3b8da2820a52\":{\"type\":\"road\",\"distance_meters\":24,\"step_count\":null,\"name\":null},\"13978815-a2e3-48b5-86bd-267de0da4e0e\":{\"type\":\"walkway\",\"distance_meters\":54,\"step_count\":null,\"name\":null},\"b3c32f98-f095-4e06-b5a6-03bea28fdc12\":{\"type\":\"walkway\",\"distance_meters\":54,\"step_count\":null,\"name\":null},\"9b3b400f-c23d-46ed-b935-b79801c750cd\":{\"type\":\"walkway\",\"distance_meters\":11,\"step_count\":null,\"name\":null},\"1eed53b1-fa44-4ad9-883c-a8d095130cdc\":{\"type\":\"walkway\",\"distance_meters\":8,\"step_count\":null,\"name\":null},\"36cb16fc-775e-4750-8d29-dd78198b80ac\":{\"type\":\"walkway\",\"distance_meters\":17,\"step_count\":null,\"name\":null},\"b6225bde-06b5-45d2-8bdc-294c6c4b635a\":{\"type\":\"walkway\",\"distance_meters\":4,\"step_count\":null,\"name\":null},\"15a738e0-dbd6-4a73-a8d3-0877b320ec3b\":{\"type\":\"walkway\",\"distance_meters\":5,\"step_count\":null,\"name\":null},\"32a7b43e-6c08-4146-a3e2-8dfddc4bb0ee\":{\"type\":\"walkway\",\"distance_meters\":15,\"step_count\":null,\"name\":null},\"c8bafcab-e1d7-49c1-83ec-24e433078cd2\":{\"type\":\"walkway\",\"distance_meters\":15,\"step_count\":null,\"name\":null},\"b284f0a7-a6eb-4048-8bdc-c18c30bcf00f\":{\"type\":\"walkway\",\"distance_meters\":54,\"step_count\":null,\"name\":null},\"1932e975-7d4e-4331-9fce-050993613bac\":{\"type\":\"road\",\"distance_meters\":28,\"step_count\":null,\"name\":null},\"9e799491-0aa6-4514-9ec5-96ff10500cdd\":{\"type\":\"road\",\"distance_meters\":6,\"step_count\":null,\"name\":null},\"c7620a37-7887-4b6d-9743-79cbaf2a6eed\":{\"type\":\"road\",\"distance_meters\":11,\"step_count\":null,\"name\":null},\"d3f37f1c-9716-4175-9f23-8073a132fb01\":{\"type\":\"walkway\",\"distance_meters\":12,\"step_count\":null,\"name\":null},\"1bb6e7e3-96f6-4d4c-819a-d2766328a375\":{\"type\":\"walkway\",\"distance_meters\":9,\"step_count\":null,\"name\":null},\"18d2c06b-b322-46cf-91f0-47ab02e314c5\":{\"type\":\"walkway\",\"distance_meters\":27,\"step_count\":null,\"name\":null},\"d38079fc-67fd-4388-9fc9-bf716e6f2f94\":{\"type\":\"walkway\",\"distance_meters\":14,\"step_count\":null,\"name\":null},\"1365eb19-ca53-4b43-8b61-be74eb5024e9\":{\"type\":\"walkway\",\"distance_meters\":14,\"step_count\":null,\"name\":null},\"f0d54e69-192f-4b3a-91af-72a954bc153c\":{\"type\":\"walkway\",\"distance_meters\":7,\"step_count\":null,\"name\":null},\"83d6fd03-cc56-42c0-9e1e-71c6fdcf574f\":{\"type\":\"walkway\",\"distance_meters\":31,\"step_count\":null,\"name\":null},\"8b6b0b3a-5f0b-4e60-a961-c1c6a59fe6d1\":{\"type\":\"walkway\",\"distance_meters\":7,\"step_count\":null,\"name\":null},\"7b31686a-f0a6-40fd-a8ee-584bcf79c477\":{\"type\":\"walkway\",\"distance_meters\":9,\"step_count\":null,\"name\":null},\"664eed0b-c689-47dc-b3f3-0c5ee827336e\":{\"type\":\"walkway\",\"distance_meters\":49,\"step_count\":null,\"name\":null},\"d7b2eafa-4950-409f-aaa5-9c447d52531d\":{\"type\":\"walkway\",\"distance_meters\":49,\"step_count\":null,\"name\":null},\"ac475da1-a204-4f2f-bff5-bc935ab624df\":{\"type\":\"walkway\",\"distance_meters\":7,\"step_count\":null,\"name\":null},\"003eb554-148c-4258-9826-a95903afd038\":{\"type\":\"road\",\"distance_meters\":55,\"step_count\":null,\"name\":null},\"b35698e8-2044-4ae8-9977-3a880450d351\":{\"type\":\"stairs\",\"distance_meters\":17,\"step_count\":null,\"name\":null},\"903ec1fd-52c7-416b-abeb-f2629b3af288\":{\"type\":\"stairs\",\"distance_meters\":17,\"step_count\":null,\"name\":null},\"67ec18d1-107f-4c22-949e-78c2933ceb94\":{\"type\":\"stairs\",\"distance_meters\":17,\"step_count\":null,\"name\":null},\"f5932214-eff0-409f-a38f-bf3d9105e335\":{\"type\":\"stairs\",\"distance_meters\":17,\"step_count\":null,\"name\":null},\"303d2415-5615-4a92-8214-ee1e4ec7945d\":{\"type\":\"walkway\",\"distance_meters\":3,\"step_count\":null,\"name\":null},\"4c1776eb-862d-451f-acef-46bac8159981\":{\"type\":\"walkway\",\"distance_meters\":13,\"step_count\":null,\"name\":null},\"3c74ebe5-04d2-414e-9453-cc4fad809f63\":{\"type\":\"walkway\",\"distance_meters\":8,\"step_count\":null,\"name\":null},\"6d0ffc8a-6712-4542-ba86-5f92bdaac222\":{\"type\":\"stairs\",\"distance_meters\":16,\"step_count\":null,\"name\":null},\"d5c68b16-5038-41df-bfbb-8fe2ef7d394c\":{\"type\":\"road\",\"distance_meters\":48,\"step_count\":null,\"name\":null},\"676886b8-df53-4208-89ef-a95294af5157\":{\"type\":\"road\",\"distance_meters\":48,\"step_count\":null,\"name\":null},\"e38377df-72d7-4755-8273-f1e9288b52cb\":{\"type\":\"road\",\"distance_meters\":12,\"step_count\":null,\"name\":null},\"9e9853f4-82f7-44de-b971-26d3c1826250\":{\"type\":\"road\",\"distance_meters\":10,\"step_count\":null,\"name\":null},\"c5c7cbd9-bc6f-4fa3-8b6e-b9c086deded1\":{\"type\":\"road\",\"distance_meters\":47,\"step_count\":null,\"name\":null},\"4bb08ad7-494b-40cb-9cf3-530a5b48ee38\":{\"type\":\"road\",\"distance_meters\":47,\"step_count\":null,\"name\":null},\"f7411edb-9db7-4467-bdad-aa0b03f6f210\":{\"type\":\"road\",\"distance_meters\":14,\"step_count\":null,\"name\":null},\"ee5441ba-2020-4801-969f-436d96c08cd7\":{\"type\":\"road\",\"distance_meters\":37,\"step_count\":null,\"name\":null},\"352d4a01-4c82-4627-aeab-b1ed5d414e6f\":{\"type\":\"road\",\"distance_meters\":37,\"step_count\":null,\"name\":null},\"a6bf48e2-7dd0-4408-9b29-8cc30f8f953d\":{\"type\":\"road\",\"distance_meters\":21,\"step_count\":null,\"name\":null},\"2d94120a-195f-4078-ae62-936303a342f6\":{\"type\":\"road\",\"distance_meters\":9,\"step_count\":null,\"name\":null},\"077fc9f0-88a7-4cab-b88e-fc83818e520d\":{\"type\":\"road\",\"distance_meters\":10,\"step_count\":null,\"name\":null},\"20bd9eae-969e-46ff-b91b-0d8b175b4ef8\":{\"type\":\"road\",\"distance_meters\":30,\"step_count\":null,\"name\":null},\"45e2ca09-c6f2-4c29-87b1-bc1ec4c5ee65\":{\"type\":\"stairs\",\"distance_meters\":26,\"step_count\":null,\"name\":null},\"6d5af9d1-137d-4172-a0ef-34436bda7941\":{\"type\":\"stairs\",\"distance_meters\":7,\"step_count\":null,\"name\":null},\"d2c60a0d-e773-4ba3-8c61-ff54204478f2\":{\"type\":\"stairs\",\"distance_meters\":7,\"step_count\":null,\"name\":null},\"bc92c2f1-5528-4c9c-8128-78d7a124c032\":{\"type\":\"stairs\",\"distance_meters\":10,\"step_count\":null,\"name\":null},\"e1319e17-e0d6-46a7-ad08-df64e40c093e\":{\"type\":\"stairs\",\"distance_meters\":10,\"step_count\":null,\"name\":null},\"0cafc358-ccbc-4e5a-9e98-3d7e260a7d04\":{\"type\":\"stairs\",\"distance_meters\":5,\"step_count\":null,\"name\":null},\"ce309281-9a31-4647-9582-6c5acb0de26c\":{\"type\":\"stairs\",\"distance_meters\":11,\"step_count\":null,\"name\":null},\"f2fc9879-9e76-4a53-ac69-1be062143e46\":{\"type\":\"road\",\"distance_meters\":25,\"step_count\":null,\"name\":null},\"32cd7ca0-ee02-44c4-a911-a34abf3d50ae\":{\"type\":\"road\",\"distance_meters\":10,\"step_count\":null,\"name\":null},\"842142d2-fd8f-4686-ae1a-9f88ad5b136f\":{\"type\":\"road\",\"distance_meters\":12,\"step_count\":null,\"name\":null},\"6760831a-1eee-4093-a95a-a345d6ae3f7e\":{\"type\":\"road\",\"distance_meters\":11,\"step_count\":null,\"name\":null}}",
+    "photoUrl": null
+  },
+  {
+    "id": "d7ff6a50-3f24-40e4-89aa-dc8920929ac7",
+    "name": "A-Block",
+    "category": "Academic",
+    "lat": 22.627566,
+    "lng": 75.790683,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "119bc0a5-f295-4998-9df0-339a34dbfb61",
+    "name": "Academic Block",
+    "category": "Academic",
+    "lat": 22.627034,
+    "lng": 75.79123,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "54bcf5db-9707-4a60-b7d4-eb4abdcc4cab",
+    "name": "Administrative Block",
+    "category": "Administrative",
+    "lat": 22.625613,
+    "lng": 75.790077,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "b8f0f2da-c965-45a7-98d9-7ea412ccf1d9",
+    "name": "ATM",
+    "category": "Facilities & Utilities",
+    "lat": 22.626869,
+    "lng": 75.790767,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "0a20b948-f657-489f-b6a6-94ea6b16c03d",
+    "name": "Avani Foods",
+    "category": "Cafe & Eatery",
+    "lat": 22.624928,
+    "lng": 75.792466,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "878d251a-f9ef-4f03-8992-cbf98572dbf3",
+    "name": "B-Block",
+    "category": "Academic",
+    "lat": 22.627699,
+    "lng": 75.790949,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "e9ea32d8-3df1-4b0f-b2a3-d5f0d8420dd9",
+    "name": "Badminton Court",
+    "category": "Stadium & Grounds",
+    "lat": 22.627051,
+    "lng": 75.795452,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "ce801d71-0e9a-4724-90d2-994664f2eaf3",
+    "name": "Basketball Court",
+    "category": "Stadium & Grounds",
+    "lat": 22.623569,
+    "lng": 75.792003,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "1d40766e-840f-4647-86e0-d3da429ccb09",
+    "name": "C-Block",
+    "category": "Academic",
+    "lat": 22.62777,
+    "lng": 75.79127,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "27a69d87-2675-4f62-8459-80be68610d57",
+    "name": "Chick n Serve",
+    "category": "Cafe & Eatery",
+    "lat": 22.624654,
+    "lng": 75.79247,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "3d9b5771-66a9-4cc9-9f18-768cc597739f",
+    "name": "Computer Lab",
+    "category": "Facilities & Utilities",
+    "lat": 22.626459,
+    "lng": 75.791207,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "1c82a470-9492-46d1-b9a3-c3fcb7c37e18",
+    "name": "Cricket Stadium",
+    "category": "Stadium & Grounds",
+    "lat": 22.626192,
+    "lng": 75.786465,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "8fb9c569-8df3-4d77-8c1a-8b537f540ce9",
+    "name": "D-Block",
+    "category": "Academic",
+    "lat": 22.627649,
+    "lng": 75.791533,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "629822ff-45f8-4d69-b814-c9bc0f455804",
+    "name": "Director's Residence",
+    "category": "Administrative",
+    "lat": 22.626998,
+    "lng": 75.793241,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "a5091b93-4ca7-455b-96e2-711f87c29ba0",
+    "name": "Dog Shelter",
+    "category": "Other",
+    "lat": 22.631079,
+    "lng": 75.79276,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "326ca9e1-d00c-4a9f-ac8f-a151c8b6da0f",
+    "name": "Domino's Pizza",
+    "category": "Cafe & Eatery",
+    "lat": 22.624785,
+    "lng": 75.792217,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "cdc1d3f5-e9f5-4209-82e7-8094f5f36f93",
+    "name": "DPM Residence",
+    "category": "Hostel",
+    "lat": 22.624344,
+    "lng": 75.789767,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "6cf7fa16-9cd7-4564-9094-9579a8152f8b",
+    "name": "E-Block",
+    "category": "Academic",
+    "lat": 22.627522,
+    "lng": 75.791825,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "f082c8da-18a3-4a52-8157-0c1715c9e086",
+    "name": "EPGP Hostel",
+    "category": "Hostel",
+    "lat": 22.624242,
+    "lng": 75.790697,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "7b6deadb-7738-4e8d-a56b-6a8f4cfa7bb4",
+    "name": "Events Court",
+    "category": "Stadium & Grounds",
+    "lat": 22.628361,
+    "lng": 75.787941,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "a17341d4-f1fd-4a0b-a798-a004617bb606",
+    "name": "Executive Residence 01",
+    "category": "Hostel",
+    "lat": 22.628366,
+    "lng": 75.7915,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "63025bac-1f8a-48c5-a978-0741933f253a",
+    "name": "Executive Residence 02",
+    "category": "Hostel",
+    "lat": 22.628738,
+    "lng": 75.790557,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "aef451a7-5bcc-42b9-bc44-0a86c0b92e51",
+    "name": "Executive Residence 03",
+    "category": "Hostel",
+    "lat": 22.624487,
+    "lng": 75.790557,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "8daf04b5-d257-4068-b10f-45e18da04904",
+    "name": "Executive Residence 04",
+    "category": "Hostel",
+    "lat": 22.626013,
+    "lng": 75.792533,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "17ced642-4162-4d11-81d4-c1d6c13354fc",
+    "name": "F-Block",
+    "category": "Academic",
+    "lat": 22.627211,
+    "lng": 75.79196,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "f4d2dbe0-3ab6-4cc3-896f-e02005677585",
+    "name": "Finance Lab",
+    "category": "Facilities & Utilities",
+    "lat": 22.626408,
+    "lng": 75.791206,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "ae3bfaa0-d639-4f58-b668-39d7da1f0d6e",
+    "name": "Football Turf",
+    "category": "Stadium & Grounds",
+    "lat": 22.625149,
+    "lng": 75.789037,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "204a92de-5246-4653-b215-0886cf285ec9",
+    "name": "G-Block",
+    "category": "Academic",
+    "lat": 22.626835,
+    "lng": 75.791931,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "a0f7e45e-521c-4bbf-8c34-bd5bffeb220d",
+    "name": "Gate No. 2",
+    "category": "Gates & Parking",
+    "lat": 22.626834,
+    "lng": 75.795875,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "f0efb56a-02b6-4805-9ff4-bb7f380168ea",
+    "name": "Golden Arches",
+    "category": "Academic",
+    "lat": 22.626908,
+    "lng": 75.790482,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "306f8267-ca23-458e-a7e4-b92e28a8fff3",
+    "name": "H-Block",
+    "category": "Academic",
+    "lat": 22.62658,
+    "lng": 75.79178,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "2b0f54e1-5329-46d7-a794-bf6ba4d84520",
+    "name": "Hostel Reception Center (HRC)",
+    "category": "Administrative",
+    "lat": 22.624754,
+    "lng": 75.790974,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "26dcea10-c5e1-4b91-9001-29dba4ef5d36",
+    "name": "I-Block",
+    "category": "Academic",
+    "lat": 22.626403,
+    "lng": 75.791507,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "80a36f35-4ebb-44d6-a7cf-2bb4d598c260",
+    "name": "Indrani Restaurant",
+    "category": "Cafe & Eatery",
+    "lat": 22.624696,
+    "lng": 75.792504,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "642bbbf0-3ed1-4fec-8643-cb7652435f49",
+    "name": "J-Block",
+    "category": "Academic",
+    "lat": 22.626605,
+    "lng": 75.790912,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "ab2d8c7b-446c-40eb-addf-b520a66e17a5",
+    "name": "Jabreshwar Mahadev Temple",
+    "category": "Other",
+    "lat": 22.626102,
+    "lng": 75.791783,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "3b1c47ba-5406-46ca-9cb2-53f4f58bccc4",
+    "name": "Jain Kitchen",
+    "category": "Cafe & Eatery",
+    "lat": 22.624353,
+    "lng": 75.791628,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "b206a9e9-d023-451c-a053-c90c05c75159",
+    "name": "Juicilicious Cafe",
+    "category": "Cafe & Eatery",
+    "lat": 22.627014,
+    "lng": 75.788658,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "b0262c53-e96d-496e-96fb-d2bd536b2ff4",
+    "name": "K-Block",
+    "category": "Academic",
+    "lat": 22.626819,
+    "lng": 75.790658,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "19764d8d-69b1-4d3f-900e-ecf89de3e621",
+    "name": "Khichdi Nation",
+    "category": "Cafe & Eatery",
+    "lat": 22.624995,
+    "lng": 75.792186,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "e74b7def-8458-4cc9-8778-5e63166977d9",
+    "name": "Khuraak",
+    "category": "Cafe & Eatery",
+    "lat": 22.624253,
+    "lng": 75.791819,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "490a401f-9acc-402a-9642-7c65b8aeb8db",
+    "name": "KK Traders",
+    "category": "General Store",
+    "lat": 22.62573,
+    "lng": 75.79271,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "6eb7b5cc-6da7-42b0-8262-dc3cccb387a7",
+    "name": "L-Block",
+    "category": "Academic",
+    "lat": 22.627068,
+    "lng": 75.790588,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "13f833c2-fddc-48b8-8cce-2a1f62f8600c",
+    "name": "Learning Center",
+    "category": "Library",
+    "lat": 22.625691,
+    "lng": 75.790595,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "c924a96f-7d70-4f5b-8403-596c333150d7",
+    "name": "Main Gate (No. 1)",
+    "category": "Gates & Parking",
+    "lat": 22.63114,
+    "lng": 75.792071,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "3d171ec0-8dd6-479b-98bd-910eb87f4bef",
+    "name": "Married Residence 01",
+    "category": "Hostel",
+    "lat": 22.624446,
+    "lng": 75.792143,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "ea62c20b-94ff-4eac-b31e-9c60b1590864",
+    "name": "Mars",
+    "category": "Cafe & Eatery",
+    "lat": 22.624568,
+    "lng": 75.792395,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "2c883126-26bc-441b-8a2e-1fe80b1a1571",
+    "name": "Medical Center",
+    "category": "Medical Center",
+    "lat": 22.625976,
+    "lng": 75.792956,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "fe7c8925-14e2-4094-9129-812f23c075f8",
+    "name": "Mess 1",
+    "category": "Mess & Dining",
+    "lat": 22.625144,
+    "lng": 75.791248,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "47bcc008-9c6a-4702-8d0d-22796d896efc",
+    "name": "Mess 2",
+    "category": "Mess & Dining",
+    "lat": 22.624373,
+    "lng": 75.791755,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "82ff6b42-66a9-4488-8658-0d36ea8eb0d9",
+    "name": "Mess 3",
+    "category": "Mess & Dining",
+    "lat": 22.62368,
+    "lng": 75.793196,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "dfaf27fa-30ba-4088-8946-71314e7d3bb4",
+    "name": "Mess 4",
+    "category": "Mess & Dining",
+    "lat": 22.626412,
+    "lng": 75.788029,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "acce41dc-58b7-4880-856e-b8e0b830b307",
+    "name": "Mess 5",
+    "category": "Mess & Dining",
+    "lat": 22.626046,
+    "lng": 75.788043,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "3b46150c-7b02-4a3a-86d0-e7935b656a7b",
+    "name": "Nescafe",
+    "category": "Cafe & Eatery",
+    "lat": 22.624608,
+    "lng": 75.792437,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "1b99217a-a80d-4abb-bd67-97df581976fe",
+    "name": "New Auditorium",
+    "category": "Facilities & Utilities",
+    "lat": 22.62861,
+    "lng": 75.787785,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "1abfb980-8dfe-4fbf-b2fb-0a9d129c2c50",
+    "name": "Old Auditorium",
+    "category": "Facilities & Utilities",
+    "lat": 22.625901,
+    "lng": 75.789713,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "7e35aa94-a923-4d46-ba80-6436ec369a45",
+    "name": "Padel Ball Court",
+    "category": "Stadium & Grounds",
+    "lat": 22.627845,
+    "lng": 75.78858,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "92acdddb-4d57-4474-8f56-48acb0ef99dc",
+    "name": "Park",
+    "category": "Stadium & Grounds",
+    "lat": 22.626372,
+    "lng": 75.795203,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "6ea2199a-b232-43de-9ef0-4637df6346a3",
+    "name": "Photocopy Shop",
+    "category": "Facilities & Utilities",
+    "lat": 22.627664,
+    "lng": 75.79131,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "597da977-600f-427d-80f2-9d577407f52d",
+    "name": "Planet-I Junction",
+    "category": "Cafe & Eatery",
+    "lat": 22.624804,
+    "lng": 75.79241,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "7db7aa65-eee2-4c8a-a125-ea72de3edbf1",
+    "name": "Post Office",
+    "category": "Facilities & Utilities",
+    "lat": 22.625927,
+    "lng": 75.789849,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "fbe85d7b-1175-4662-be73-f50102e81339",
+    "name": "Reception",
+    "category": "Administrative",
+    "lat": 22.626923,
+    "lng": 75.79062,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "a9b9c3f3-6b72-47c1-b3d1-84c741198c2e",
+    "name": "Sardar Ji ka Dhaba",
+    "category": "Cafe & Eatery",
+    "lat": 22.624217,
+    "lng": 75.791743,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "dda65d6d-149d-4b00-81c8-5bf05418f510",
+    "name": "SBI Branch",
+    "category": "Facilities & Utilities",
+    "lat": 22.626001,
+    "lng": 75.78983,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "8fa09da5-3efe-49ac-b14c-ef1553936dad",
+    "name": "Skating Rink",
+    "category": "Stadium & Grounds",
+    "lat": 22.626411,
+    "lng": 75.795734,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "1a411115-34d1-4334-8a9c-7174f472717d",
+    "name": "Spiritual Garden",
+    "category": "Other",
+    "lat": 22.627249,
+    "lng": 75.792389,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "791a86bd-c225-4f35-aff0-37c64821a2b2",
+    "name": "Sports Complex",
+    "category": "Sports & Gym",
+    "lat": 22.628243,
+    "lng": 75.788463,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "e6a8d4dd-a309-4d27-83a2-4fa2c868b2d6",
+    "name": "SR 01",
+    "category": "Hostel",
+    "lat": 22.624916,
+    "lng": 75.791023,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "b7ed5fc0-27a3-47fc-b591-63b26701dd17",
+    "name": "SR 02",
+    "category": "Hostel",
+    "lat": 22.62432,
+    "lng": 75.791211,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "2a1c5d2d-b7b7-4b72-81b4-691fb160de7c",
+    "name": "SR 03",
+    "category": "Hostel",
+    "lat": 22.624636,
+    "lng": 75.791395,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "f4ca153c-39cf-4586-8977-0d315bd95e0d",
+    "name": "SR 04",
+    "category": "Hostel",
+    "lat": 22.625384,
+    "lng": 75.791664,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "4e9abe48-5a76-412b-b8a6-2ca0b42dd8d3",
+    "name": "SR 05",
+    "category": "Hostel",
+    "lat": 22.625279,
+    "lng": 75.792026,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "ee194334-cc67-4d9f-b706-c8b76f3d85e2",
+    "name": "SR 06",
+    "category": "Hostel",
+    "lat": 22.624931,
+    "lng": 75.791931,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "89620302-d1ba-4618-a3e5-7d389bebe565",
+    "name": "SR 07",
+    "category": "Hostel",
+    "lat": 22.625591,
+    "lng": 75.792444,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "77e51a32-313b-42bb-98b6-d273a33d9bce",
+    "name": "SR 08",
+    "category": "Hostel",
+    "lat": 22.625506,
+    "lng": 75.79287,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "1bfae8c6-4e4f-4c5e-b70e-f5faf3590587",
+    "name": "SR 09",
+    "category": "Hostel",
+    "lat": 22.625151,
+    "lng": 75.792825,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "d8871ce8-32e2-4cb9-a448-7192b5de4605",
+    "name": "SR 10",
+    "category": "Hostel",
+    "lat": 22.624738,
+    "lng": 75.79232,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "e397f2f4-baf6-4d97-84e8-c26faa97cf3e",
+    "name": "SR 11",
+    "category": "Hostel",
+    "lat": 22.623937,
+    "lng": 75.792748,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "260b8f2e-631f-4bc3-95d4-68a667f24cb6",
+    "name": "SR 12",
+    "category": "Hostel",
+    "lat": 22.62361,
+    "lng": 75.792641,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "20e158fb-8c03-4441-9ac1-3d42dc9f7b6c",
+    "name": "SR 13",
+    "category": "Hostel",
+    "lat": 22.624156,
+    "lng": 75.793247,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "95a21555-cd2b-4a2d-89ad-7823b8332a42",
+    "name": "SR 14",
+    "category": "Hostel",
+    "lat": 22.624009,
+    "lng": 75.793648,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "5c1ea71d-bbe0-4d51-a3b4-a59223dd0ded",
+    "name": "SR 15",
+    "category": "Hostel",
+    "lat": 22.626852,
+    "lng": 75.787796,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "9b0521ff-3378-4a8b-9357-796753b57ff3",
+    "name": "SR 16A",
+    "category": "Hostel",
+    "lat": 22.626528,
+    "lng": 75.788408,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "3866920e-ce81-4059-878f-dd6201c2caec",
+    "name": "SR 16B",
+    "category": "Hostel",
+    "lat": 22.626895,
+    "lng": 75.788576,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "322a04b1-b9f2-4dfd-a372-6de0781ca4ab",
+    "name": "SR 17",
+    "category": "Hostel",
+    "lat": 22.625636,
+    "lng": 75.787843,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "cc796fad-cb10-4a85-95da-05c4e4e949cf",
+    "name": "SR 18",
+    "category": "Hostel",
+    "lat": 22.625808,
+    "lng": 75.788543,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "8b366c12-e779-4709-b62f-f27d1d4d4abe",
+    "name": "SR 19",
+    "category": "Hostel",
+    "lat": 22.626925,
+    "lng": 75.788165,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "8d67087b-8c77-4e03-93f8-55727e147263",
+    "name": "SR 20",
+    "category": "Hostel",
+    "lat": 22.625606,
+    "lng": 75.788174,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "3fb3cd63-dc28-4af7-8e0b-d1ff4fffb224",
+    "name": "SRC Block",
+    "category": "Academic",
+    "lat": 22.628776,
+    "lng": 75.790983,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "b7dfa746-b6a1-40f9-ab1e-87aa762b82de",
+    "name": "Swimming Pool",
+    "category": "Sports & Gym",
+    "lat": 22.628608,
+    "lng": 75.788359,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "e0f04907-4417-4c6d-b5dd-d1fe064e6495",
+    "name": "Tennis Court",
+    "category": "Stadium & Grounds",
+    "lat": 22.628456,
+    "lng": 75.788728,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "1d28fd4a-9d83-4625-b167-7e95a3e6dad4",
+    "name": "Tennis Court (Faculty)",
+    "category": "Stadium & Grounds",
+    "lat": 22.626722,
+    "lng": 75.795191,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "82481348-98a7-4263-8528-33b5ed9d0dbd",
+    "name": "The IKIGAI Salon",
+    "category": "Salon & Barber",
+    "lat": 22.625751,
+    "lng": 75.792464,
+    "description": "{\"__meta\":true,\"desc\":null,\"phone\":null,\"hours\":null,\"menu\":[{\"id\":\"1786877189604-ifrtr\",\"name\":\"Basic Male Hair Cut\",\"category\":\"Services\",\"price\":120,\"is_popular\":false},{\"id\":\"1786877189604-ww6i8\",\"name\":\"Advance Male Hair Cut\",\"category\":\"Services\",\"price\":150,\"is_popular\":false},{\"id\":\"1786877189604-yf8bj\",\"name\":\"Child Hair Cut (under 8 Years)\",\"category\":\"Services\",\"price\":80,\"is_popular\":false},{\"id\":\"1786877189604-n90u8\",\"name\":\"Beard\",\"category\":\"Services\",\"price\":80,\"is_popular\":false},{\"id\":\"1786877189604-qhsfd\",\"name\":\"Hair Wash\",\"category\":\"Services\",\"price\":50,\"is_popular\":false},{\"id\":\"1786877189604-2ybsf\",\"name\":\"Styling\",\"category\":\"Services\",\"price\":70,\"is_popular\":false},{\"id\":\"1786877189604-5w46r\",\"name\":\"Hair Spa Basic\",\"category\":\"Services\",\"price\":349,\"is_popular\":false},{\"id\":\"1786877189604-szjrr\",\"name\":\"Loreal Hair Spa\",\"category\":\"Services\",\"price\":599,\"is_popular\":false},{\"id\":\"1786877189604-ul4ul\",\"name\":\"Beard Colour\",\"category\":\"Services\",\"price\":299,\"is_popular\":false},{\"id\":\"1786877189604-0shgn\",\"name\":\"Matrix Hair Colour\",\"category\":\"Services\",\"price\":599,\"is_popular\":false},{\"id\":\"1786877189604-k36f5\",\"name\":\"Loreal Hair Colour\",\"category\":\"Services\",\"price\":799,\"is_popular\":false},{\"id\":\"1786877189604-9upq9\",\"name\":\"INOA (Ammonia Free) Hair Colour\",\"category\":\"Services\",\"price\":849,\"is_popular\":false},{\"id\":\"1786877189604-um2rj\",\"name\":\"Express Head Massage (15 Mins)\",\"category\":\"Services\",\"price\":100,\"is_popular\":false},{\"id\":\"1786877189604-vidx2\",\"name\":\"Head Massage (30 Mins)\",\"category\":\"Services\",\"price\":249,\"is_popular\":false},{\"id\":\"1786877189604-lhsee\",\"name\":\"Face D-TAN\",\"category\":\"Services\",\"price\":249,\"is_popular\":false},{\"id\":\"1786877189604-q4i84\",\"name\":\"Cleanup\",\"category\":\"Services\",\"price\":399,\"is_popular\":false},{\"id\":\"1786877189604-egwra\",\"name\":\"Facial\",\"category\":\"Services\",\"price\":699,\"is_popular\":false}]}",
+    "photoUrl": null
+  },
+  {
+    "id": "685eacbf-6670-480b-8eb8-df47ad384b8b",
+    "name": "The Pi Shop",
+    "category": "General Store",
+    "lat": 22.625818,
+    "lng": 75.792648,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "ababfcf8-7241-4d31-a6a8-15b514c39fe9",
+    "name": "Transport Office",
+    "category": "Facilities & Utilities",
+    "lat": 22.625859,
+    "lng": 75.789824,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "c78b39f2-09cc-4b48-a7ca-b825c920c2a5",
+    "name": "Type V Faculty Houses",
+    "category": "Facilities & Utilities",
+    "lat": 22.625725,
+    "lng": 75.794335,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "f29ab94f-3425-4abf-a187-daa8939c70a7",
+    "name": "Visiting Faculty Apartment",
+    "category": "Other",
+    "lat": 22.628265,
+    "lng": 75.793233,
+    "description": null,
+    "photoUrl": null
+  },
+  {
+    "id": "b4075831-786c-4162-be6d-453f81358c35",
+    "name": "Volleyball Court",
+    "category": "Stadium & Grounds",
+    "lat": 22.625297,
+    "lng": 75.792635,
+    "description": null,
+    "photoUrl": null
+  }
+]

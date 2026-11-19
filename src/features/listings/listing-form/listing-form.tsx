@@ -30,6 +30,8 @@ import { createListing } from "../actions/create";
 import { updateListing } from "../actions/update";
 import { DeleteDialog } from "../delete-dialog";
 import { PhotoField, type Photo } from "./photo-field";
+import SpotPicker from "@/features/map/components/spot-picker";
+import AvailabilityPicker from "../components/availability-picker";
 import type { ListingCard, Mode } from "../types";
 import type { Category } from "@/features/shell/queries";
 
@@ -605,13 +607,24 @@ export function ListingForm({ categories, initial, edit }: { categories: Categor
                   <ProductCard l={preview} preview />
                 </div>
               </div>
-              <div className="note">
-                <Icon name="pin" />
-                <span>
-                  Pickup from {viewer?.hostel}
-                  {viewer?.room ? `, room ${viewer.room}` : ""}. Change it in your profile.
-                </span>
-              </div>
+              <SpotPicker
+                initialHostel={String(v.pickupHostel || viewer?.hostel || "SR 18")}
+                initialLat={v.pickupLat ? Number(v.pickupLat) : null}
+                initialLng={v.pickupLng ? Number(v.pickupLng) : null}
+                initialNote={String(v.pickupNote || "")}
+                onChange={({ hostel, lat, lng, note }) => {
+                  setValue("pickupHostel", hostel as never);
+                  setValue("pickupLat", lat as never);
+                  setValue("pickupLng", lng as never);
+                  setValue("pickupNote", note as never);
+                }}
+              />
+              {mode !== "drop" && (
+                <AvailabilityPicker
+                  value={(v.pickupSlots as string[]) || []}
+                  onChange={(slots) => setValue("pickupSlots", slots as never, { shouldDirty: true })}
+                />
+              )}
               {edit && edit.history.length > 0 && (
                 <div className="panel pad">
                   <h3 style={{ marginBottom: 6 }}>

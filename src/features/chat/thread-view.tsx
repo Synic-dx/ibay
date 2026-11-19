@@ -11,18 +11,24 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
+import { useApp } from "@/components/app-context";
 import { fmt } from "@/lib/format";
 import { PhotoTile, priceText } from "@/features/listings/components/parts";
+import MeetHalfwayPicker from "@/features/map/components/meet-halfway-picker";
+import HandoverStatusBadge from "@/features/deals/components/handover-status-badge";
+import HandoverOtpDisplay from "@/features/deals/components/handover-otp-display";
 import { fetchThread, respondOffer, sendMessage, sendOffer } from "./actions";
 import type { ChatMessage, Thread } from "./queries";
 
 const STATUS_TXT = { pending: "Waiting for reply", accepted: "Accepted", declined: "Declined", countered: "Countered" } as const;
 
 export function ThreadView({ initial, compact = false }: { initial: Thread; compact?: boolean }) {
+  const { viewer } = useApp();
   const qc = useQueryClient();
   const { data } = useQuery({ queryKey: ["thread", initial.id], queryFn: () => fetchThread(initial.id), initialData: initial, refetchInterval: 15000 });
   const t = data ?? initial;
   const [draft, setDraft] = useState("");
+  const [halfwayOpen, setHalfwayOpen] = useState(false);
   const [optimistic, setOptimistic] = useState<ChatMessage[]>([]);
   const [pending, start] = useTransition();
   const end = useRef<HTMLDivElement>(null);
@@ -86,6 +92,33 @@ export function ThreadView({ initial, compact = false }: { initial: Thread; comp
           </Link>
         </div>
       )}
+      {t.deal?.handoverScheduledAt && (
+        <div style={{ padding: compact ? "0 10px 6px" : "0 16px 8px" }}>
+          <HandoverStatusBadge
+            txId={t.deal.id}
+            scheduledAt={t.deal.handoverScheduledAt}
+            status={t.deal.handoverStatus}
+            proposedBy={t.deal.handoverProposedBy}
+            currentUserId={viewer?.id}
+            otherName={t.other.name.split(" ")[0]}
+            listingTitle={t.listing?.title ?? "Item"}
+            locationName={t.listing?.pickupHostel ?? "Campus"}
+            sellerSlots={t.listing?.pickupSlots}
+            compact={compact}
+          />
+        </div>
+      )}
+      {t.deal && t.deal.isBuyer && (
+        <div style={{ padding: compact ? "0 10px 6px" : "0 16px 8px" }}>
+          <HandoverOtpDisplay
+            txId={t.deal.id}
+            code={t.deal.stage === 1 ? t.deal.returnOtp : t.deal.deliveryOtp}
+            step={t.deal.stage === 1 ? "return" : "pickup"}
+            sellerName={t.other.name.split(" ")[0]}
+            compact
+          />
+        </div>
+      )}
       {t.other.whatsapp && !compact && (
         <div className="note" style={{ padding: "8px 14px" }}>
           <Icon name="chat" />
@@ -147,7 +180,24 @@ export function ThreadView({ initial, compact = false }: { initial: Thread; comp
       </div>
       <div className={compact ? "" : "composer"}>
         <div className={`qr ${compact ? "dk-qr" : ""}`}>
-          {quick.slice(0, compact ? 3 : 4).map((q) => (
+          {viewer?.hostel && t.other.hostel && (
+            <button
+              type="button"
+              style={{
+                background: "rgba(2, 80, 95, 0.08)",
+                color: "var(--brand, #02505f)",
+                fontWeight: 600,
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 5,
+              }}
+              onClick={() => setHalfwayOpen(true)}
+            >
+              <Icon name="compass" className="icon i14" />
+              Meet Halfway
+            </button>
+          )}
+          {quick.slice(0, compact ? 2 : 3).map((q) => (
             <button key={q} type="button" onClick={() => send(q)}>
               {q}
             </button>
@@ -171,6 +221,15 @@ export function ThreadView({ initial, compact = false }: { initial: Thread; comp
           </button>
         </form>
       </div>
+
+      {halfwayOpen && viewer?.hostel && t.other.hostel && (
+        <MeetHalfwayPicker
+          userHostel={viewer.hostel}
+          otherHostel={t.other.hostel}
+          onSelectSpot={(msg) => send(msg)}
+          onClose={() => setHalfwayOpen(false)}
+        />
+      )}
     </>
   );
 }
