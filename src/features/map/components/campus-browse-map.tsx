@@ -8,7 +8,7 @@ import type { ListingCard } from "@/features/listings/types";
 import { HOSTELS } from "@/lib/validation/auth";
 import { Icon } from "@/components/ui/icon";
 import { useApp } from "@/components/app-context";
-import { getResidenceCoordinates } from "../proximity";
+import { getResidenceCoordinates, getEffectiveListingHostel } from "../proximity";
 import MapDrawer from "./map-drawer";
 
 const CampusMap = dynamic(() => import("./campus-map"), {
@@ -79,7 +79,8 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
         const matchesTitle = l.title.toLowerCase().includes(q);
-        const matchesHostel = l.pickupHostel.toLowerCase().includes(q);
+        const effectiveHostel = getEffectiveListingHostel(l).toLowerCase();
+        const matchesHostel = effectiveHostel.includes(q) || l.pickupHostel.toLowerCase().includes(q);
         if (!matchesTitle && !matchesHostel) return false;
       }
 
@@ -101,7 +102,7 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
       if (!coords) continue;
 
       const itemsInHostel = filteredListings.filter(
-        (l) => l.pickupHostel.toLowerCase() === h.toLowerCase()
+        (l) => getEffectiveListingHostel(l).toLowerCase() === h.toLowerCase()
       );
       const hasDrops = itemsInHostel.some((l) => l.mode === "drop");
 

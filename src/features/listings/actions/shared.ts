@@ -57,6 +57,7 @@ export function columnsFor(d: ListingData) {
 export function refreshListingPages(id?: string) {
   revalidatePath("/");
   revalidatePath("/browse");
+  revalidatePath("/map");
   revalidatePath("/my-listings");
   revalidatePath("/saved");
   if (id) {

@@ -8,7 +8,7 @@ import "server-only";
 import { db } from "@/lib/supabase/server";
 import { istDay } from "@/lib/format";
 import { nextFreeLabel } from "@/features/rentals/slots";
-import { getNearbyResidences } from "@/features/map/proximity";
+import { getNearbyResidences, getEffectiveListingHostel } from "@/features/map/proximity";
 import type { Viewer } from "@/lib/auth/session";
 import type { ListingCard, ListingDetail, ListingPhoto, ListingStatus } from "./types";
 
@@ -28,6 +28,15 @@ type Row = Record<string, any>;
 export function mapCard(r: Row, saved: Set<string> = new Set()): ListingCard {
   const imgs: Row[] = [...(r.images ?? [])].sort((a, b) => a.position - b.position);
   const s = r.seller ?? {};
+  const lat = r.pickup_lat != null ? Number(r.pickup_lat) : null;
+  const lng = r.pickup_lng != null ? Number(r.pickup_lng) : null;
+  const effectiveHostel = getEffectiveListingHostel({
+    pickupHostel: r.pickup_hostel,
+    pickupLat: lat,
+    pickupLng: lng,
+    seller: s,
+  });
+
   return {
     id: r.id,
     title: r.title,
@@ -50,9 +59,9 @@ export function mapCard(r: Row, saved: Set<string> = new Set()): ListingCard {
     bidCount: r.bids?.[0]?.count ?? 0,
     priceDropAmount: r.price_drop_amount,
     priceDroppedAt: r.price_dropped_at,
-    pickupHostel: r.pickup_hostel,
-    pickupLat: r.pickup_lat != null ? Number(r.pickup_lat) : null,
-    pickupLng: r.pickup_lng != null ? Number(r.pickup_lng) : null,
+    pickupHostel: effectiveHostel,
+    pickupLat: lat,
+    pickupLng: lng,
     pickupSlots: r.pickup_slots ?? [],
     seller: {
       id: s.id,

@@ -248,8 +248,12 @@ export default function SpotPicker({
   const handleNoteChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = e.target.value.slice(0, 300);
     setNote(val);
+    const resolved =
+      coords.lat && coords.lng
+        ? findNearestResidence(coords.lat, coords.lng)?.location.name || selectedHostel
+        : selectedHostel;
     onChange({
-      hostel: selectedHostel,
+      hostel: resolved,
       lat: coords.lat,
       lng: coords.lng,
       note: val,
