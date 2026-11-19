@@ -108,7 +108,7 @@ export function ChatDealBar({ deal, compact = false, onOpenPass }: ChatDealBarPr
           }}
         >
           {actionLabel}
-          <Icon name="chev" className="icon i14" style={{ transform: "rotate(-90deg)" }} />
+          <Icon name="chev" className="icon i14" />
         </button>
       )}
     </div>

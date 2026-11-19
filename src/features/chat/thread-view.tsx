@@ -15,8 +15,8 @@ import { useApp } from "@/components/app-context";
 import { fmt } from "@/lib/format";
 import { PhotoTile, priceText } from "@/features/listings/components/parts";
 import MeetHalfwayPicker from "@/features/map/components/meet-halfway-picker";
-import HandoverStatusBadge from "@/features/deals/components/handover-status-badge";
-import HandoverOtpDisplay from "@/features/deals/components/handover-otp-display";
+import { ChatDealBar } from "./components/chat-deal-bar";
+import HandoverPassSheet from "@/features/deals/components/handover-pass-sheet";
 import { fetchThread, respondOffer, sendMessage, sendOffer } from "./actions";
 import type { ChatMessage, Thread } from "./queries";
 
@@ -29,6 +29,7 @@ export function ThreadView({ initial, compact = false }: { initial: Thread; comp
   const t = data ?? initial;
   const [draft, setDraft] = useState("");
   const [halfwayOpen, setHalfwayOpen] = useState(false);
+  const [passOpen, setPassOpen] = useState(false);
   const [optimistic, setOptimistic] = useState<ChatMessage[]>([]);
   const [pending, start] = useTransition();
   const end = useRef<HTMLDivElement>(null);
@@ -82,42 +83,21 @@ export function ThreadView({ initial, compact = false }: { initial: Thread; comp
         </Link>
       )}
       {t.deal && (
-        <div className="dealbar">
-          <span className="row" style={{ gap: 6 }}>
-            <Icon name="check" className="icon i16" strokeWidth={2.6} />
-            Deal agreed · {fmt(t.deal.amount)}
-          </span>
-          <Link href="/deals" style={{ color: "inherit", fontWeight: 700, marginLeft: "auto" }}>
-            Track ›
-          </Link>
-        </div>
+        <ChatDealBar
+          deal={t.deal}
+          compact={compact}
+          onOpenPass={() => setPassOpen(true)}
+        />
       )}
-      {t.deal?.handoverScheduledAt && (
-        <div style={{ padding: compact ? "0 10px 6px" : "0 16px 8px" }}>
-          <HandoverStatusBadge
-            txId={t.deal.id}
-            scheduledAt={t.deal.handoverScheduledAt}
-            status={t.deal.handoverStatus}
-            proposedBy={t.deal.handoverProposedBy}
-            currentUserId={viewer?.id}
-            otherName={t.other.name.split(" ")[0]}
-            listingTitle={t.listing?.title ?? "Item"}
-            locationName={t.listing?.pickupHostel ?? "Campus"}
-            sellerSlots={t.listing?.pickupSlots}
-            compact={compact}
-          />
-        </div>
-      )}
-      {t.deal && t.deal.isBuyer && (
-        <div style={{ padding: compact ? "0 10px 6px" : "0 16px 8px" }}>
-          <HandoverOtpDisplay
-            txId={t.deal.id}
-            code={t.deal.stage === 1 ? t.deal.returnOtp : t.deal.deliveryOtp}
-            step={t.deal.stage === 1 ? "return" : "pickup"}
-            sellerName={t.other.name.split(" ")[0]}
-            compact
-          />
-        </div>
+      {t.deal && (
+        <HandoverPassSheet
+          open={passOpen}
+          onOpenChange={setPassOpen}
+          deal={t.deal}
+          other={t.other}
+          listing={t.listing}
+          viewerId={viewer?.id}
+        />
       )}
       {t.other.whatsapp && !compact && (
         <div className="note" style={{ padding: "8px 14px" }}>
