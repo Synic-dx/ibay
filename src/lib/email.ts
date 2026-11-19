@@ -10,7 +10,7 @@ import { env } from "@/lib/env";
 const client = () => (env.resendKey ? new Resend(env.resendKey) : null);
 
 const wrap = (body: string) => `
-<div style="font-family:Poppins,Arial,sans-serif;max-width:440px;margin:0 auto;padding:24px;color:#20373C">
+<div style="font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;max-width:440px;margin:0 auto;padding:24px;color:#20373C">
   <div style="font-weight:700;font-size:22px;letter-spacing:-.04em"><span style="color:#1FC9B2">i</span>-<span style="color:#02637A">b</span><span style="color:#E0A526">a</span><span style="color:#DF524A">y</span></div>
   ${body}
   <p style="font-size:12px;color:#567379;margin-top:24px">IIM Indore's campus marketplace. Only @iimidr.ac.in accounts.</p>

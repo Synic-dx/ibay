@@ -18,7 +18,7 @@ body { background: var(--bg); }
 /* Toasts (sonner) styled like the prototype's dark pill. */
 .ibay-toast {
   background: #0b1e22 !important; color: #fff !important; border: 0 !important; border-radius: 16px !important;
-  box-shadow: var(--shg) !important; font-family: var(--font-poppins), Poppins, system-ui, sans-serif !important;
+  box-shadow: var(--shg) !important; font-family: var(--font-inter), Inter, system-ui, sans-serif !important;
   font-size: 13px !important; padding: 11px 16px !important;
 }
 [data-theme=dark] .ibay-toast { background: #e6ecee !important; color: #0f1314 !important; }
@@ -37,7 +37,7 @@ body { background: var(--bg); }
 .otp-digit:focus { outline: 2px solid var(--brand) !important; outline-offset: 1px !important; box-shadow: var(--focus) !important; }
 
 /* "Demo mode" pill in the header. */
-.demopill { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-poppins), system-ui, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: normal; text-transform: none; padding: 3px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn-ink); white-space: nowrap; }
+.demopill { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-inter), system-ui, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: normal; text-transform: none; padding: 3px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn-ink); white-space: nowrap; }
 
 /* Form helpers. */
 .fhint { font-size: 12px; color: var(--ink-3); display: flex; justify-content: space-between; gap: 8px; }
