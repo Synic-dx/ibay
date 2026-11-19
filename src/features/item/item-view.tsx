@@ -341,7 +341,7 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
               <button type="button" className={`fbtn ${saved ? "on" : ""}`} style={{ right: 60 }} onClick={heart} aria-label={saved ? "Remove from saved" : "Save"} aria-pressed={saved}>
                 <Icon name="heart" />
               </button>
-              <ThemeToggle className="fbtn mthm" />
+              <ThemeToggle className="fbtn mthm" style={{ right: 12 }} />
               <div className="gtag">
                 <ModeBadge l={l} />
               </div>

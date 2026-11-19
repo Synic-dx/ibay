@@ -94,7 +94,7 @@ body { background: var(--bg); }
 @media (max-width: 1079px) { .dsc-m { display: grid; grid-template-columns: repeat(2, 1fr); width: min(92vw, 420px); background: var(--surface); border-radius: 18px; padding: 8px; box-shadow: var(--shg); } }
 
 /* Theme toggle on the item gallery sits in the top-right corner like the other round buttons. */
-.gal .fbtn.thm { right: 12px; }
+.gal .fbtn.thm, .gal .fbtn.mthm { right: 12px !important; left: auto !important; }
 .vcard .vc-buy > a.btn { display: flex; }
 
 /* My listings has five stat tiles on desktop. */

@@ -61,7 +61,25 @@ export default function PickupSnippet({
     return calculateWalkingEffort(viewerHostel, coords.lat, coords.lng);
   }, [viewerHostel, coords.lat, coords.lng]);
 
-  const isSameHostel = viewerHostel && viewerHostel.toLowerCase() === pickupHostel.toLowerCase();
+  const isSameHostel =
+    viewerHostel &&
+    pickupHostel &&
+    viewerHostel.toLowerCase() === pickupHostel.toLowerCase();
+
+  const locationDisplay = useMemo(() => {
+    if (!nearestLandmark) return pickupHostel;
+    const landmarkName = nearestLandmark.location.name.trim();
+    const hostelName = pickupHostel.trim();
+    if (landmarkName.toLowerCase() === hostelName.toLowerCase()) {
+      return hostelName;
+    }
+    // If the pin is directly at a recognized hostel/residence, show that residence
+    if (nearestLandmark.location.category === "Hostel" && nearestLandmark.distanceMeters <= 35) {
+      return landmarkName;
+    }
+    // If at a specific campus facility (e.g. Sports Complex, Cafeteria)
+    return `${landmarkName} · near ${hostelName}`;
+  }, [nearestLandmark, pickupHostel]);
 
   return (
     <div
@@ -94,10 +112,8 @@ export default function PickupSnippet({
             </span>
             <span>Pickup Spot</span>
           </h4>
-          <span style={{ fontSize: "12px", color: "var(--text-muted, #64748b)" }}>
-            {nearestLandmark
-              ? `${nearestLandmark.location.name} (${pickupHostel})`
-              : pickupHostel}
+          <span style={{ fontSize: "12px", color: "var(--ink-2, #334155)", fontWeight: 500 }}>
+            {locationDisplay}
           </span>
         </div>
         <Link
