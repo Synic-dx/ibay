@@ -20,6 +20,7 @@ import { requestBuy } from "@/features/deals/actions";
 import { openChat, sendOffer } from "@/features/chat/actions";
 import { closeAuction, markSold } from "@/features/listings/actions/update";
 import { PhotoTile } from "@/features/listings/components/parts";
+import PickupSnippet from "@/features/map/components/pickup-snippet";
 import type { ListingCard, ListingDetail } from "@/features/listings/types";
 
 type Base = { open: boolean; onOpenChange: (v: boolean) => void };
@@ -169,6 +170,7 @@ export function BidSheet({ open, onOpenChange, l }: Base & { l: ListingDetail })
 const WHEN = ["Today, evening", "Tomorrow, morning", "Tomorrow, evening", "Ask in chat"];
 
 export function BuySheet({ open, onOpenChange, l }: Base & { l: ListingCard }) {
+  const { viewer } = useApp();
   const [when, setWhen] = useState(0);
   const [pending, start] = useTransition();
   const goChat = useGoChat();
@@ -194,6 +196,15 @@ export function BuySheet({ open, onOpenChange, l }: Base & { l: ListingCard }) {
               from {l.seller.name} · {l.pickupHostel}
             </div>
           </div>
+        </div>
+        <div style={{ marginTop: "-4px", marginBottom: "2px" }}>
+          <PickupSnippet
+            pickupHostel={l.pickupHostel}
+            pickupLat={l.pickupLat}
+            pickupLng={l.pickupLng}
+            viewerHostel={viewer?.hostel}
+            title={l.title}
+          />
         </div>
         <span className="label">
           <Icon name="clock" />
