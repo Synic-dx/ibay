@@ -6,6 +6,7 @@
 -- 4. Adds handover_lat, handover_lng, handover_spot_name, and handover_agreed_at to transactions
 
 -- 1. Update profiles table constraint & default
+ALTER TABLE public.profiles DROP CONSTRAINT IF EXISTS profiles_hostel;
 ALTER TABLE public.profiles DROP CONSTRAINT IF EXISTS profiles_hostel_check;
 
 UPDATE public.profiles
