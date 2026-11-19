@@ -5,7 +5,7 @@
  *       could fulfil.
  */
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { Icon } from "@/components/ui/icon";
 import { Avatar } from "@/components/brand";
 import { SubBar } from "@/components/shell/mobile-bars";

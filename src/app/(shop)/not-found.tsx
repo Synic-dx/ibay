@@ -2,7 +2,7 @@
  * FEATURE: 404 page. Also shown when you open someone else's edit page,
  * so listing ids can't be probed.
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { Icon } from "@/components/ui/icon";
 
 export default function NotFound() {

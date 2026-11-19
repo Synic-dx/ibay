@@ -5,7 +5,7 @@
  *       rails (Big brands, Preprocess, Gym Corner, Novels & manga, Rent don't buy),
  *       "People are looking for" and "Fresh near you".
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { Icon } from "@/components/ui/icon";
 import { Avatar } from "@/components/brand";
 import { RootBar, SearchPill } from "@/components/shell/mobile-bars";

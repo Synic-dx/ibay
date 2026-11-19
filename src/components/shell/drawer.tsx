@@ -4,7 +4,7 @@
  * WHAT: Shop links, collapsible category groups, "You" links and settings.
  *       Hidden on desktop (the header has everything).
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Icon } from "@/components/ui/icon";

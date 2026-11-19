@@ -3,7 +3,7 @@
  * WHO: only the two members; anyone else gets a 404.
  */
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { notFound } from "next/navigation";
 import { Avatar } from "@/components/brand";
 import { SubBar } from "@/components/shell/mobile-bars";

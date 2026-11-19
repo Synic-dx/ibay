@@ -6,7 +6,7 @@
  *       on inner pages (on desktop it turns into a plain page title row).
  *       <TabBar> is the bottom bar: Home, Explore, Sell, Chats, You.
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { Icon } from "@/components/ui/icon";

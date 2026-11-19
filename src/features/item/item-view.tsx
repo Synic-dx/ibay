@@ -10,7 +10,7 @@
  *       description, reviews and similar items. Phones get a sticky action bar.
  * LIVE: auctions refresh instantly when anyone bids (Supabase Realtime).
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";

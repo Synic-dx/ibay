@@ -5,7 +5,7 @@
  *       Google sign-ins from other domains come back with ?error=domain.
  */
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { getViewer } from "@/lib/auth/session";

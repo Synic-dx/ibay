@@ -6,7 +6,7 @@
  *       All state is in the URL.
  */
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { Icon } from "@/components/ui/icon";
 import { SubBar } from "@/components/shell/mobile-bars";
 import { ProductCard } from "@/features/listings/components/product-card";

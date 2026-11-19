@@ -2,7 +2,7 @@
 /**
  * FEATURE: Link into the requests board (guests get the sign-in modal)
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import type { CSSProperties, ReactNode } from "react";
 import { useApp } from "@/components/app-context";
 

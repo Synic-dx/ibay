@@ -4,7 +4,7 @@
  * WHAT: Food drops in your hostel and running auctions, soonest first, with
  *       live timers (red for drops under 10 min, amber for auctions under 1 h).
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { Icon } from "@/components/ui/icon";
 import { Countdown } from "@/components/countdown";
 import { useApp } from "@/components/app-context";

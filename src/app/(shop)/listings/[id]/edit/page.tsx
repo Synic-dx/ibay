@@ -16,7 +16,7 @@ import { ListingForm } from "@/features/listings/listing-form/listing-form";
 import { valuesFromListing } from "@/features/listings/form-values";
 import { SubBar } from "@/components/shell/mobile-bars";
 import { Icon } from "@/components/ui/icon";
-import Link from "next/link";
+import Link from "@/components/ui/link";
 
 export const metadata: Metadata = { title: "Edit listing" };
 

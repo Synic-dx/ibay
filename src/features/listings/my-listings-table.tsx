@@ -10,7 +10,7 @@
  *       Everything lives in the URL, so a refresh keeps the view.
  *       Phones: the same rows as stacked cards with a "..." menu.
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState, useTransition } from "react";
 import { createColumnHelper, tableFeatures, useTable } from "@tanstack/react-table";

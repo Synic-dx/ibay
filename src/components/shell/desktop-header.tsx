@@ -8,7 +8,7 @@
  *   row 3: the LIVE ticker
  * Hidden below 1080px by CSS (phones and tablets use the top bar + tab bar).
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import * as Menu from "@radix-ui/react-dropdown-menu";

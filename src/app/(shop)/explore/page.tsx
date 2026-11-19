@@ -2,7 +2,7 @@
  * FEATURE: Explore (every category, grouped by what is going on on campus)
  */
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { Icon } from "@/components/ui/icon";
 import { RootBar, SearchPill } from "@/components/shell/mobile-bars";
 import { CategoryPic } from "@/features/home/category-pic";

@@ -6,7 +6,7 @@
  *       hostel + trust in words.
  * GUESTS: tapping the card or the heart opens the sign-in modal instead.
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
@@ -65,7 +65,7 @@ export function ProductCard({ l, preview = false }: { l: ListingCard; preview?: 
       <div className="bd">
         <div className="tt">
           {preview ? l.title : (
-            <Link href={href} onClick={gate} prefetch={false}>
+            <Link href={href} onClick={gate}>
               {l.title}
             </Link>
           )}

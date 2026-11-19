@@ -1,5 +1,5 @@
 /** Root 404 (outside the shop layout). */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 
 export default function RootNotFound() {
   return (

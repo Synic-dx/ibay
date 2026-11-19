@@ -3,7 +3,7 @@
  * FEATURE: Friendly error page for the shop (no stack traces shown to users).
  */
 import { useEffect } from "react";
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { Icon } from "@/components/ui/icon";
 
 export default function ShopError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {

@@ -6,7 +6,7 @@
  *       replies and the composer. Sends are optimistic: your bubble appears
  *       at once and is replaced by the saved one.
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";

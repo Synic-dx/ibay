@@ -4,7 +4,7 @@
  *       on saved items, bookings and ratings. Opening the page marks them read.
  */
 import type { Metadata } from "next";
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { after } from "next/server";
 import { Icon } from "@/components/ui/icon";
 import { SubBar } from "@/components/shell/mobile-bars";

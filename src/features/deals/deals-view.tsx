@@ -8,7 +8,7 @@
  *       tune, tags, a required reason (10 to 500 characters) and a live preview
  *       of how the other person's Plume will change.
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";

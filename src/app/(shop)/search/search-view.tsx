@@ -4,7 +4,7 @@
  * WHAT: Recent searches (kept in this browser), trending terms and categories;
  *       as you type, matching categories and listings appear.
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { Icon } from "@/components/ui/icon";

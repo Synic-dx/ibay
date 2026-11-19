@@ -1,7 +1,7 @@
 /**
  * FEATURE: Desktop footer (hidden on phones, like the prototype)
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { Icon } from "@/components/ui/icon";
 import { Peacock, Wordmark } from "@/components/brand";
 

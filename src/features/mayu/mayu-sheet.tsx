@@ -4,7 +4,7 @@
  * WHAT: The round peacock button (bottom right; 60px on desktop) opens a tall
  *       sheet. Answers stream in; listing cards are real tool results.
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Peacock } from "@/components/brand";

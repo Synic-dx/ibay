@@ -7,7 +7,7 @@
  *       "Moving out?" with the most-wanted request, and "Can't find it?" which
  *       becomes "Rate N finished deals" when ratings are pending.
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { useEffect, useRef, useState } from "react";
 import { Icon } from "@/components/ui/icon";
 import { useApp } from "@/components/app-context";

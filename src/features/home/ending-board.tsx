@@ -5,7 +5,7 @@
  *       auctions (Bid ₹next in one tap). Timers turn amber then red.
  *       Guests see a locked food-drop panel (drops are hostel-only).
  */
-import Link from "next/link";
+import Link from "@/components/ui/link";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";

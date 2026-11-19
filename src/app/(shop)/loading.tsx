@@ -1,17 +1,12 @@
-/** FEATURE: Loading skeleton shown while a shop page streams in. */
+/** FEATURE: Loading skeleton for Home (shown instantly after a click). */
+import { Sk, SkChips, SkGrid, SkPage } from "@/components/ui/skeletons";
+
 export default function Loading() {
   return (
-    <main aria-busy="true" aria-label="Loading">
-      <div className="sk" style={{ height: 46, borderRadius: 999, marginBottom: 16 }} />
-      <div className="g2">
-        {Array.from({ length: 8 }, (_, i) => (
-          <div key={i} className="pc" style={{ padding: 6 }}>
-            <div className="sk" style={{ aspectRatio: "1 / 1" }} />
-            <div className="sk" style={{ height: 14, margin: "10px 4px 6px" }} />
-            <div className="sk" style={{ height: 18, width: "50%", margin: "0 4px 8px" }} />
-          </div>
-        ))}
-      </div>
-    </main>
+    <SkPage label="Loading home">
+      <SkChips n={8} />
+      <Sk h={260} r={24} style={{ marginBottom: 20 }} />
+      <SkGrid n={10} />
+    </SkPage>
   );
 }

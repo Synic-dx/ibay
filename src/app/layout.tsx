@@ -10,6 +10,7 @@ import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
 import { AppProvider } from "@/components/app-context";
 import { QueryProvider } from "@/components/query-provider";
+import { NavProgress } from "@/components/ui/nav-progress";
 import { getViewer } from "@/lib/auth/session";
 import { userChannel } from "@/lib/auth/ticket";
 import { googleEnabled } from "@/lib/auth";
@@ -42,6 +43,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en" className={`${poppins.variable} ${mono.variable}`} suppressHydrationWarning>
       <body>
+        <NavProgress />
         <ThemeProvider attribute="data-theme" defaultTheme="light" enableSystem={false} disableTransitionOnChange>
           <QueryProvider>
           <AppProvider

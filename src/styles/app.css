@@ -103,3 +103,21 @@ body { background: var(--bg); }
 /* WHY: the sign-in dialog turns off clicks outside itself, but Google / hCaptcha add the
    picture puzzle to the page body. Turn clicks back on for those popups. */
 iframe[src*="google.com/recaptcha"], iframe[src*="recaptcha.net/recaptcha"], iframe[src*="hcaptcha.com"] { pointer-events: auto !important; }
+
+/* Top progress bar while a page loads (components/ui/nav-progress.tsx). */
+.navprog { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 1000; pointer-events: none; background: var(--brand); transform-origin: 0 50%; transform: scaleX(0); opacity: 0; box-shadow: 0 0 8px var(--brand); }
+.navprog.on { opacity: 1; animation: navprog 10s cubic-bezier(.08,.75,.2,1) forwards; }
+.navprog.done { opacity: 0; transform: scaleX(1); transition: transform .18s ease-out, opacity .3s ease .15s; }
+@keyframes navprog { from { transform: scaleX(0); } 12% { transform: scaleX(.35); } to { transform: scaleX(.92); } }
+
+/* Skeleton building blocks (components/ui/skeletons.tsx). */
+.skp { display: grid; gap: 12px; }
+.sk.line { height: 14px; border-radius: 8px; }
+.sk.circle { border-radius: 999px; flex: none; }
+.skrow { display: flex; align-items: center; gap: 12px; padding: 12px 14px; }
+.skrow + .skrow { border-top: 1px solid var(--line); }
+.skitem { display: grid; gap: 20px; }
+@media (min-width: 900px) { .skitem { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 32px; align-items: start; } }
+@media (prefers-reduced-motion: reduce) { .sk { animation: none; } .navprog.on { animation-duration: 0s; transform: scaleX(.6); } }
+main { transition: opacity .2s ease; }
+html[data-nav="busy"] main { opacity: .55; }
