@@ -102,7 +102,7 @@ export default async function YouPage() {
                   <Icon name="shield" />
                   Your Plume score
                 </span>
-                <span className={`trust ${t.tone}`}>{t.label}</span>
+                <span className={`trust pill ${t.tone}`}>{t.label}</span>
               </div>
               <div className="between" style={{ alignItems: "flex-end" }}>
                 <b className="mono" style={{ fontSize: 34, lineHeight: 1 }}>
@@ -138,12 +138,14 @@ export default async function YouPage() {
                   ],
                   ["heart", "Saved", `${saved ?? 0} items`, "/saved"],
                   ["store", "My listings", `${live ?? 0} live`, "/my-listings"],
-                  ["list", "Requests", "Looking for...", "/requests"],
+                  ["list", "Requests", "Looking for…", "/requests"],
                 ] as const
               ).map(([i, n, s, href]) => (
                 <Link key={n} className="panel stat" href={href}>
-                  <Icon name={i} />
-                  <b style={{ fontSize: 15 }}>{n}</b>
+                  <div className="stat-head">
+                    <Icon name={i} />
+                    <b style={{ fontSize: 14.5, fontWeight: 600 }}>{n}</b>
+                  </div>
                   <span className="xs faint">{s}</span>
                 </Link>
               ))}
