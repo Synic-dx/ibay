@@ -85,6 +85,8 @@ export function ThreadView({ initial, compact = false }: { initial: Thread; comp
       {t.deal && (
         <ChatDealBar
           deal={t.deal}
+          listingTitle={t.listing?.title}
+          locationName={t.listing?.pickupHostel ?? "Campus"}
           compact={compact}
           onOpenPass={() => setPassOpen(true)}
         />

@@ -13,6 +13,7 @@ import { Icon } from "@/components/ui/icon";
 import { useApp } from "@/components/app-context";
 import { fmt } from "@/lib/format";
 import { findNearestResidence, getResidenceCoordinates, calculateDistanceMeters } from "@/features/map/proximity";
+import { triggerHaptic } from "@/lib/haptics";
 import { toggleSave } from "../actions/save";
 import type { ListingCard } from "../types";
 import { AgeBadge, ModeBadge, PhotoTile, PriceDrop, PriceLine, TrustLine } from "./parts";
@@ -60,6 +61,7 @@ export function ProductCard({ l, preview = false }: { l: ListingCard; preview?: 
       openAuth({ reason: "Sign in to save items and get price drop alerts", next: href });
       return;
     }
+    triggerHaptic("light");
     start(async () => {
       setSaved(!saved);
       const r = await toggleSave(l.id);

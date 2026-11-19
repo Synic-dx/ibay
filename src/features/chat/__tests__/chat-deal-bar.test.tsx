@@ -49,5 +49,7 @@ describe("ChatDealBar", () => {
     );
     expect(html).toContain("Handover");
     expect(html).toContain("View Pass");
+    expect(html).toContain("calendar.google.com");
+    expect(html).toContain("Add to Google Calendar");
   });
 });

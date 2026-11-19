@@ -5,6 +5,7 @@ import Link from "next/navigation";
 import { Sheet } from "@/components/ui/sheet";
 import { Icon } from "@/components/ui/icon";
 import { fmt } from "@/lib/format";
+import { createGoogleCalendarUrl } from "../scheduling";
 import HandoverOtpDisplay from "./handover-otp-display";
 import HandoverStatusBadge from "./handover-status-badge";
 
@@ -50,6 +51,14 @@ export default function HandoverPassSheet({
   const title = isBuyer ? "Delivery Pickup Pass" : "Deal Verification & Handover";
   const step = deal.stage === 1 ? "return" : "pickup";
   const activeOtp = deal.stage === 1 ? deal.returnOtp : deal.deliveryOtp;
+  const calendarUrl = deal.handoverScheduledAt
+    ? createGoogleCalendarUrl({
+        title: `i-bay Handover: ${listing?.title ?? "Item"}`,
+        location: listing?.pickupHostel ?? "Campus",
+        startIso: deal.handoverScheduledAt,
+        details: `Handover meeting for ${listing?.title ?? "Item"} with ${firstName}. Verify code and inspect items at pickup.`,
+      })
+    : null;
 
   return (
     <Sheet
@@ -87,19 +96,38 @@ export default function HandoverPassSheet({
         {/* Handover Meeting Schedule */}
         {deal.handoverScheduledAt && (
           <div>
-            <span
-              style={{
-                fontSize: 12,
-                fontWeight: 700,
-                color: "var(--ink-2, #6b7280)",
-                textTransform: "uppercase",
-                letterSpacing: "0.04em",
-                display: "block",
-                marginBottom: 6,
-              }}
-            >
-              Meeting Logistics
-            </span>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+              <span
+                style={{
+                  fontSize: 12,
+                  fontWeight: 700,
+                  color: "var(--ink-2, #6b7280)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.04em",
+                }}
+              >
+                Meeting Logistics
+              </span>
+              {calendarUrl && (
+                <a
+                  href={calendarUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 4,
+                    fontSize: 11,
+                    fontWeight: 600,
+                    color: "var(--brand, #02505F)",
+                    textDecoration: "none",
+                  }}
+                >
+                  <Icon name="cal" className="icon i12" />
+                  Google Calendar
+                </a>
+              )}
+            </div>
             <HandoverStatusBadge
               txId={deal.id}
               scheduledAt={deal.handoverScheduledAt}

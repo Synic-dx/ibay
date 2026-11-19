@@ -27,6 +27,7 @@ import { DeleteDialog } from "@/features/listings/delete-dialog";
 import { setPaused, relistListing } from "@/features/listings/actions/update";
 import { toggleSave } from "@/features/listings/actions/save";
 import { claimDrop } from "@/features/drops/actions";
+import { triggerHaptic } from "@/lib/haptics";
 import { useOpenChat } from "@/features/chat/use-open-chat";
 import { DatesSheet, HoursSheet } from "@/features/rentals/booking-sheets";
 import { ReportButton } from "@/features/admin/report-sheet";
@@ -143,18 +144,20 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
   }, [l.id, l.mode, router]);
 
   const gate = (reason: string, fn: () => void) => () => (viewer ? fn() : openAuth({ reason, next: `/item/${l.id}` }));
-  const heart = gate("Sign in to save items and get price drop alerts", () =>
+  const heart = gate("Sign in to save items and get price drop alerts", () => {
+    triggerHaptic("light");
     start(async () => {
       setSaved(!saved);
       const r = await toggleSave(l.id);
       if (r.ok) toast(r.message);
       else setSaved(saved);
-    }),
-  );
+    });
+  });
   const claim = gate("Sign in to claim this food drop", () =>
     start(async () => {
       const r = await claimDrop(l.id);
       if (!r.ok) return void toast.error(r.formError);
+      triggerHaptic("success");
       toast(r.message);
       router.push(r.data.conversationId ? `/messages/${r.data.conversationId}` : "/deals");
     }),
