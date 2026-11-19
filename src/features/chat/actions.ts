@@ -18,6 +18,7 @@ import { rateLimit } from "@/lib/security/guard";
 import { getThread, listThreads, type Thread, type ThreadSummary } from "./queries";
 import { notify, ping, startConversation } from "./service";
 import { generateOtp, hashOtp } from "@/features/deals/otp-crypto";
+import { refreshListingPages } from "@/features/listings/actions/shared";
 
 /** Loads a conversation and checks the viewer is in it. */
 async function membership(convId: string) {
@@ -131,5 +132,10 @@ export async function respondOffer(messageId: string, accept: boolean): Promise<
   }
   await notify(m.other, "offer", "tag", `${viewer.name.split(" ")[0]} ${accept ? "accepted" : "declined"} your offer of ${fmt(msg.offer_amount)}.`, `/messages/${m.conv.id}`);
   revalidatePath("/deals");
+  revalidatePath("/my-listings");
+  revalidatePath("/you");
+  if (m.conv.listing_id) {
+    refreshListingPages(m.conv.listing_id);
+  }
   return ok((await getThread(m.conv.id, viewer.id))!);
 }

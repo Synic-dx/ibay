@@ -643,6 +643,8 @@ begin
   update public.transactions set stage = stage + 1 where id = p_tx;
   if step_name = 'Returned' then
     update public.rental_bookings set status = 'completed' where transaction_id = p_tx;
+  elsif step_name = 'Handed over' and t.kind = 'sale' then
+    update public.listings set status = 'sold' where id = t.listing_id and status = 'active';
   end if;
   return t.stage + 1;
 end $$;

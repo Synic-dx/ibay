@@ -247,7 +247,13 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
       )
     ) : (
       <button type="button" className="btn block" disabled>
-        {l.status === "deleted" ? "This listing was deleted" : "No longer available"}
+        {l.status === "claimed"
+          ? "Claimed by someone else"
+          : l.status === "sold"
+          ? "Sold"
+          : l.status === "deleted"
+          ? "This listing was deleted"
+          : "No longer available"}
       </button>
     );
   } else if (mine) {
