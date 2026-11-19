@@ -29,10 +29,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 34px;
-  height: 34px;
-  background: rgba(255, 255, 255, 0.92);
+  width: 36px;
+  height: 36px;
+  background: var(--glass, rgba(255, 255, 255, 0.92));
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   color: var(--ink, #1e293b);
   border: 1px solid var(--line, #cbd5e1);
   border-radius: var(--radius-sm, 8px);
@@ -44,19 +45,19 @@
 }
 
 .controlBtn:hover {
-  background: #ffffff;
+  background: var(--surface, #ffffff);
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 
 .controlBtnActive {
   background: var(--brand, #02505f);
-  color: #ffffff;
+  color: var(--on-brand, #ffffff);
   border-color: var(--brand, #02505f);
 }
 
 .controlBtnActive:hover {
-  background: #013b46;
+  background: var(--brand-hover, #013b46);
 }
 
 /* Spot Picker Widget */
@@ -110,7 +111,7 @@
 
 .snapBtn:hover {
   background: var(--brand, #02505f);
-  color: #ffffff;
+  color: var(--on-brand, #ffffff);
 }
 
 .selectedLocationBadge {

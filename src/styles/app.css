@@ -33,8 +33,11 @@ body { background: var(--bg); }
 .capoff { display: flex; gap: 8px; align-items: center; padding: 10px 12px; border-radius: 12px; background: var(--warn-soft); color: var(--warn-ink); font-size: 12.5px; font-weight: 600; }
 .caperr { display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border-radius: 12px; background: var(--bad-soft); color: var(--bad); font-size: 12.5px; }
 
+/* OTP digit focus state */
+.otp-digit:focus { outline: 2px solid var(--brand) !important; outline-offset: 1px !important; box-shadow: var(--focus) !important; }
+
 /* "Demo mode" pill in the header. */
-.demopill { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-jetbrains), monospace; font-size: 9.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn-ink); white-space: nowrap; }
+.demopill { display: inline-flex; align-items: center; gap: 4px; font-family: var(--font-poppins), system-ui, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: normal; text-transform: none; padding: 3px 8px; border-radius: 999px; background: var(--warn-soft); color: var(--warn-ink); white-space: nowrap; }
 
 /* Form helpers. */
 .fhint { font-size: 12px; color: var(--ink-3); display: flex; justify-content: space-between; gap: 8px; }
@@ -94,7 +97,7 @@ body { background: var(--bg); }
 @media (max-width: 1079px) { .dsc-m { display: grid; grid-template-columns: repeat(2, 1fr); width: min(92vw, 420px); background: var(--surface); border-radius: 18px; padding: 8px; box-shadow: var(--shg); } }
 
 /* Theme toggle on the item gallery sits in the top-right corner like the other round buttons. */
-.gal .fbtn.thm { right: 12px; }
+.gal .fbtn.thm, .gal .fbtn.mthm { right: 12px !important; left: auto !important; }
 .vcard .vc-buy > a.btn { display: flex; }
 
 /* My listings has five stat tiles on desktop. */
@@ -118,7 +121,16 @@ iframe[src*="google.com/recaptcha"], iframe[src*="recaptcha.net/recaptcha"], ifr
 .skrow + .skrow { border-top: 1px solid var(--line); }
 .skitem { display: grid; gap: 20px; }
 @media (min-width: 900px) { .skitem { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 32px; align-items: start; } }
-@media (prefers-reduced-motion: reduce) { .sk { animation: none; } .navprog.on { animation-duration: 0s; transform: scaleX(.6); } }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .sk { animation: none !important; }
+  .navprog.on { animation-duration: 0s !important; transform: scaleX(.6) !important; }
+}
 main { transition: opacity .2s ease; }
 html[data-nav="busy"] main { opacity: .55; }
 

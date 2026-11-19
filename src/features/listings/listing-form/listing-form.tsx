@@ -623,10 +623,10 @@ export function ListingForm({ categories, initial, edit }: { categories: Categor
                 initialLng={v.pickupLng ? Number(v.pickupLng) : null}
                 initialNote={String(v.pickupNote || "")}
                 onChange={({ hostel, lat, lng, note }) => {
-                  setValue("pickupHostel", hostel as never);
-                  setValue("pickupLat", lat as never);
-                  setValue("pickupLng", lng as never);
-                  setValue("pickupNote", note as never);
+                  setValue("pickupHostel", hostel as never, { shouldDirty: true, shouldValidate: true });
+                  setValue("pickupLat", lat as never, { shouldDirty: true, shouldValidate: true });
+                  setValue("pickupLng", lng as never, { shouldDirty: true, shouldValidate: true });
+                  setValue("pickupNote", note as never, { shouldDirty: true, shouldValidate: true });
                 }}
               />
               {mode !== "drop" && (

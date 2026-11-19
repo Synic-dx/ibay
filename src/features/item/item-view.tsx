@@ -12,7 +12,7 @@
  */
 import Link from "@/components/ui/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState, useMemo, useTransition } from "react";
 import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
 import { Avatar } from "@/components/brand";
@@ -32,6 +32,7 @@ import { DatesSheet, HoursSheet } from "@/features/rentals/booking-sheets";
 import { ReportButton } from "@/features/admin/report-sheet";
 import { BidSheet, BuySheet, CloseAuctionSheet, OfferSheet, SoldSheet } from "./sheets";
 import PickupSnippet from "@/features/map/components/pickup-snippet";
+import { findNearestResidence, getResidenceCoordinates, calculateDistanceMeters } from "@/features/map/proximity";
 import type { ListingCard, ListingDetail } from "@/features/listings/types";
 
 export type Review = { id: string; score: number; reason: string; tags: string[]; raterName: string; createdAt: string };
@@ -88,7 +89,29 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
   const mine = viewer?.id === l.seller.id;
   const s = l.seller;
   const first = s.name.split(" ")[0];
-  const near = viewer && viewer.hostel === l.pickupHostel && !mine;
+
+  const effectivePickupHostel = useMemo(() => {
+    if (l.pickupLat && l.pickupLng) {
+      const res = findNearestResidence(l.pickupLat, l.pickupLng);
+      if (res && res.distanceMeters <= 80) {
+        return res.location.name;
+      }
+    }
+    return l.pickupHostel;
+  }, [l.pickupLat, l.pickupLng, l.pickupHostel]);
+
+  const near = useMemo(() => {
+    if (!viewer?.hostel || mine) return false;
+    if (l.pickupLat && l.pickupLng) {
+      const vCoords = getResidenceCoordinates(viewer.hostel);
+      if (vCoords) {
+        const d = calculateDistanceMeters(vCoords.lat, vCoords.lng, l.pickupLat, l.pickupLng);
+        return d <= 55;
+      }
+    }
+    return viewer.hostel.trim().toLowerCase() === effectivePickupHostel.trim().toLowerCase();
+  }, [viewer?.hostel, effectivePickupHostel, mine, l.pickupLat, l.pickupLng]);
+
   const available = l.status === "active" || (mine && l.status === "paused");
   const m = ageMonths(l.purchasedOn);
 
@@ -306,7 +329,7 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
     ...(hasAge(l) ? ([["cal", "Purchased", `${boughtLabel(l.purchasedOn)}${l.purchasedOn ? ` (${ageText(m)})` : ""}`]] as [string, string, string][]) : []),
     ...(l.sealStatus ? ([["shield", "Seal", l.sealStatus], ["hourglass", "Expiry", l.expiresOn ? new Date(l.expiresOn).toLocaleDateString("en-IN", { month: "short", year: "numeric" }) : null]] as [string, string, string | null][]) : []),
     ...l.specs.filter((x) => !["Brand", "Model"].includes(x.k)).map((x) => ["ruler", x.k, x.v] as [string, string, string]),
-    ["pin", "Pickup", l.pickupHostel],
+    ["pin", "Pickup", effectivePickupHostel],
     ["wallet", "Payment", "UPI or cash at handover"],
     ["eye", "Listed", `${ago(l.createdAt)} · ${l.views} views`],
   ];
@@ -341,7 +364,7 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
               <button type="button" className={`fbtn ${saved ? "on" : ""}`} style={{ right: 60 }} onClick={heart} aria-label={saved ? "Remove from saved" : "Save"} aria-pressed={saved}>
                 <Icon name="heart" />
               </button>
-              <ThemeToggle className="fbtn mthm" />
+              <ThemeToggle className="fbtn mthm" style={{ right: 12 }} />
               <div className="gtag">
                 <ModeBadge l={l} />
               </div>
@@ -390,7 +413,7 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
                       {fmt(l.price)}
                     </div>
                     <span className="sm muted">
-                      <Icon name="pin" className="icon i14" /> {l.pickupHostel} · only people in {l.pickupHostel} can see this
+                      <Icon name="pin" className="icon i14" /> {effectivePickupHostel} · only people in {effectivePickupHostel} can see this
                     </span>
                   </div>
                   <div style={{ textAlign: "right" }}>
@@ -503,7 +526,7 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
                 <br />
                 <span className="faint xs">
                   {s.responseNote ? `${s.responseNote} · ` : ""}
-                  {l.pickupHostel}
+                  {effectivePickupHostel}
                 </span>
               </span>
               <Icon name="chev" className="icon i18" />
@@ -610,7 +633,7 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
               </div>
             </div>
             <PickupSnippet
-              pickupHostel={l.pickupHostel}
+              pickupHostel={effectivePickupHostel}
               pickupLat={l.pickupLat}
               pickupLng={l.pickupLng}
               viewerHostel={viewer?.hostel}

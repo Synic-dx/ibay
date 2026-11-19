@@ -220,3 +220,34 @@ BEGIN
     WHERE id = r.id;
   END LOOP;
 END $$;
+
+-- ---------------------------------------------------------------------
+-- Part 5: One account per email (case-insensitive)
+-- ---------------------------------------------------------------------
+
+ALTER TABLE public.profiles DROP CONSTRAINT IF EXISTS profiles_email_lowercase;
+ALTER TABLE public.profiles
+  ADD CONSTRAINT profiles_email_lowercase CHECK (email = lower(btrim(email)));
+
+CREATE UNIQUE INDEX IF NOT EXISTS profiles_email_lower_key ON public.profiles (lower(email));
+
+-- ---------------------------------------------------------------------
+-- Part 6: Update listing with pickup location support
+-- ---------------------------------------------------------------------
+
+DO $$
+DECLARE
+  d text;
+  needle text := 'tags           = case when p_patch ? ''tags'' then array(select jsonb_array_elements_text(p_patch->''tags'')) else tags end';
+  replacement text := 'tags           = case when p_patch ? ''tags'' then array(select jsonb_array_elements_text(p_patch->''tags'')) else tags end,' || chr(10) ||
+                      '    pickup_hostel  = case when p_patch ? ''pickup_hostel'' then p_patch->>''pickup_hostel'' else pickup_hostel end,' || chr(10) ||
+                      '    pickup_lat     = case when p_patch ? ''pickup_lat'' then (p_patch->>''pickup_lat'')::numeric else pickup_lat end,' || chr(10) ||
+                      '    pickup_lng     = case when p_patch ? ''pickup_lng'' then (p_patch->>''pickup_lng'')::numeric else pickup_lng end,' || chr(10) ||
+                      '    pickup_note    = case when p_patch ? ''pickup_note'' then p_patch->>''pickup_note'' else pickup_note end,' || chr(10) ||
+                      '    pickup_slots   = case when p_patch ? ''pickup_slots'' then array(select jsonb_array_elements_text(p_patch->''pickup_slots'')) else pickup_slots end';
+BEGIN
+  d := pg_get_functiondef('public.update_listing(uuid,uuid,timestamptz,jsonb)'::regprocedure);
+  IF position(needle in d) > 0 THEN
+    EXECUTE replace(d, needle, replacement);
+  END IF;
+END $$;

@@ -7,7 +7,13 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { Icon } from "@/components/ui/icon";
 
-export function ThemeToggle({ className = "ib thm" }: { className?: string }) {
+export function ThemeToggle({
+  className = "ib thm",
+  style,
+}: {
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   const { resolvedTheme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -16,6 +22,7 @@ export function ThemeToggle({ className = "ib thm" }: { className?: string }) {
     <button
       type="button"
       className={className}
+      style={style}
       onClick={() => setTheme(dark ? "light" : "dark")}
       aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
       title={dark ? "Light mode" : "Dark mode"}

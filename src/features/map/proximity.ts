@@ -74,6 +74,25 @@ export function findNearestLandmark(
   return nearest ? { location: nearest, distanceMeters: minDistance } : null;
 }
 
+export function findNearestResidence(
+  lat: number,
+  lng: number
+): { location: CampusLocation; distanceMeters: number } | null {
+  if (!residenceLocations.length) return null;
+  let nearest: CampusLocation | null = null;
+  let minDistance = Infinity;
+
+  for (const loc of residenceLocations) {
+    const dist = calculateDistanceMeters(lat, lng, loc.lat, loc.lng);
+    if (dist < minDistance) {
+      minDistance = dist;
+      nearest = loc;
+    }
+  }
+
+  return nearest ? { location: nearest, distanceMeters: minDistance } : null;
+}
+
 export interface WalkingEffort {
   distanceMeters: number;
   steps: number;

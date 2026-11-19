@@ -141,7 +141,7 @@ export function MessagingDock() {
                 </button>
               ))}
               {threads.isSuccess && !list.length && <p className="faint sm pad">No chats yet.</p>}
-              {threads.isLoading && <p className="faint sm pad">Loading...</p>}
+              {threads.isLoading && <p className="faint sm pad">Loading…</p>}
             </div>
           </>
         )}

@@ -7,11 +7,12 @@
  * GUESTS: tapping the card or the heart opens the sign-in modal instead.
  */
 import Link from "@/components/ui/link";
-import { useState, useTransition } from "react";
+import { useState, useTransition, useMemo } from "react";
 import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
 import { useApp } from "@/components/app-context";
 import { fmt } from "@/lib/format";
+import { findNearestResidence, getResidenceCoordinates, calculateDistanceMeters } from "@/features/map/proximity";
 import { toggleSave } from "../actions/save";
 import type { ListingCard } from "../types";
 import { AgeBadge, ModeBadge, PhotoTile, PriceDrop, PriceLine, TrustLine } from "./parts";
@@ -20,7 +21,28 @@ export function ProductCard({ l, preview = false }: { l: ListingCard; preview?: 
   const { viewer, openAuth } = useApp();
   const [saved, setSaved] = useState(l.saved);
   const [, start] = useTransition();
-  const near = viewer && viewer.hostel === l.pickupHostel && viewer.id !== l.seller.id;
+
+  const effectiveHostel = useMemo(() => {
+    if (l.pickupLat && l.pickupLng) {
+      const res = findNearestResidence(l.pickupLat, l.pickupLng);
+      if (res && res.distanceMeters <= 80) return res.location.name;
+    }
+    return l.pickupHostel;
+  }, [l.pickupLat, l.pickupLng, l.pickupHostel]);
+
+  const near = useMemo(() => {
+    if (!viewer || viewer.id === l.seller.id) return false;
+    if (viewer.hostel.trim().toLowerCase() !== effectiveHostel.trim().toLowerCase()) return false;
+    if (l.pickupLat && l.pickupLng) {
+      const vCoords = getResidenceCoordinates(viewer.hostel);
+      if (vCoords) {
+        const d = calculateDistanceMeters(vCoords.lat, vCoords.lng, l.pickupLat, l.pickupLng);
+        if (d > 55) return false;
+      }
+    }
+    return true;
+  }, [viewer, effectiveHostel, l.pickupLat, l.pickupLng, l.seller.id]);
+
   const href = `/item/${l.id}`;
 
   const gate = (e: React.MouseEvent) => {
@@ -79,7 +101,7 @@ export function ProductCard({ l, preview = false }: { l: ListingCard; preview?: 
               Your hostel
             </span>
           ) : (
-            l.pickupHostel
+            effectiveHostel
           )}{" "}
           · <TrustLine plume={l.seller.plume} ratedDeals={l.seller.ratedDeals} deals={false} />
         </div>

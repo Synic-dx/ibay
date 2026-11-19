@@ -88,7 +88,7 @@ export function PhotoField({ value, onChange, error }: { value: Photo[]; onChang
         <label className="drop" style={{ ...errStyle, opacity: full ? 0.5 : undefined }} aria-invalid={!!error}>
           <Icon name="img" />
           <span>
-            <b>{busy ? `Uploading ${busy}...` : "Choose photos"}</b>
+            <b>{busy ? `Uploading ${busy}…` : "Choose photos"}</b>
             <br />
             <span className="faint sm">From your gallery or files</span>
           </span>

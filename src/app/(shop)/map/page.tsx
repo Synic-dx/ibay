@@ -17,7 +17,7 @@ export default async function CampusMapPage() {
   const listings = dbReady() ? await visibleCatalogue(viewer) : [];
 
   return (
-    <main style={{ width: "100%", height: "100%", overflow: "hidden" }}>
+    <main className="mappage">
       <CampusBrowseMap listings={listings} />
     </main>
   );
