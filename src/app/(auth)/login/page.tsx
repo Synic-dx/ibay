@@ -25,10 +25,11 @@ const ERRORS: Record<string, string> = {
   exists: "An account with this email already exists. Please sign in instead.",
 };
 
-export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string; error?: string }> }) {
-  const { next, error } = await searchParams;
+export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string; error?: string; mode?: string }> }) {
+  const { next, error, mode } = await searchParams;
   const safeNext = next && next.startsWith("/") && !next.startsWith("//") ? next : "/";
   if (await getViewer()) redirect(safeNext);
+  const initialMode = mode === "signup" ? "signup" : "signin";
   return (
     <div id="shell">
       <header className="tb">
@@ -43,7 +44,12 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       <main style={{ display: "grid", placeItems: "center", minHeight: "calc(100dvh - 80px)", padding: 16 }}>
         <div className="authcard" style={{ animation: "none" }}>
           <Suspense>
-            <LoginCard next={safeNext} googleEnabled={googleEnabled} initialError={error ? (ERRORS[error] ?? "Sign-in failed. Try again.") : null} />
+            <LoginCard
+              next={safeNext}
+              mode={initialMode}
+              googleEnabled={googleEnabled}
+              initialError={error ? (ERRORS[error] ?? "Sign-in failed. Try again.") : null}
+            />
           </Suspense>
         </div>
       </main>
