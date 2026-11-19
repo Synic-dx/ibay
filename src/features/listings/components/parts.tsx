@@ -36,7 +36,7 @@ export function PhotoTile({
 
   if (photoUrl) {
     // eslint-disable-next-line @next/next/no-img-element -- local art and user photos of unknown size, shown with object-fit
-    inner = <img src={photoUrl} alt={title} className={photoFit} loading="lazy" style={zoom ? { transform: zoom } : undefined} />;
+    inner = <img src={photoUrl} alt={title} className={photoFit} loading="lazy" decoding="async" style={zoom ? { transform: zoom } : undefined} />;
   } else if (categoryId === "tickets" && Array.isArray(ticketInfo) && ticketInfo.length) {
     inner = (
       <div className="ticket" role="img" aria-label={title}>

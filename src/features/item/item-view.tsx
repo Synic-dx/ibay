@@ -354,12 +354,23 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
         <div className="itemcols">
           <div className="itemleft">
             <div className="gal">
-              <div className="gtrack" ref={trackRef} onScroll={(e) => setSlide(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))} aria-label="Photos">
+              <div
+                className="gtrack"
+                ref={trackRef}
+                onScroll={(e) => {
+                  const w = e.currentTarget.clientWidth || 1;
+                  const next = Math.round(e.currentTarget.scrollLeft / w);
+                  if (next !== slide && next >= 0 && next < slides.length) {
+                    setSlide(next);
+                  }
+                }}
+                aria-label="Photos"
+              >
                 {slides.map(({ p, zoom }, i) => (
                   <div className="gslide" key={i}>
                     {p ? (
                       // eslint-disable-next-line @next/next/no-img-element -- gallery photo, object-fit handled in CSS
-                      <img src={p.url} alt={i === 0 ? l.title : ""} className={p.fit === "cover" ? "cover" : ""} style={zoom ? { transform: zoom } : undefined} />
+                      <img src={p.url} alt={i === 0 ? l.title : ""} className={p.fit === "cover" ? "cover" : ""} style={zoom ? { transform: zoom } : undefined} decoding="async" />
                     ) : (
                       <PhotoTile l={l} className="" style={{ width: "100%", height: "100%", display: "grid", placeItems: "center" }} />
                     )}
