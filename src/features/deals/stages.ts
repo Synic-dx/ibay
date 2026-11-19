@@ -9,7 +9,6 @@ export type Deal = {
   kind: "sale" | "rental" | "auction";
   role: "buyer" | "seller";
   amount: number;
-  deposit: number;
   stage: number;
   createdAt: string;
   listing: ListingCard;

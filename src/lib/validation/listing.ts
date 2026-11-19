@@ -8,7 +8,7 @@
  *   common:  title 5 to 80, description up to 1000, category from the list, condition, 1 to 6 photos
  *   sell:    price 0 to 2,00,000; original price required, at least the price, at most 5,00,000;
  *            purchase month required, not in the future, not more than 15 years ago
- *   rent:    rate at least 1; unit hour/day/week/month; deposit 0 to 50,000
+ *   rent:    rate at least 1; unit hour/day/week/month (no deposits on i-bay)
  *   auction: starting bid at least 1; optional buy-now above it; ends in 6 h, 1 d, 3 d or 7 d
  *   drop:    price 0 to 2,000; available 15 to 180 minutes; category forced to food
  *   specs:   up to 12 pairs; supplements need a seal status and an expiry that isn't past
@@ -153,7 +153,6 @@ export const listingSchema = z
       ...secondHand,
       price: rupees("a rent", 1, 200000),
       rentUnit: z.enum(RENT_UNITS, { error: "Pick hour, day, week or month." }),
-      deposit: rupees("a refundable deposit (₹0 is allowed)", 0, 50000, "Deposit can be at most ₹50,000."),
     }),
     z.object({
       mode: z.literal("auction"),
@@ -208,7 +207,7 @@ export type ListingData = z.output<typeof listingSchema>;
 /** Fields shown on each step of the 3-step form (used to validate one step at a time). */
 export const STEP_FIELDS: Record<1 | 2 | 3, string[]> = {
   1: ["mode", "title", "categoryId", "photos"],
-  2: ["price", "mrp", "purchasedOn", "rentUnit", "deposit", "buyNow", "durationHours", "availableMinutes", "size", "specs", "sealStatus", "expiresOn"],
+  2: ["price", "mrp", "purchasedOn", "rentUnit", "buyNow", "durationHours", "availableMinutes", "size", "specs", "sealStatus", "expiresOn"],
   3: ["condition", "description", "bundleContents", "pickupHostel", "pickupLat", "pickupLng", "pickupNote", "pickupSlots", "captchaToken"],
 };
 
@@ -235,7 +234,7 @@ export function guessCategory(title: string): (typeof CATEGORY_IDS)[number] | nu
     ["room", /mattress|pillow|mirror|lamp|curtain|chair|stool|clock|plant|bucket|shower filter/],
     ["events", /camera|speaker|tripod|ring light|fairy lights|props|decoration/],
     ["hobbies", /guitar|keyboard|ukulele|chess|uno|monopoly|console|game|paint/],
-    ["travel", /cycle|bike|helmet|backpack|tent|trolley|suitcase|duffel/],
+    ["travel", /backpack|tent|trolley|suitcase|duffel|trek|sleeping bag/],
     ["sports", /racquet|racket|bat|ball|court|non.?marking|yoga|shuttle|tennis|badminton|cricket|football/],
     ["tickets", /ticket|pass|concert|ipl|match|stand.?up/],
     ["clothing", /shirt|jacket|hoodie|shoe|heels|watch|sunglass|shades|loafer|tote|polo|ray-?ban/],

@@ -30,7 +30,6 @@ export type ListingCard = {
   price: number;
   mrp: number | null;
   rentUnit: RentUnit | null;
-  deposit: number | null;
   reservePrice: number | null;
   buyNowPrice: number | null;
   endsAt: string | null;

@@ -144,10 +144,6 @@ export function PriceLine({ l }: { l: ListingCard }) {
           {fmt(l.price)}
           <small>/{unitShort(l.rentUnit)}</small>
         </div>
-        <div className="meta">
-          <Icon name="shield" />
-          {fmt(l.deposit ?? 0)} deposit
-        </div>
         {l.mrp ? <div className="meta">Worth {fmt(l.mrp)} new</div> : null}
       </>
     );

@@ -3,7 +3,7 @@
  * FEATURE: Item page [RUBRIC:CRUD-READ] [RUBRIC:RESPONSIVE]
  * WHAT: Sticky gallery (left on tablet/desktop), then one combined price + buy
  *       panel: asking price, % below original, age badge, a facts row
- *       (original price, bought, deposit), one big primary button and two
+ *       (original price, bought), one big primary button and two
  *       secondary ones (Make an offer, Chat), and a pay-at-handover note.
  *       Owners get Edit / Pause / Delete instead of buying.
  *       Below: seller card, quick questions, bundles, edit history, details,
@@ -187,7 +187,7 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
   // Gallery: real photos, or three framings of one photo like the prototype.
   const slides = l.photos.length > 1 ? l.photos.map((p) => ({ p, zoom: undefined as string | undefined })) : [0, 1, 2].map((i) => ({ p: l.photos[0] ?? null, zoom: l.photos[0]?.fit === "contain" ? (i === 1 ? "scale(1.35)" : i === 2 ? "scale(1.15) translateY(8%)" : undefined) : undefined }));
 
-  // The value card: price now, original price, bought, deposit, then the actions.
+  // The value card: price now, original price, bought, then the actions.
   const nowPrice =
     l.mode === "rent" ? (
       <>
@@ -521,16 +521,6 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
                     <b style={{ fontSize: 15 }}>{boughtLabel(l.purchasedOn)}</b>
                     <div className="xs faint">{m != null ? ageText(m, true) : ""}</div>
                   </div>
-                  {l.mode === "rent" && (
-                    <div style={{ flex: 1 }}>
-                      <span className="label">
-                        <Icon name="shield" />
-                        Deposit
-                      </span>
-                      <b style={{ fontSize: 15 }}>{fmt(l.deposit ?? 0)}</b>
-                      <div className="xs faint">refundable</div>
-                    </div>
-                  )}
                 </div>
                 {typical && (
                   <div className="note" style={l.price <= (typical.lo + typical.hi) / 2 ? { color: "var(--good)" } : undefined}>
@@ -775,7 +765,7 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
                     {l.mode === "rent" ? `${fmt(l.price)}/${unitShort(l.rentUnit)}` : l.price === 0 ? "Free" : fmt(l.price)}
                   </b>
                   <span>
-                    {l.mode === "rent" ? `+ ${fmt(l.deposit ?? 0)} deposit` : l.mode === "auction" && l.endsAt ? <><Countdown endsAt={l.endsAt} /> left</> : l.mode === "drop" ? "First to claim gets it" : "Just pick it up"}
+                    {l.mode === "rent" ? "Pay the rent at pickup" : l.mode === "auction" && l.endsAt ? <><Countdown endsAt={l.endsAt} /> left</> : l.mode === "drop" ? "First to claim gets it" : "Just pick it up"}
                   </span>
                 </div>
                 {primary}

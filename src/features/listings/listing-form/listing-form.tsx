@@ -190,7 +190,7 @@ export function ListingForm({ categories, initial, edit }: { categories: Categor
   const preview: ListingCard = {
     ...(edit?.card ?? ({} as ListingCard)),
     id: "preview", title: title || "Your item", mode, categoryId: catId || "room", price: pNum, mrp: oNum || null,
-    rentUnit: mode === "rent" ? (unit as ListingCard["rentUnit"]) : null, deposit: Number(v.deposit) || 0, reservePrice: pNum, buyNowPrice: null,
+    rentUnit: mode === "rent" ? (unit as ListingCard["rentUnit"]) : null, reservePrice: pNum, buyNowPrice: null,
     endsAt: new Date(Date.now() + (mode === "drop" ? Number(v.availableMinutes || 30) * 60e3 : Number(v.durationHours || 24) * 3600e3)).toISOString(),
     status: "active", purchasedOn: mode === "drop" ? null : `${py}-${pm}-01`, condition: String(v.condition || "Good"),
     photo: (v.photos as Photo[] | undefined)?.[0] ?? null, ticketInfo: [], isBundle: Boolean(v.isBundle), bundleCount: String(v.bundleContents ?? "").split("\n").filter(Boolean).length,
@@ -389,9 +389,6 @@ export function ListingForm({ categories, initial, edit }: { categories: Categor
                     )}
                     {err("rentUnit") && <span className="ferr" role="alert"><Icon name="alert" className="icon i14" />{err("rentUnit")}</span>}
                   </div>
-                  <F id="f-deposit" label="Refundable deposit" icon="shield" error={err("deposit")}>
-                    <input className={`input ${err("deposit") ? "bad" : ""}`} inputMode="numeric" placeholder="₹ (0 is allowed)" {...ids("deposit")} {...register("deposit")} />
-                  </F>
                 </>
               )}
 

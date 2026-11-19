@@ -157,7 +157,7 @@ export default async function HomePage() {
         <ProductRail icon="drama" title="Getups & Costumes" sub="For club and committee interviews, preprocesses and presentations. Rent by the hour." items={act.filter((l) => l.categoryId === "preprocess")} more="/browse?cat=preprocess" />
         <ProductRail icon="dumbbell" title="Gym Corner" items={act.filter((l) => l.categoryId === "gym")} more="/browse?cat=gym" />
         <ProductRail icon="book" title="Novels, comics & manga" sub="Buy or rent by the week" items={act.filter((l) => l.categoryId === "reads")} more="/browse?cat=reads" />
-        <ProductRail icon="repeat" title="Rent, don't buy" sub="Coolers, calculators, speakers, cycles" items={rent} more="/browse?modes=rent" />
+        <ProductRail icon="repeat" title="Rent, don't buy" sub="Coolers, calculators, speakers, suits" items={rent} more="/browse?modes=rent" />
 
         {requests.length > 0 && (
           <section className="sec">

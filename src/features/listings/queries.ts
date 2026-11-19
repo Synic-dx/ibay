@@ -15,7 +15,7 @@ import type { ListingCard, ListingDetail, ListingPhoto, ListingStatus } from "./
 // WHY "as "*"": the column list is built from pieces, so we tell the query builder to treat rows
 // as plain objects; mapCard() below turns them into the typed ListingCard.
 export const CARD_SELECT = (
-  "id,title,mode,category_id,price,mrp,rent_unit,deposit,reserve_price,buy_now_price,ends_at,status,purchased_on,condition," +
+  "id,title,mode,category_id,price,mrp,rent_unit,reserve_price,buy_now_price,ends_at,status,purchased_on,condition," +
   "ticket_info,is_bundle,bundle_contents,bundle_items,price_drop_amount,price_dropped_at,pickup_hostel,pickup_lat,pickup_lng,pickup_slots,views,saves,brand,model,size,tags," +
   "created_at,updated_at,deleted_at," +
   "seller:profiles!listings_seller_id_fkey(id,name,hostel,plume,rated_deals,avatar_url,avatar_color,response_note,banned)," +
@@ -45,7 +45,6 @@ export function mapCard(r: Row, saved: Set<string> = new Set()): ListingCard {
     price: r.price,
     mrp: r.mrp,
     rentUnit: r.rent_unit,
-    deposit: r.deposit,
     reservePrice: r.reserve_price,
     buyNowPrice: r.buy_now_price,
     endsAt: r.ends_at,

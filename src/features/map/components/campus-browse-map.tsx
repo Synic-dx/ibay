@@ -143,7 +143,7 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
             type="search"
             name="q"
             aria-label="Search items or hostels"
-            placeholder="Search items or hostels (e.g. SR 18, calculator, cycles)…"
+            placeholder="Search items or hostels (e.g. SR 18, calculator, books)…"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             autoComplete="off"

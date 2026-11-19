@@ -17,7 +17,7 @@ export async function listDeals(userId: string): Promise<Deal[]> {
   const { data } = await db()
     .from("transactions")
     .select(
-      "id,kind,amount,deposit,stage,created_at,buyer_id,seller_id,handover_scheduled_at,handover_status,handover_proposed_by,delivery_otp_plain,return_otp_plain,otp_attempts,otp_locked_until," +
+      "id,kind,amount,stage,created_at,buyer_id,seller_id,handover_scheduled_at,handover_status,handover_proposed_by,delivery_otp_plain,return_otp_plain,otp_attempts,otp_locked_until," +
         "buyer:profiles!transactions_buyer_id_fkey(id,name,plume,rated_deals,hostel),seller:profiles!transactions_seller_id_fkey(id,name,plume,rated_deals,hostel)," +
         `listing:listings(${CARD_SELECT},pickup_note)`,
     )
@@ -39,7 +39,6 @@ export async function listDeals(userId: string): Promise<Deal[]> {
       kind: d.kind,
       role,
       amount: d.amount,
-      deposit: d.deposit,
       stage: d.stage,
       createdAt: d.created_at,
       listing: mapCard(d.listing),

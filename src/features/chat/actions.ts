@@ -108,7 +108,7 @@ export async function respondOffer(messageId: string, accept: boolean): Promise<
   if (msg.offer_status !== "pending") return fail("This offer was already answered.");
   await db().from("messages").update({ offer_status: accept ? "accepted" : "declined" }).eq("id", messageId);
   if (accept && m.conv.listing_id) {
-    const { data: l } = await db().from("listings").select("id,seller_id,mode,deposit,status").eq("id", m.conv.listing_id).single();
+    const { data: l } = await db().from("listings").select("id,seller_id,mode,status").eq("id", m.conv.listing_id).single();
     if (l && l.status === "active") {
       const buyer = l.seller_id === viewer.id ? m.other : viewer.id;
       const deliveryOtp = generateOtp();
@@ -120,7 +120,6 @@ export async function respondOffer(messageId: string, accept: boolean): Promise<
           seller_id: l.seller_id,
           kind: l.mode === "rent" ? "rental" : "sale",
           amount: msg.offer_amount,
-          deposit: l.mode === "rent" ? (l.deposit ?? 0) : 0,
           delivery_otp_plain: deliveryOtp,
           delivery_otp_hash: hashOtp(deliveryOtp),
         })

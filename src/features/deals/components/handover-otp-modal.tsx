@@ -74,7 +74,7 @@ export default function HandoverOtpModal({
             </b>
             <div className="faint xs">
               {isReturn
-                ? `Deposit refund: ${fmt(deal.deposit)} to ${first}`
+                ? `Return from ${first}: check it came back in the same condition`
                 : `Payment: ${fmt(deal.amount)} from ${first}`}
             </div>
           </div>
@@ -99,7 +99,7 @@ export default function HandoverOtpModal({
           </span>
           <span style={{ lineHeight: 1.4 }}>
             {isReturn
-              ? `Check the returned item condition together and refund the ${fmt(deal.deposit)} deposit before entering the code.`
+              ? `Check the returned item's condition together before entering the code.`
               : `Inspect payment (${fmt(deal.amount)}) and hand over the item together before entering the code.`}
           </span>
         </div>

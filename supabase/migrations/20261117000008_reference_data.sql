@@ -19,7 +19,7 @@ insert into public.categories (id, name, short_name, "group", description, icon,
   ('sports', 'Sports Gear', 'Sports', 'Play', 'Racquets, bats, balls, court shoes', 'trophy', '/img/racquet.webp', 'contain', 12),
   ('hobbies', 'Music, Games & Hobbies', 'Hobbies', 'Play', 'Guitars, keyboards, board games', 'music', '/img/ukulele.webp', 'contain', 13),
   ('reads', 'Novels, Comics & Manga', 'Novels & manga', 'Play', 'Bestsellers, box sets, manga volumes', 'book', '/img/op.webp', 'contain', 14),
-  ('travel', 'Cycles & Travel', 'Travel', 'Play', 'Cycles, helmets, bags, tents', 'bike', '/img/cycle.webp', 'contain', 15),
+  ('travel', 'Travel & Outdoors', 'Travel', 'Play', 'Tents, trekking backpacks, duffels and trip gear', 'pkg', '/img/tent.webp', 'contain', 15),
   ('clothing', 'Clothing & Accessories', 'Clothing', 'Play', 'Jackets, shoes, watches, shades', 'shirt', '/img/wayfarer.webp', 'contain', 16),
   ('tickets', 'Tickets', 'Tickets', 'Play', 'Concerts, matches, stand-up', 'ticket', null, 'contain', 17)
 on conflict (id) do update set name = excluded.name, short_name = excluded.short_name, "group" = excluded."group", description = excluded.description, icon = excluded.icon, cover_url = excluded.cover_url, cover_fit = excluded.cover_fit, sort = excluded.sort;

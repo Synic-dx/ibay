@@ -22,7 +22,7 @@ export const metadata: Metadata = { title: "Edit listing" };
 
 const FIELD_NAMES: Record<string, string> = {
   price: "price", title: "title", description: "description", mrp: "original price", condition: "condition", status: "status",
-  deposit: "deposit", rent_unit: "unit", category_id: "category", photos: "photos", purchased_on: "purchase month", ends_at: "end time",
+  rent_unit: "unit", category_id: "category", photos: "photos", purchased_on: "purchase month", ends_at: "end time",
   size: "size", brand: "brand", model: "model", specs: "specs", is_bundle: "bundle", bundle_contents: "bundle contents",
 };
 

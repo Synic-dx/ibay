@@ -71,7 +71,7 @@ export function DatesSheet({ open, onOpenChange, l, bookings }: Props) {
     });
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange} icon="cal" title="Choose your dates" subtitle={`${fmt(l.price)}/${l.rentUnit} · ${fmt(l.deposit ?? 0)} refundable deposit`}>
+    <Sheet open={open} onOpenChange={onOpenChange} icon="cal" title="Choose your dates" subtitle={`${fmt(l.price)}/${l.rentUnit} · pay at pickup`}>
       <div className="stack" style={{ gap: 14 }}>
         <span className="label">{a == null ? "Tap your pickup day" : b == null ? "Now tap your return day" : "Your dates"}</span>
         <div className="days" role="group" aria-label="Days">
@@ -97,13 +97,9 @@ export function DatesSheet({ open, onOpenChange, l, bookings }: Props) {
               </span>
               <span>{fmt(rent)}</span>
             </div>
-            <div>
-              <span>Refundable deposit</span>
-              <span>{fmt(l.deposit ?? 0)}</span>
-            </div>
             <div className="tot">
               <span>Pay at pickup</span>
-              <span>{fmt(rent + (l.deposit ?? 0))}</span>
+              <span>{fmt(rent)}</span>
             </div>
             <div className="faint xs" style={{ display: "block" }}>
               Pickup {dayLabel(a!, true)}, return by {dayLabel(b ?? a!, true)}.
@@ -168,7 +164,7 @@ export function HoursSheet({ open, onOpenChange, l, bookings }: Props) {
     });
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange} icon="clock" title="Book by the hour" subtitle={`${fmt(l.price)}/hr · ${fmt(l.deposit ?? 0)} refundable deposit`}>
+    <Sheet open={open} onOpenChange={onOpenChange} icon="clock" title="Book by the hour" subtitle={`${fmt(l.price)}/hr · pay at pickup`}>
       <div className="stack" style={{ gap: 12 }}>
         <span className="label">
           <Icon name="cal" />
@@ -251,13 +247,9 @@ export function HoursSheet({ open, onOpenChange, l, bookings }: Props) {
               </span>
               <span>{fmt(n * l.price)}</span>
             </div>
-            <div>
-              <span>Refundable deposit</span>
-              <span>{fmt(l.deposit ?? 0)}</span>
-            </div>
             <div className="tot">
               <span>Pay at pickup</span>
-              <span>{fmt(n * l.price + (l.deposit ?? 0))}</span>
+              <span>{fmt(n * l.price)}</span>
             </div>
             <div className="faint xs" style={{ display: "block" }}>
               {dayLabel(day, true)}: pick up {hrLabel(a!)}, return by {hrLabel((b ?? a!) + 1)}.

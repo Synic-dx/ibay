@@ -36,12 +36,12 @@ function HandoverSheet({ d, onClose }: { d: Deal; onClose: () => void }) {
   const [pending, start] = useTransition();
   const next = stagesFor(d.kind)[d.stage + 1];
   return (
-    <Sheet open onOpenChange={(o) => !o && onClose()} icon="check" title={`Confirm: ${next.toLowerCase()}`} subtitle={next === "Returned" ? "Check the item together before the deposit goes back" : "Take 2 or 3 photos together. They protect both of you."}>
+    <Sheet open onOpenChange={(o) => !o && onClose()} icon="check" title={`Confirm: ${next.toLowerCase()}`} subtitle={next === "Returned" ? "Check the item together before you confirm the return" : "Take 2 or 3 photos together. They protect both of you."}>
       <div className="stack" style={{ gap: 12 }}>
         {(
           [
             ["camera", "We took condition photos", photos, setPhotos],
-            ["wallet", next === "Returned" ? "Deposit returned" : "Payment done (UPI or cash)", money, setMoney],
+            [next === "Returned" ? "check" : "wallet", next === "Returned" ? "Item came back in the same condition" : "Payment done (UPI or cash)", money, setMoney],
           ] as const
         ).map(([i, t, v, set]) => (
           <label key={t} className="between" style={{ padding: "12px 14px", borderRadius: 16, background: "var(--sunken)", boxShadow: "var(--shw)" }}>
@@ -214,7 +214,6 @@ export function DealsView({ deals, tab }: { deals: Deal[]; tab: string }) {
                   </b>
                   <span className="xs muted">
                     {d.role === "buyer" ? "From" : "To"} {d.other.name} · {fmt(d.amount)}
-                    {d.kind === "rental" ? ` + ${fmt(d.deposit)} deposit` : ""}
                   </span>
                   <br />
                   <span className="xs faint">{ago(d.createdAt)}</span>

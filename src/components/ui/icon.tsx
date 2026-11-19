@@ -5,7 +5,7 @@
  *       prototype's .icon / .i14 / .i16 classes.
  */
 import {
-  ArrowLeft, ArrowRight, ArrowUpDown, BedDouble, Bell, Bike, BookOpen, Bookmark, Calendar, Camera, Check, ChevronDown,
+  ArrowLeft, ArrowRight, ArrowUpDown, BedDouble, Bell, BookOpen, Bookmark, Calendar, Camera, Check, ChevronDown,
   ChevronLeft, ChevronRight, ChevronUp, CircleAlert, CircleHelp, Clock, Compass, Drama, Dumbbell, Ellipsis, Eye, Filter, Flag, Flame,
   Gavel, Gift, GraduationCap, GripVertical, Heart, Hourglass, House, Image as ImageIcon, IndianRupee, Info, KeyRound, Laptop,
   LayoutGrid, Layers, List, LoaderCircle, Lock, LogOut, Mail, MapPin, Maximize2, Menu, MessageCircle, Minus, Moon, Music,
@@ -20,7 +20,7 @@ const MAP: Record<string, LucideIcon> = {
   clock: Clock, shield: Shield, star: Star, arrow: ArrowRight, sun: Sun, moon: Moon, img: ImageIcon, info: Info, check: Check,
   tag: Tag, hammer: Gavel, food: Utensils, list: List, logout: LogOut, grid: LayoutGrid, cal: Calendar, send: Send,
   share: Share2, store: Store, filter: SlidersHorizontal, sort: ArrowUpDown, sparkles: Sparkles, dumbbell: Dumbbell,
-  shirt: Shirt, book: BookOpen, laptop: Laptop, bed: BedDouble, fridge: Refrigerator, gift: Gift, music: Music, bike: Bike,
+  shirt: Shirt, book: BookOpen, laptop: Laptop, bed: BedDouble, fridge: Refrigerator, gift: Gift, music: Music,
   ticket: Ticket, flame: Flame, pkg: Package, package: Package, packagePlus: PackagePlus, repeat: Repeat, drama: Drama, grad: GraduationCap,
   party: PartyPopper, zap: Zap, camera: Camera, mail: Mail, help: CircleHelp, trend: TrendingDown, trendup: TrendingUp,
   eye: Eye, ruler: Ruler, min: Minus, expand: Maximize2, edit: Pencil, users: Users, wallet: Wallet, key: KeyRound,

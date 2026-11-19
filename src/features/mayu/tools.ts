@@ -24,7 +24,6 @@ export const brief = (l: ListingCard) => ({
   mode: l.mode,
   price: l.price,
   unit: l.mode === "rent" ? unitShort(l.rentUnit) : null,
-  deposit: l.deposit,
   original_price: l.mrp,
   age: l.purchasedOn ? ageText(ageMonths(l.purchasedOn)) : null,
   seller_trust: trustLevel(l.seller.plume, l.seller.ratedDeals).label,

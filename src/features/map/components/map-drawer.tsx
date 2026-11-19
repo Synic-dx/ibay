@@ -353,11 +353,6 @@ export default function MapDrawer({
                       {fmt(item.price)}
                       {isRent && item.rentUnit ? ` / ${item.rentUnit}` : ""}
                     </span>
-                    {isRent && item.deposit ? (
-                      <span style={{ fontSize: "10.5px", color: "var(--text-muted, #64748b)" }}>
-                        + {fmt(item.deposit)} dep
-                      </span>
-                    ) : null}
                   </div>
 
                   <div className="map-seller-row">

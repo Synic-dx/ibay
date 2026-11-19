@@ -32,7 +32,8 @@ export function columnsFor(d: ListingData) {
     price: d.price,
     mrp: d.mode === "drop" ? null : valueCheck || (d.mrp !== undefined && !Number.isNaN(Number(d.mrp))) ? Number(d.mrp) : null,
     rent_unit: d.mode === "rent" ? d.rentUnit : null,
-    deposit: d.mode === "rent" ? d.deposit : null,
+    // No deposits on i-bay. Rentals store 0 because the database column predates that decision.
+    deposit: d.mode === "rent" ? 0 : null,
     reserve_price: d.mode === "auction" ? d.price : null,
     buy_now_price: d.mode === "auction" ? (d.buyNow ?? null) : null,
     brand: d.brand || null,

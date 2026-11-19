@@ -2,7 +2,7 @@
 /**
  * FEATURE: Deals, handovers and ratings [RUBRIC:EXTRA]
  * WHAT: requestBuy() (Buy now: pick a pickup time, nothing is charged),
- *       advanceDeal() (handover check: photos taken, payment / deposit done),
+ *       advanceDeal() (handover check: photos taken, payment done or item returned),
  *       rateDeal() (score -10 to +10 with a required reason; Plume updates in
  *       a database trigger; editable for 24 hours).
  */

@@ -50,7 +50,7 @@ export default function HandoverOtpDisplay({
   const isReturn = step === "return";
   const title = isReturn ? "Rental Return Code" : "Delivery Pickup Code";
   const instructions = isReturn
-    ? `Share this code with ${sellerName} after inspecting condition and receiving your deposit back.`
+    ? `Share this code with ${sellerName} once you've returned the item and checked its condition together.`
     : `Share this code with ${sellerName} after inspecting the item and completing payment.`;
 
   const handleCopy = () => {

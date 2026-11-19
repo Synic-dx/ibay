@@ -87,7 +87,7 @@ export function UspNavChips() {
       <Link
         href="/browse?modes=rent"
         className={`dusp-chip rent ${isRentOn ? "on" : ""}`}
-        title="Campus rentals: coolers, suits, cycles & calculators"
+        title="Campus rentals: coolers, suits, speakers & calculators"
       >
         <RentalUspIcon className="icon i16 dusp-ic" />
         <span>Rentals</span>
