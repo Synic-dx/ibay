@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useCallback, useRef } from "react";
+import React, { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Marker, MapRef } from "react-map-gl/maplibre";
 import {
@@ -101,6 +101,49 @@ export default function SpotPicker({
     return findNearestLandmark(coords.lat, coords.lng);
   }, [coords.lat, coords.lng]);
 
+  const [selectedLocationName, setSelectedLocationName] = useState<string>(() => {
+    if (initialLat && initialLng) {
+      const lm = findNearestLandmark(initialLat, initialLng);
+      if (lm && lm.distanceMeters <= 50) return lm.location.name;
+    }
+    if (initialHostel && initialHostel !== "Day scholar") return initialHostel;
+    return "";
+  });
+
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isDropdownOpen) return;
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isDropdownOpen]);
+
+  const filteredLocations = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return null;
+    return allLocations.filter(
+      (l) =>
+        l.name.toLowerCase().includes(q) ||
+        (l.category && l.category.toLowerCase().includes(q))
+    );
+  }, [searchQuery]);
+
   const updatePositionAndHostel = useCallback(
     (newCoords: { lat: number; lng: number }) => {
       setCoords(newCoords);
@@ -116,6 +159,10 @@ export default function SpotPicker({
         resolvedHostel = landmark.location.name;
       } else if (nearestRes && (HOSTELS as readonly string[]).includes(nearestRes.location.name)) {
         resolvedHostel = nearestRes.location.name;
+      }
+
+      if (landmark && landmark.distanceMeters <= 50) {
+        setSelectedLocationName(landmark.location.name);
       }
 
       setSelectedHostel(resolvedHostel);
@@ -135,6 +182,7 @@ export default function SpotPicker({
       if (res) {
         setCoords(res);
         setSelectedHostel(hostelName);
+        setSelectedLocationName(hostelName);
         onChange({
           hostel: hostelName,
           lat: res.lat,
@@ -151,21 +199,18 @@ export default function SpotPicker({
     [note, onChange]
   );
 
-  const handleLocationDropdownSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const locName = e.target.value;
-    if (!locName) return;
-
-    const found = allLocations.find((l) => l.name === locName);
-    if (!found) return;
-
-    const newCoords = { lat: found.lat, lng: found.lng };
+  const handleSelectLocation = (loc: CampusLocation) => {
+    const newCoords = { lat: loc.lat, lng: loc.lng };
     setCoords(newCoords);
+    setSelectedLocationName(loc.name);
+    setIsDropdownOpen(false);
+    setSearchQuery("");
 
     let resolvedHostel = selectedHostel;
-    if ((HOSTELS as readonly string[]).includes(found.name)) {
-      resolvedHostel = found.name;
+    if ((HOSTELS as readonly string[]).includes(loc.name)) {
+      resolvedHostel = loc.name;
     } else {
-      const nearestRes = findNearestResidence(found.lat, found.lng);
+      const nearestRes = findNearestResidence(loc.lat, loc.lng);
       if (nearestRes && (HOSTELS as readonly string[]).includes(nearestRes.location.name)) {
         resolvedHostel = nearestRes.location.name;
       }
@@ -210,6 +255,14 @@ export default function SpotPicker({
       note: val,
     });
   };
+
+  const activeSpotLabel = useMemo(() => {
+    if (selectedLocationName) return selectedLocationName;
+    if (nearestLandmark && nearestLandmark.distanceMeters <= 50) {
+      return nearestLandmark.location.name;
+    }
+    return "";
+  }, [selectedLocationName, nearestLandmark]);
 
   const spotDisplayName = useMemo(() => {
     if (!nearestLandmark) return selectedHostel;
@@ -256,55 +309,206 @@ export default function SpotPicker({
       </div>
 
       {/* Quick Location Select Dropdown */}
-      <div className="spot-select-wrap">
-        <label htmlFor="spot-location-select" className="spot-select-label">
+      <div className="spot-select-wrap" ref={dropdownRef}>
+        <label htmlFor="spot-location-trigger" className="spot-select-label">
           <Icon name="compass" className="icon i14" />
           <span>Quick-select building or landmark</span>
         </label>
-        <select
-          id="spot-location-select"
-          className="spot-dropdown"
-          value={nearestLandmark?.distanceMeters && nearestLandmark.distanceMeters <= 25 ? nearestLandmark.location.name : ""}
-          onChange={handleLocationDropdownSelect}
-          aria-label="Select campus building or landmark"
+
+        <button
+          id="spot-location-trigger"
+          type="button"
+          className={`spot-picker-trigger ${isDropdownOpen ? "open" : ""}`}
+          onClick={() => setIsDropdownOpen((prev) => !prev)}
+          aria-expanded={isDropdownOpen}
+          aria-haspopup="listbox"
         >
-          <option value="">-- Choose a location on campus --</option>
-          <optgroup label="Hostels & Student Residences">
-            {HOSTEL_LOCATIONS.map((loc) => (
-              <option key={loc.id} value={loc.name}>
-                {loc.name}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="Academic & Administrative Blocks">
-            {ACADEMIC_LOCATIONS.map((loc) => (
-              <option key={loc.id} value={loc.name}>
-                {loc.name}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="Cafes, Mess & Dining">
-            {CAFE_LOCATIONS.map((loc) => (
-              <option key={loc.id} value={loc.name}>
-                {loc.name}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="Sports Complex & Stadiums">
-            {SPORTS_LOCATIONS.map((loc) => (
-              <option key={loc.id} value={loc.name}>
-                {loc.name}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label="Campus Gates & Facilities">
-            {OTHER_LOCATIONS.map((loc) => (
-              <option key={loc.id} value={loc.name}>
-                {loc.name}
-              </option>
-            ))}
-          </optgroup>
-        </select>
+          <div className="spot-picker-trigger-val">
+            <Icon name="pin" className="icon i14 spot-picker-trigger-icon" />
+            {activeSpotLabel ? (
+              <span className="spot-picker-trigger-name">{activeSpotLabel}</span>
+            ) : (
+              <span className="spot-picker-trigger-placeholder">
+                -- Choose a location on campus --
+              </span>
+            )}
+          </div>
+          <Icon
+            name="down"
+            className={`icon i14 spot-picker-chevron ${isDropdownOpen ? "rotated" : ""}`}
+          />
+        </button>
+
+        {isDropdownOpen && (
+          <div className="spot-picker-popover" role="listbox">
+            <div className="spot-picker-search-bar">
+              <Icon name="search" className="icon i14 spot-picker-search-icon" />
+              <input
+                type="text"
+                className="spot-picker-search-input"
+                placeholder="Type to filter 50+ campus spots..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                autoFocus
+                onClick={(e) => e.stopPropagation()}
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  className="spot-picker-search-clear"
+                  onClick={() => setSearchQuery("")}
+                  title="Clear search"
+                >
+                  <Icon name="x" className="icon i12" />
+                </button>
+              )}
+            </div>
+
+            <div className="spot-picker-menu-list">
+              {filteredLocations ? (
+                filteredLocations.length > 0 ? (
+                  filteredLocations.map((loc) => {
+                    const isSelected = loc.name === activeSpotLabel;
+                    return (
+                      <button
+                        key={loc.id}
+                        type="button"
+                        role="option"
+                        aria-selected={isSelected}
+                        className={`spot-picker-option ${isSelected ? "active" : ""}`}
+                        onClick={() => handleSelectLocation(loc)}
+                      >
+                        <span className="spot-picker-option-name">{loc.name}</span>
+                        {loc.category && (
+                          <span className="spot-picker-option-category">{loc.category}</span>
+                        )}
+                        {isSelected && (
+                          <Icon name="check" className="icon i14 spot-picker-option-check" />
+                        )}
+                      </button>
+                    );
+                  })
+                ) : (
+                  <div className="spot-picker-empty">
+                    No campus spot found matching &quot;{searchQuery}&quot;
+                  </div>
+                )
+              ) : (
+                <>
+                  <div className="spot-picker-group">
+                    <div className="spot-picker-group-header">Hostels &amp; Residences</div>
+                    {HOSTEL_LOCATIONS.map((loc) => {
+                      const isSelected = loc.name === activeSpotLabel;
+                      return (
+                        <button
+                          key={loc.id}
+                          type="button"
+                          role="option"
+                          aria-selected={isSelected}
+                          className={`spot-picker-option ${isSelected ? "active" : ""}`}
+                          onClick={() => handleSelectLocation(loc)}
+                        >
+                          <span className="spot-picker-option-name">{loc.name}</span>
+                          {isSelected && (
+                            <Icon name="check" className="icon i14 spot-picker-option-check" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="spot-picker-group">
+                    <div className="spot-picker-group-header">Academic &amp; Administrative Blocks</div>
+                    {ACADEMIC_LOCATIONS.map((loc) => {
+                      const isSelected = loc.name === activeSpotLabel;
+                      return (
+                        <button
+                          key={loc.id}
+                          type="button"
+                          role="option"
+                          aria-selected={isSelected}
+                          className={`spot-picker-option ${isSelected ? "active" : ""}`}
+                          onClick={() => handleSelectLocation(loc)}
+                        >
+                          <span className="spot-picker-option-name">{loc.name}</span>
+                          {isSelected && (
+                            <Icon name="check" className="icon i14 spot-picker-option-check" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="spot-picker-group">
+                    <div className="spot-picker-group-header">Cafes, Mess &amp; Dining</div>
+                    {CAFE_LOCATIONS.map((loc) => {
+                      const isSelected = loc.name === activeSpotLabel;
+                      return (
+                        <button
+                          key={loc.id}
+                          type="button"
+                          role="option"
+                          aria-selected={isSelected}
+                          className={`spot-picker-option ${isSelected ? "active" : ""}`}
+                          onClick={() => handleSelectLocation(loc)}
+                        >
+                          <span className="spot-picker-option-name">{loc.name}</span>
+                          {isSelected && (
+                            <Icon name="check" className="icon i14 spot-picker-option-check" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="spot-picker-group">
+                    <div className="spot-picker-group-header">Sports Complex &amp; Stadiums</div>
+                    {SPORTS_LOCATIONS.map((loc) => {
+                      const isSelected = loc.name === activeSpotLabel;
+                      return (
+                        <button
+                          key={loc.id}
+                          type="button"
+                          role="option"
+                          aria-selected={isSelected}
+                          className={`spot-picker-option ${isSelected ? "active" : ""}`}
+                          onClick={() => handleSelectLocation(loc)}
+                        >
+                          <span className="spot-picker-option-name">{loc.name}</span>
+                          {isSelected && (
+                            <Icon name="check" className="icon i14 spot-picker-option-check" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="spot-picker-group">
+                    <div className="spot-picker-group-header">Campus Gates &amp; Facilities</div>
+                    {OTHER_LOCATIONS.map((loc) => {
+                      const isSelected = loc.name === activeSpotLabel;
+                      return (
+                        <button
+                          key={loc.id}
+                          type="button"
+                          role="option"
+                          aria-selected={isSelected}
+                          className={`spot-picker-option ${isSelected ? "active" : ""}`}
+                          onClick={() => handleSelectLocation(loc)}
+                        >
+                          <span className="spot-picker-option-name">{loc.name}</span>
+                          {isSelected && (
+                            <Icon name="check" className="icon i14 spot-picker-option-check" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* 3D Satellite Map Frame */}
