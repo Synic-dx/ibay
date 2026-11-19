@@ -16,6 +16,7 @@ import { fmt } from "@/lib/format";
 import { PhotoTile, priceText } from "@/features/listings/components/parts";
 import MeetHalfwayPicker from "@/features/map/components/meet-halfway-picker";
 import HandoverStatusBadge from "@/features/deals/components/handover-status-badge";
+import HandoverOtpDisplay from "@/features/deals/components/handover-otp-display";
 import { fetchThread, respondOffer, sendMessage, sendOffer } from "./actions";
 import type { ChatMessage, Thread } from "./queries";
 
@@ -104,6 +105,17 @@ export function ThreadView({ initial, compact = false }: { initial: Thread; comp
             locationName={t.listing?.pickupHostel ?? "Campus"}
             sellerSlots={t.listing?.pickupSlots}
             compact={compact}
+          />
+        </div>
+      )}
+      {t.deal && (t.deal.deliveryOtp || t.deal.returnOtp) && (
+        <div style={{ padding: compact ? "0 10px 6px" : "0 16px 8px" }}>
+          <HandoverOtpDisplay
+            txId={t.deal.id}
+            code={t.deal.stage === 1 ? t.deal.returnOtp : t.deal.deliveryOtp}
+            step={t.deal.stage === 1 ? "return" : "pickup"}
+            sellerName={t.other.name.split(" ")[0]}
+            compact
           />
         </div>
       )}
