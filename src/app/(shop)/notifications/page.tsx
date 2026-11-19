@@ -22,27 +22,33 @@ export default async function NotificationsPage() {
   return (
     <>
       <SubBar title="Notifications" />
-      <main className="withtabs" style={{ paddingLeft: 0, paddingRight: 0 }}>
+      <main className="withtabs" style={{ paddingLeft: 0, paddingRight: 0 }} role="list" aria-label="Notifications list">
         {(data ?? []).map((n) => (
-          <Link key={n.id} className={`thr ${n.read_at ? "" : "unread"}`} href={n.link ?? "/"}>
-            <span className="li" style={{ width: 42, height: 42, borderRadius: 14, background: "var(--sunken)", display: "grid", placeItems: "center", color: "var(--brand-ink)", flex: "none" }}>
+          <Link
+            key={n.id}
+            role="listitem"
+            className={`thr ${n.read_at ? "" : "unread"}`}
+            href={n.link ?? "/"}
+            aria-label={`${n.read_at ? "" : "Unread: "}${n.body}`}
+          >
+            <span className="li" style={{ width: 44, height: 44, borderRadius: 14, background: n.read_at ? "var(--sunken)" : "var(--brand-soft)", display: "grid", placeItems: "center", color: "var(--brand-ink)", flex: "none" }}>
               <Icon name={n.icon} />
             </span>
             <span className="tx">
-              <span className="sm" style={{ display: "block", whiteSpace: "normal", color: "var(--ink)", fontWeight: n.read_at ? 400 : 600 }}>
+              <span className="sm" style={{ display: "block", whiteSpace: "normal", color: "var(--ink)", fontWeight: n.read_at ? 400 : 600, lineHeight: 1.4 }}>
                 {n.body}
               </span>
-              <span className="faint xs">{ago(n.created_at)}</span>
+              <span className="faint xs" style={{ marginTop: 2, display: "inline-block" }}>{ago(n.created_at)}</span>
             </span>
           </Link>
         ))}
         {!data?.length && (
-          <div className="empty">
+          <div className="empty" style={{ margin: "40px auto" }}>
             <span className="ei">
               <Icon name="bell" />
             </span>
-            <h3>All quiet</h3>
-            <p className="sm">Outbids, offers and price drops show up here.</p>
+            <h3>All quiet for now</h3>
+            <p className="sm">You&apos;ll see updates here when someone makes an offer, outbids you, or drops prices on saved items.</p>
           </div>
         )}
       </main>

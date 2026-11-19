@@ -122,6 +122,15 @@ export function SearchView({ initial, categories }: { initial: string; categorie
           </>
         ) : (
           <div className="lgroup">
+            {res.cats.length === 0 && res.items.length === 0 && (
+              <div className="empty" style={{ padding: "32px 16px" }}>
+                <span className="ei">
+                  <Icon name="search" />
+                </span>
+                <h3>No instant matches</h3>
+                <p className="sm">Tap below to search full listings, descriptions, and hostel locations across campus.</p>
+              </div>
+            )}
             {res.cats.map((c) => (
               <Link key={c.id} className="lrow" href={`/browse?cat=${c.id}`}>
                 <span className="li">
