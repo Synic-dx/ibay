@@ -10,7 +10,7 @@ import Link from "@/components/ui/link";
 import { usePathname, useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { Icon } from "@/components/ui/icon";
-import { Avatar, Logo, Wordmark } from "@/components/brand";
+import { Avatar, Peacock, Wordmark } from "@/components/brand";
 import { useApp } from "@/components/app-context";
 import { ThemeToggle } from "./theme-toggle";
 
@@ -23,7 +23,7 @@ export function RootBar({ children }: { children?: ReactNode }) {
           <Icon name="menu" />
         </button>
         <Link className="brand" href="/" aria-label="i-bay home">
-          <Logo size={30} />
+          <Peacock size={30} />
           <Wordmark size={23} />
         </Link>
         {viewer ? (
