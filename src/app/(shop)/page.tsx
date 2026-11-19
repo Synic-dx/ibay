@@ -14,6 +14,8 @@ import { HostelButton } from "@/features/home/hostel-button";
 import { HeroCarousel, HeroSide } from "@/features/home/hero";
 import { EndingBoard } from "@/features/home/ending-board";
 import { CategoryPic } from "@/features/home/category-pic";
+import { MomentRail } from "@/features/home/moment-rail";
+import { ProductRail } from "@/features/home/product-rail";
 import { ProductCard } from "@/features/listings/components/product-card";
 import { canSeeDrop, visibleCatalogue } from "@/features/listings/queries";
 import { getCategories, getCollections, getLiveItems, inCollection } from "@/features/shell/queries";
@@ -40,30 +42,6 @@ const STORIES: [string, string, boolean, string][] = [
   ["all", "All", false, "/explore"],
 ];
 
-function Rail({ icon, title, sub, items, more }: { icon: string; title: string; sub?: string; items: ListingCard[]; more: string }) {
-  if (!items.length) return null;
-  return (
-    <section className="sec">
-      <div className="sh">
-        <h2>
-          <Icon name={icon} />
-          {title}
-        </h2>
-        <Link href={more}>
-          See all
-          <Icon name="chev" />
-        </Link>
-      </div>
-      {sub && <div className="sub">{sub}</div>}
-      <div className="hrail">
-        {items.map((l) => (
-          <ProductCard key={l.id} l={l} />
-        ))}
-      </div>
-    </section>
-  );
-}
-
 export default async function HomePage() {
   if (!dbReady()) return <SetupNotice />;
   const viewer = await getViewer();
@@ -84,6 +62,19 @@ export default async function HomePage() {
   const topRequest = [...requests].sort((a, b) => b.votes - a.votes)[0] ?? null;
   const countBy = new Map<string, number>();
   for (const l of catalogue) countBy.set(l.categoryId, (countBy.get(l.categoryId) ?? 0) + 1);
+  const moments = collections.map((c) => {
+    const its = catalogue.filter((l) => inCollection(l, c));
+    return {
+      id: c.id,
+      name: c.name,
+      count: its.length,
+      previews: its.slice(0, 3).map((l) => ({
+        id: l.id,
+        url: l.photo?.url,
+        cover: l.photo?.fit === "cover",
+      })),
+    };
+  });
   const storyPic = (k: string) => {
     if (k === "auction") return <img src="/img/puffer.webp" alt="" />; // eslint-disable-line @next/next/no-img-element
     if (k === "rent") return <img src="/img/cooler.webp" alt="" />; // eslint-disable-line @next/next/no-img-element
@@ -160,39 +151,13 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className="sec">
-          <div className="sh">
-            <h2>
-              <Icon name="sparkles" />
-              Shop by moment
-            </h2>
-          </div>
-          <div className="hrail" style={{ gridAutoColumns: "220px" }}>
-            {/* eslint-disable @next/next/no-img-element -- small local thumbnails */}
-            {collections.map((c) => {
-              const its = catalogue.filter((l) => inCollection(l, c));
-              return (
-                <Link key={c.id} className="panel moment" href={`/browse?coll=${c.id}`}>
-                  <div className="th3">
-                    {its.slice(0, 3).map((l) => (
-                      <span key={l.id}>{l.photo ? <img src={l.photo.url} alt="" className={l.photo.fit === "cover" ? "cover" : ""} /> : <Icon name="ticket" />}</span>
-                    ))}
-                  </div>
-                  <div>
-                    <b className="sm">{c.name}</b>
-                    <div className="faint xs">{its.length} items</div>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
+        <MomentRail moments={moments} />
 
-        <Rail icon="tag" title="Hot Deals & Heavy Discounts" sub="Original price vs what it is going for now" items={deals.slice(0, 10)} more="/browse?sort=off" />
-        <Rail icon="drama" title="Getups & Costumes" sub="For club and committee interviews, preprocesses and presentations. Rent by the hour." items={act.filter((l) => l.categoryId === "preprocess")} more="/browse?cat=preprocess" />
-        <Rail icon="dumbbell" title="Gym Corner" items={act.filter((l) => l.categoryId === "gym")} more="/browse?cat=gym" />
-        <Rail icon="book" title="Novels, comics & manga" sub="Buy or rent by the week" items={act.filter((l) => l.categoryId === "reads")} more="/browse?cat=reads" />
-        <Rail icon="repeat" title="Rent, don't buy" sub="Coolers, calculators, speakers, cycles" items={rent} more="/browse?modes=rent" />
+        <ProductRail icon="tag" title="Hot Deals & Heavy Discounts" sub="Original price vs what it is going for now" items={deals.slice(0, 10)} more="/browse?sort=off" />
+        <ProductRail icon="drama" title="Getups & Costumes" sub="For club and committee interviews, preprocesses and presentations. Rent by the hour." items={act.filter((l) => l.categoryId === "preprocess")} more="/browse?cat=preprocess" />
+        <ProductRail icon="dumbbell" title="Gym Corner" items={act.filter((l) => l.categoryId === "gym")} more="/browse?cat=gym" />
+        <ProductRail icon="book" title="Novels, comics & manga" sub="Buy or rent by the week" items={act.filter((l) => l.categoryId === "reads")} more="/browse?cat=reads" />
+        <ProductRail icon="repeat" title="Rent, don't buy" sub="Coolers, calculators, speakers, cycles" items={rent} more="/browse?modes=rent" />
 
         {requests.length > 0 && (
           <section className="sec">

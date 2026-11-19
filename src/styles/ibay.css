@@ -167,6 +167,14 @@ section.sec{margin-top:24px}
 .sh h2 .icon{width:20px;height:20px;color:var(--brand-ink)}
 .sh a{font-size:13px;font-weight:600;display:flex;align-items:center;gap:2px}
 .sh a .icon{width:16px;height:16px}
+.sh-actions{display:flex;align-items:center;gap:12px}
+.rail-nav{display:flex;align-items:center;gap:6px}
+.rnav-btn{width:32px;height:32px;border-radius:999px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shr);color:var(--ink);display:inline-grid;place-items:center;cursor:pointer;transition:transform .15s ease,background .15s ease,box-shadow .15s ease,opacity .15s ease;flex:none;padding:0}
+.rnav-btn .icon{width:16px;height:16px}
+.rnav-btn:hover:not(:disabled){background:var(--surface-2);box-shadow:var(--shg);transform:translateY(-1px);color:var(--brand-ink)}
+.rnav-btn:active:not(:disabled){transform:scale(.95)}
+.rnav-btn:disabled{opacity:.28;cursor:default;box-shadow:none;pointer-events:none}
+.rnav-btn:focus-visible{outline:none;box-shadow:var(--focus)}
 .sub{font-size:12px;color:var(--ink-3);margin-top:-6px;margin-bottom:10px}
 /* stories */
 .stories{display:flex;gap:12px;overflow-x:auto;margin:0 -14px;padding:6px 14px 4px}
@@ -200,7 +208,9 @@ section.sec{margin-top:24px}
 .pulse{width:8px;height:8px;border-radius:99px;background:var(--bad);box-shadow:0 0 0 0 rgba(223,82,74,.6);animation:pl 1.6s infinite;flex:none}
 @keyframes pl{70%{box-shadow:0 0 0 8px rgba(223,82,74,0)}100%{box-shadow:0 0 0 0 rgba(223,82,74,0)}}
 /* rails & grid */
-.hrail{display:grid;grid-auto-flow:column;grid-auto-columns:calc(46% - 6px);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -14px;padding:2px 14px 10px}
+.hrail{display:grid;grid-auto-flow:column;grid-auto-columns:calc(46% - 6px);gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;margin:0 -14px;padding:4px 14px 14px;scrollbar-width:none}
+.hrail::-webkit-scrollbar{display:none}
+.hrail:focus-visible{outline:none;box-shadow:none}
 .hrail>*{scroll-snap-align:start}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 @media (min-width:480px){.hrail{grid-auto-columns:calc(36% - 6px)}}
@@ -244,12 +254,17 @@ section.sec{margin-top:24px}
 .ticket .tm span{font-size:8px;opacity:.8;font-family:var(--font-jetbrains),'JetBrains Mono',monospace}
 .ticket .ts{width:26%;border-left:2px dashed rgba(255,255,255,.5);display:grid;place-items:center;font-family:var(--font-jetbrains),'JetBrains Mono',monospace;font-size:8px;writing-mode:vertical-rl;letter-spacing:.1em;background:rgba(0,0,0,.12)}
 /* moments, tiles */
-.moment{flex:none;width:220px;padding:12px;display:flex;flex-direction:column;gap:8px;text-align:left;scroll-snap-align:start}
-.th3{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
-.th3 span{aspect-ratio:1;border-radius:10px;background:var(--photo);display:grid;place-items:center;overflow:hidden}
-.th3 img{max-width:80%;max-height:80%;mix-blend-mode:multiply}
+.moment{flex:none;width:240px;padding:14px;display:flex;flex-direction:column;gap:10px;text-align:left;scroll-snap-align:start;transition:transform .15s ease,box-shadow .15s ease}
+.moment:hover{transform:translateY(-2px);box-shadow:var(--shg)}
+.moment-meta{display:flex;flex-direction:column;gap:2px}
+.moment-name{font-size:14px;font-weight:600;line-height:1.25}
+.moment-count{color:var(--ink-3)}
+.th3{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.th3 span{aspect-ratio:1;border-radius:12px;background:var(--photo);display:grid;place-items:center;overflow:hidden}
+.th3 img{max-width:82%;max-height:82%;mix-blend-mode:multiply}
 .th3 img.cover{width:100%;height:100%;max-width:none;max-height:none;object-fit:cover;object-position:top}
 .th3 svg.art{width:85%;height:85%}
+[data-theme=dark] .th3 img{mix-blend-mode:normal}
 .tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
 .tile{display:flex;flex-direction:column;align-items:center;gap:7px;padding:12px 6px;text-align:center;font-weight:600;font-size:11.5px;line-height:1.2;background:var(--surface);border-radius:18px;box-shadow:var(--shr)}
 .tile .ci{width:58px;height:58px;border-radius:16px;background:var(--photo);display:grid;place-items:center;overflow:hidden}
@@ -557,7 +572,7 @@ a.stat:active{transform:scale(.98)}
  .slide{flex:0 0 100%;min-height:300px;grid-template-columns:1.3fr 1fr}
  .slide .t{padding:36px 44px}
  .slide h3{font-size:30px;max-width:560px}
- .hrail{grid-auto-columns:214px;margin:0;padding:2px 0 12px;scrollbar-width:thin}
+ .hrail{grid-auto-columns:214px;margin:0;padding:4px 2px 16px;scrollbar-width:none}
  .chiprow{margin:0;padding-left:0;padding-right:0}
  .g2{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px}
  .tiles{grid-template-columns:repeat(6,minmax(0,1fr))}
@@ -695,10 +710,11 @@ a.stat:active{transform:scale(.98)}
  .ctile .ci svg.art{width:90%;height:90%}
  [data-theme=dark] .ctile .ci img{mix-blend-mode:normal}
  .ctile b{font-size:14px}
- /* rails become one clean row of cards on desktop */
- .hrail{grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));grid-template-rows:auto;grid-auto-rows:0;row-gap:0;overflow:hidden;padding:4px 4px 12px;margin:0 -4px;scroll-snap-type:none}
- .hrail[style*="220px"]{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
- .hrail.reqrail{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+ /* rails stay one clean single row on desktop, scrollable with arrow keys/buttons */
+ .hrail{grid-auto-flow:column;grid-auto-columns:214px;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:6px 4px 18px;margin:0 -4px;scrollbar-width:none}
+ .hrail::-webkit-scrollbar{display:none}
+ .hrail.moment-rail, .hrail[style*="220px"]{grid-auto-columns:250px}
+ .hrail.reqrail{grid-auto-columns:340px}
  section.sec{margin-top:34px}
  .sh h2{font-size:21px}
 }

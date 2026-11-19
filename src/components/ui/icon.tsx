@@ -6,7 +6,7 @@
  */
 import {
   ArrowLeft, ArrowRight, ArrowUpDown, BedDouble, Bell, Bike, BookOpen, Bookmark, Calendar, Camera, Check, ChevronDown,
-  ChevronRight, ChevronUp, CircleAlert, CircleHelp, Clock, Compass, Drama, Dumbbell, Ellipsis, Eye, Filter, Flag, Flame,
+  ChevronLeft, ChevronRight, ChevronUp, CircleAlert, CircleHelp, Clock, Compass, Drama, Dumbbell, Ellipsis, Eye, Filter, Flag, Flame,
   Gavel, Gift, GraduationCap, GripVertical, Heart, Hourglass, House, Image as ImageIcon, IndianRupee, Info, KeyRound, Laptop,
   LayoutGrid, Layers, List, LoaderCircle, Lock, LogOut, Mail, MapPin, Maximize2, Menu, MessageCircle, Minus, Moon, Music,
   Package, PackagePlus, PartyPopper, Pause, Pencil, Play, Plus, Refrigerator, Repeat, Ruler, Search, Send, Settings, Share2, Shield,
@@ -16,7 +16,7 @@ import {
 
 const MAP: Record<string, LucideIcon> = {
   search: Search, chat: MessageCircle, bell: Bell, heart: Heart, bag: ShoppingBag, user: User, pin: MapPin, plus: Plus, x: X,
-  menu: Menu, home: House, compass: Compass, back: ArrowLeft, chev: ChevronRight, down: ChevronDown, up: ChevronUp,
+  menu: Menu, home: House, compass: Compass, back: ArrowLeft, chev: ChevronRight, chevLeft: ChevronLeft, chevRight: ChevronRight, down: ChevronDown, up: ChevronUp,
   clock: Clock, shield: Shield, star: Star, arrow: ArrowRight, sun: Sun, moon: Moon, img: ImageIcon, info: Info, check: Check,
   tag: Tag, hammer: Gavel, food: Utensils, list: List, logout: LogOut, grid: LayoutGrid, cal: Calendar, send: Send,
   share: Share2, store: Store, filter: SlidersHorizontal, sort: ArrowUpDown, sparkles: Sparkles, dumbbell: Dumbbell,
