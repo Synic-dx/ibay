@@ -29,7 +29,7 @@ const CampusMap = dynamic(() => import("./campus-map"), {
         borderRadius: "14px",
       }}
     >
-      Loading Campus Map...
+      Loading Campus Map…
     </div>
   ),
 });
@@ -301,6 +301,7 @@ export default function SpotPicker({
             className="spot-snap-btn"
             onClick={() => snapToResidence(initialHostel)}
             title={`Snap pin to ${initialHostel}`}
+            aria-label={`Snap pin to ${initialHostel}`}
           >
             <Icon name="home" className="icon i14" />
             <span>Snap to {initialHostel}</span>
@@ -344,11 +345,15 @@ export default function SpotPicker({
             <div className="spot-picker-search-bar">
               <Icon name="search" className="icon i14 spot-picker-search-icon" />
               <input
-                type="text"
+                type="search"
+                name="spotQuery"
+                aria-label="Filter campus spots"
                 className="spot-picker-search-input"
-                placeholder="Type to filter 50+ campus spots..."
+                placeholder="Type to filter 50+ campus spots…"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                autoComplete="off"
+                spellCheck={false}
                 autoFocus
                 onClick={(e) => e.stopPropagation()}
               />
@@ -358,6 +363,7 @@ export default function SpotPicker({
                   className="spot-picker-search-clear"
                   onClick={() => setSearchQuery("")}
                   title="Clear search"
+                  aria-label="Clear search"
                 >
                   <Icon name="x" className="icon i12" />
                 </button>
@@ -573,10 +579,12 @@ export default function SpotPicker({
         </div>
         <textarea
           id="spot-notes-textarea"
+          name="handoverNote"
           className="spot-notes-input"
-          placeholder="e.g. Room 204, 2nd floor, knock or WhatsApp when downstairs."
+          placeholder="e.g. Room 204, 2nd floor, knock or WhatsApp when downstairs…"
           value={note}
           maxLength={300}
+          spellCheck={false}
           onChange={handleNoteChange}
           rows={3}
         />

@@ -53,7 +53,15 @@ export function ReportButton({ listingId, userId, label = "Report", compact = fa
             ))}
           </div>
           {errs.reason && <span className="ferr" role="alert"><Icon name="alert" className="icon i14" />{errs.reason}</span>}
-          <textarea className="input" placeholder="Anything else we should know? (optional)" aria-label="Details" value={details} onChange={(e) => setDetails(e.target.value)} maxLength={500} />
+          <textarea
+            name="details"
+            className="input"
+            placeholder="Anything else we should know? (optional)…"
+            aria-label="Details"
+            value={details}
+            onChange={(e) => setDetails(e.target.value)}
+            maxLength={500}
+          />
           {errs.form && <div className="formerr" role="alert">{errs.form}</div>}
           <button type="button" className="btn block" onClick={send} disabled={pending}>
             <Icon name="send" />

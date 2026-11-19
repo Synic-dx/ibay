@@ -77,7 +77,7 @@ export function RequestSheet({
             <Icon name="search" />
             What do you need?
           </label>
-          <input id="rq-text" className={`input ${e.text ? "bad" : ""}`} placeholder="e.g. orange kurta, size M" aria-invalid={!!e.text} aria-describedby={e.text ? "rq-text-err" : undefined} maxLength={noValidate ? undefined : 120} {...register("text")} />
+          <input id="rq-text" className={`input ${e.text ? "bad" : ""}`} placeholder="e.g. orange kurta, size M…" aria-invalid={!!e.text} aria-describedby={e.text ? "rq-text-err" : undefined} maxLength={noValidate ? undefined : 120} {...register("text")} />
           <span className="fhint">
             <span />
             <span className="cnt-txt">{text.length}/120</span>
@@ -107,7 +107,7 @@ export function RequestSheet({
             <Icon name="rupee" />
             Budget
           </label>
-          <input id="rq-budget" className={`input ${e.budget ? "bad" : ""}`} placeholder="e.g. Rent up to ₹200/day" aria-invalid={!!e.budget} maxLength={noValidate ? undefined : 40} {...register("budget")} />
+          <input id="rq-budget" className={`input ${e.budget ? "bad" : ""}`} placeholder="e.g. Rent up to ₹200/day…" aria-invalid={!!e.budget} maxLength={noValidate ? undefined : 40} {...register("budget")} />
           {e.budget && (
             <span className="ferr" role="alert">
               <Icon name="alert" className="icon i14" />
@@ -207,11 +207,28 @@ export function ReplySheet({ open, onOpenChange, requestId, requestText }: { ope
     <Sheet open={open} onOpenChange={onOpenChange} icon="img" title="I have this" subtitle={`For: ${requestText}`}>
       <div className="stack" style={{ gap: 14 }}>
         <div className="field">
-          <textarea className={`input ${errs.text ? "bad" : ""}`} placeholder="Size, colour, condition, where to pick up" aria-label="Description" value={text} onChange={(e) => setText(e.target.value)} maxLength={500} aria-invalid={!!errs.text} />
+          <textarea
+            name="description"
+            className={`input ${errs.text ? "bad" : ""}`}
+            placeholder="Size, colour, condition, where to pick up…"
+            aria-label="Description"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            maxLength={500}
+            aria-invalid={!!errs.text}
+          />
           {errs.text && <span className="ferr" role="alert"><Icon name="alert" className="icon i14" />{errs.text}</span>}
         </div>
         <div className="row">
-          <input className="input" placeholder="Price, e.g. ₹150/day" aria-label="Price" value={price} onChange={(e) => setPrice(e.target.value)} maxLength={40} />
+          <input
+            name="price"
+            className="input"
+            placeholder="Price, e.g. ₹150/day…"
+            aria-label="Price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            maxLength={40}
+          />
           <label className="sqbtn" style={{ cursor: "pointer" }} aria-label="Add a photo">
             {busy ? <span className="spin" /> : <Icon name="camera" />}
             <input

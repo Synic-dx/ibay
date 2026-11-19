@@ -132,17 +132,21 @@ export default function MapDrawer({
               <Icon name="search" className="icon i14" />
             </span>
             <input
-              type="text"
-              placeholder={`Filter items in ${hostelName}...`}
+              type="search"
+              name="filter"
+              aria-label={`Filter items in ${hostelName}`}
+              placeholder={`Filter items in ${hostelName}…`}
               value={localSearch}
               onChange={(e) => setLocalSearch(e.target.value)}
+              autoComplete="off"
+              spellCheck={false}
               className="map-drawer-search-input"
             />
             {localSearch && (
               <button
                 type="button"
                 onClick={() => setLocalSearch("")}
-                style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--muted)", display: "flex", padding: 2 }}
+                style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--muted)", display: "flex", padding: 4 }}
                 aria-label="Clear filter search"
               >
                 <Icon name="x" className="icon i12" />
@@ -150,9 +154,11 @@ export default function MapDrawer({
             )}
           </div>
 
-          <div className="map-drawer-pills">
+          <div className="map-drawer-pills" role="tablist" aria-label="Hostel item mode filter">
             <button
               type="button"
+              role="tab"
+              aria-selected={filterMode === "all"}
               className={`map-filter-pill ${filterMode === "all" ? "is-active" : ""}`}
               onClick={() => setFilterMode("all")}
             >
@@ -161,9 +167,11 @@ export default function MapDrawer({
             {dropsCount > 0 && (
               <button
                 type="button"
+                role="tab"
+                aria-selected={filterMode === "drop"}
                 className={`map-filter-pill ${filterMode === "drop" ? "is-active" : ""}`}
                 onClick={() => setFilterMode("drop")}
-                style={filterMode !== "drop" ? { color: "#e11d48", borderColor: "#fecdd3", background: "#fff1f2" } : { background: "#e11d48", borderColor: "#e11d48" }}
+                style={filterMode !== "drop" ? { color: "var(--bad)", borderColor: "var(--line)", background: "var(--bad-soft)" } : { background: "var(--bad)", borderColor: "var(--bad)", color: "#ffffff" }}
               >
                 <Icon name="flame" className="icon i12" />
                 Drops ({dropsCount})
@@ -171,6 +179,8 @@ export default function MapDrawer({
             )}
             <button
               type="button"
+              role="tab"
+              aria-selected={filterMode === "sell"}
               className={`map-filter-pill ${filterMode === "sell" ? "is-active" : ""}`}
               onClick={() => setFilterMode("sell")}
             >
@@ -178,6 +188,8 @@ export default function MapDrawer({
             </button>
             <button
               type="button"
+              role="tab"
+              aria-selected={filterMode === "rent"}
               className={`map-filter-pill ${filterMode === "rent" ? "is-active" : ""}`}
               onClick={() => setFilterMode("rent")}
             >
@@ -198,26 +210,26 @@ export default function MapDrawer({
                 href={`/item/${drop.id}`}
                 style={{
                   padding: "10px 14px",
-                  background: "#fff1f2",
-                  border: "1px solid #fecdd3",
+                  background: "var(--bad-soft)",
+                  border: "1px solid var(--bad)",
                   borderRadius: "12px",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
                   textDecoration: "none",
-                  boxShadow: "0 2px 6px rgba(225, 29, 72, 0.08)",
+                  boxShadow: "var(--shr)",
                   transition: "transform 0.15s ease",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <span style={{ color: "#e11d48", display: "flex", alignItems: "center" }}>
+                  <span style={{ color: "var(--bad)", display: "flex", alignItems: "center" }}>
                     <Icon name="flame" className="icon i20" />
                   </span>
                   <div>
-                    <b style={{ color: "#9f1239", fontSize: "13.5px", display: "block" }}>
+                    <b style={{ color: "var(--ink)", fontSize: "13.5px", display: "block" }}>
                       Food Drop: {drop.title}
                     </b>
-                    <span style={{ color: "#e11d48", fontSize: "11.5px", fontWeight: 600 }}>
+                    <span style={{ color: "var(--bad)", fontSize: "11.5px", fontWeight: 600 }}>
                       {drop.price === 0 ? "Free drop" : `₹${drop.price}`} · Ready at {drop.pickupHostel}
                     </span>
                   </div>
@@ -227,7 +239,7 @@ export default function MapDrawer({
                     fontSize: "12px",
                     fontWeight: 700,
                     color: "#ffffff",
-                    background: "#e11d48",
+                    background: "var(--bad)",
                     padding: "5px 12px",
                     borderRadius: "6px",
                     flexShrink: 0,
@@ -263,10 +275,10 @@ export default function MapDrawer({
                   padding: "6px 14px",
                   borderRadius: 20,
                   border: "1px solid var(--line)",
-                  background: "#ffffff",
+                  background: "var(--surface)",
                   fontSize: "12px",
                   fontWeight: 600,
-                  color: "var(--brand, #02505f)",
+                  color: "var(--brand-ink, #02505f)",
                   cursor: "pointer",
                 }}
               >

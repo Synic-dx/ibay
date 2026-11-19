@@ -236,7 +236,7 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
     );
     secondary = [
       <button key="p" type="button" className="btn sec" onClick={pause} disabled={pending}>
-        <Icon name={l.status === "paused" ? "play" : "pause"} />
+        {pending ? <span className="spin" /> : <Icon name={l.status === "paused" ? "play" : "pause"} />}
         {l.status === "paused" ? "Resume" : "Pause"}
       </button>,
       <button key="d" type="button" className="btn sec danger-o" onClick={() => setSheet("del")}>
@@ -294,7 +294,7 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
   } else if (l.mode === "drop") {
     primary = (
       <button type="button" className="btn block" onClick={claim} disabled={pending}>
-        <Icon name="zap" />
+        {pending ? <span className="spin" /> : <Icon name="zap" />}
         Claim it · {fmt(l.price)}
       </button>
     );

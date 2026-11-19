@@ -251,3 +251,23 @@ BEGIN
     EXECUTE replace(d, needle, replacement);
   END IF;
 END $$;
+
+-- ---------------------------------------------------------------------
+-- Part 7: Getups & Costumes category and remove Day scholar
+-- ---------------------------------------------------------------------
+
+UPDATE public.categories
+   SET name = 'Getups & Costumes',
+       short_name = 'Getups',
+       description = 'Wigs, costumes and props for club and committee interviews, preprocesses, class presentations and theme nights. Rent by the hour.'
+ WHERE id = 'preprocess';
+
+ALTER TABLE public.profiles DROP CONSTRAINT IF EXISTS profiles_hostel_check;
+ALTER TABLE public.profiles
+  ADD CONSTRAINT profiles_hostel_check CHECK (hostel IN (
+    'SR 01', 'SR 02', 'SR 03', 'SR 04', 'SR 05', 'SR 06', 'SR 07', 'SR 08', 'SR 09', 'SR 10',
+    'SR 11', 'SR 12', 'SR 13', 'SR 14', 'SR 15', 'SR 16A', 'SR 16B', 'SR 17', 'SR 18', 'SR 19', 'SR 20',
+    'DPM Residence', 'EPGP Hostel',
+    'Executive Residence 01', 'Executive Residence 02', 'Executive Residence 03', 'Executive Residence 04',
+    'Married Residence 01'
+  ));

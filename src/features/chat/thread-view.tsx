@@ -184,8 +184,8 @@ export function ThreadView({ initial, compact = false }: { initial: Thread; comp
             <button
               type="button"
               style={{
-                background: "rgba(2, 80, 95, 0.08)",
-                color: "var(--brand, #02505f)",
+                background: "var(--brand-soft)",
+                color: "var(--brand-ink)",
                 fontWeight: 600,
                 display: "inline-flex",
                 alignItems: "center",
@@ -215,7 +215,16 @@ export function ThreadView({ initial, compact = false }: { initial: Thread; comp
               <Icon name="rupee" />
             </button>
           )}
-          <input id={inputId} placeholder="Message, or an amount to offer" aria-label="Message" autoComplete="off" value={draft} onChange={(e) => setDraft(e.target.value)} maxLength={1000} />
+          <input
+            id={inputId}
+            name="message"
+            placeholder="Message, or an amount to offer…"
+            aria-label="Message"
+            autoComplete="off"
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
+            maxLength={1000}
+          />
           <button className="rb send" type="submit" aria-label="Send">
             <Icon name="send" />
           </button>

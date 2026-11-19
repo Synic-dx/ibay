@@ -116,9 +116,10 @@ export function BidSheet({ open, onOpenChange, l }: Base & { l: ListingDetail })
         >
           <div className="row">
             <input
+              name="bidAmount"
               className={`input ${err ? "bad" : ""}`}
               inputMode="numeric"
-              placeholder={`${fmt(nb)} or more`}
+              placeholder={`${fmt(nb)} or more…`}
               aria-label="Custom bid"
               aria-invalid={!!err}
               aria-describedby={err ? "bid-err" : undefined}
@@ -126,7 +127,7 @@ export function BidSheet({ open, onOpenChange, l }: Base & { l: ListingDetail })
               onChange={(e) => (setAmt(e.target.value), setErr(null))}
             />
             <button className="btn" type="submit" disabled={pending}>
-              Bid
+              {pending ? <span className="spin" /> : "Bid"}
             </button>
           </div>
           {err && (

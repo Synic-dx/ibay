@@ -30,7 +30,7 @@ const CampusMap = dynamic(() => import("./campus-map"), {
         borderRadius: "10px",
       }}
     >
-      Loading map preview...
+      Loading map preview…
     </div>
   ),
 });
@@ -193,11 +193,11 @@ export default function PickupSnippet({
             alignItems: "center",
             gap: "6px",
             padding: "6px 10px",
-            background: "#ecfdf5",
-            color: "#065f46",
+            background: "var(--good-soft)",
+            color: "var(--good)",
             borderRadius: "6px",
             fontSize: "12px",
-            fontWeight: 500,
+            fontWeight: 600,
           }}
         >
           <Icon name="zap" className="icon i14" />

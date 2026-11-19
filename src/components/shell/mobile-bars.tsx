@@ -130,7 +130,7 @@ export function SearchPill({ placeholder }: { placeholder?: string }) {
   return (
     <Link className="spill" href="/search">
       <Icon name="search" className="icon i18" />
-      <span>{placeholder ?? "Search Yonex racquets, sarees, whey..."}</span>
+      <span>{placeholder ?? "Search Yonex racquets, sarees, whey…"}</span>
       <span className="go">
         <Icon name="arrow" />
       </span>

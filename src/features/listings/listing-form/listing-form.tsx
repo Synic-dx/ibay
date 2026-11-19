@@ -299,7 +299,7 @@ export function ListingForm({ categories, initial, edit }: { categories: Categor
                 <input
                   className={`input ${err("title") ? "bad" : ""}`}
                   maxLength={noValidate ? undefined : 80}
-                  placeholder={mode === "drop" ? "e.g. Extra biryani, sealed" : "e.g. Yonex Astrox 77 Pro, 4U G5"}
+                  placeholder={mode === "drop" ? "e.g. Extra biryani, sealed…" : "e.g. Yonex Astrox 77 Pro, 4U G5…"}
                   readOnly={locked.drop}
                   {...ids("title")}
                   {...register("title")}
@@ -350,7 +350,7 @@ export function ListingForm({ categories, initial, edit }: { categories: Categor
                 </F>
                 {needValue && (
                   <F id="f-mrp" label="Original price" icon="tag" error={err("mrp")}>
-                    <input className={`input ${err("mrp") ? "bad" : ""}`} inputMode="numeric" placeholder="What you paid" {...ids("mrp")} {...register("mrp")} />
+                    <input className={`input ${err("mrp") ? "bad" : ""}`} inputMode="numeric" placeholder="What you paid…" {...ids("mrp")} {...register("mrp")} />
                   </F>
                 )}
               </div>
@@ -594,7 +594,7 @@ export function ListingForm({ categories, initial, edit }: { categories: Categor
                   </span>
                 }
               >
-                <textarea className={`input ${err("description") ? "bad" : ""}`} placeholder="What is included, any defects, when you are free" maxLength={noValidate ? undefined : 1000} {...ids("description")} {...register("description")} />
+                <textarea className={`input ${err("description") ? "bad" : ""}`} placeholder="What is included, any defects, when you are free…" maxLength={noValidate ? undefined : 1000} {...ids("description")} {...register("description")} />
               </F>
               {mode !== "drop" && (
                 <>
@@ -605,7 +605,7 @@ export function ListingForm({ categories, initial, edit }: { categories: Categor
                     </span>
                     <span className={`sw ${v.isBundle ? "on" : ""}`} />
                   </button>
-                  {Boolean(v.isBundle) && <textarea className="input" placeholder="What is included, one per line" aria-label="Bundle contents" {...register("bundleContents")} />}
+                  {Boolean(v.isBundle) && <textarea className="input" placeholder="What is included, one per line…" aria-label="Bundle contents" {...register("bundleContents")} />}
                 </>
               )}
               <div className="field">

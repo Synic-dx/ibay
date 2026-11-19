@@ -482,14 +482,34 @@ export function Onboarding({ onFinish }: { onFinish: () => void }) {
       <div className="field">
         <div className="iwrap">
           <Icon name="key" className="icon i18" />
-          <input className="input" placeholder="Room number, e.g. 212" value={room} onChange={(e) => setRoom(e.target.value)} aria-label="Room number" aria-invalid={!!errs.room} />
+          <input
+            name="room"
+            className="input"
+            placeholder="Room number, e.g. 212…"
+            value={room}
+            spellCheck={false}
+            onChange={(e) => setRoom(e.target.value)}
+            aria-label="Room number"
+            aria-invalid={!!errs.room}
+          />
         </div>
         {errs.room && <span className="ferr" role="alert"><Icon name="alert" className="icon i14" />{errs.room}</span>}
       </div>
       <div className="field">
         <div className="iwrap">
           <Icon name="chat" className="icon i18" />
-          <input className="input" type="tel" placeholder="WhatsApp (optional)" value={wa} onChange={(e) => setWa(e.target.value)} aria-label="WhatsApp number" aria-invalid={!!errs.whatsapp} />
+          <input
+            name="whatsapp"
+            className="input"
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            placeholder="WhatsApp (optional)…"
+            value={wa}
+            onChange={(e) => setWa(e.target.value)}
+            aria-label="WhatsApp number"
+            aria-invalid={!!errs.whatsapp}
+          />
         </div>
         {errs.whatsapp && <span className="ferr" role="alert"><Icon name="alert" className="icon i14" />{errs.whatsapp}</span>}
       </div>
