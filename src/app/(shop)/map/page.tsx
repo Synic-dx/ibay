@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import { getViewer } from "@/lib/auth/session";
+import { dbReady } from "@/lib/supabase/server";
 import { visibleCatalogue } from "@/features/listings/queries";
 import CampusBrowseMap from "@/features/map/components/campus-browse-map";
+import { SetupNotice } from "@/components/setup-notice";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Campus Map · i-bay",
@@ -9,6 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CampusMapPage() {
+  if (!dbReady()) return <SetupNotice />;
   const viewer = await getViewer();
   const listings = await visibleCatalogue(viewer);
 
@@ -18,3 +23,4 @@ export default async function CampusMapPage() {
     </main>
   );
 }
+
