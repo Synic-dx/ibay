@@ -17,7 +17,7 @@ export async function listDeals(userId: string): Promise<Deal[]> {
   const { data } = await db()
     .from("transactions")
     .select(
-      "id,kind,amount,deposit,stage,created_at,buyer_id,seller_id," +
+      "id,kind,amount,deposit,stage,created_at,buyer_id,seller_id,handover_scheduled_at,handover_status,handover_proposed_by," +
         "buyer:profiles!transactions_buyer_id_fkey(id,name,plume,rated_deals,hostel),seller:profiles!transactions_seller_id_fkey(id,name,plume,rated_deals,hostel)," +
         `listing:listings(${CARD_SELECT},pickup_note)`,
     )
@@ -44,6 +44,9 @@ export async function listDeals(userId: string): Promise<Deal[]> {
       createdAt: d.created_at,
       listing: mapCard(d.listing),
       handoverNote: d.listing?.pickup_note ?? null,
+      handoverScheduledAt: d.handover_scheduled_at ?? null,
+      handoverStatus: d.handover_status ?? "proposed",
+      handoverProposedBy: d.handover_proposed_by ?? null,
       other: { id: o.id, name: o.name, plume: Number(o.plume), ratedDeals: o.rated_deals, hostel: o.hostel },
       myRating: r ? { score: r.score, editableUntil: r.editable_until, reason: r.reason, tags: r.tags } : null,
     };

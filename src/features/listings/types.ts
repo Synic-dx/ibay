@@ -47,6 +47,7 @@ export type ListingCard = {
   pickupHostel: string;
   pickupLat?: number | null;
   pickupLng?: number | null;
+  pickupSlots?: string[];
   seller: SellerLite;
   views: number;
   saves: number;

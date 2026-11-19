@@ -14,6 +14,9 @@ export type Deal = {
   createdAt: string;
   listing: ListingCard;
   handoverNote?: string | null;
+  handoverScheduledAt?: string | null;
+  handoverStatus?: "proposed" | "confirmed" | "rescheduled" | "completed";
+  handoverProposedBy?: string | null;
   other: { id: string; name: string; plume: number; ratedDeals: number; hostel: string };
   myRating: { score: number; editableUntil: string; reason: string; tags: string[] } | null;
 };

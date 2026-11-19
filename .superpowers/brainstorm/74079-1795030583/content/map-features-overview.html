@@ -1,0 +1,141 @@
+<h2>IIM Indore Campus Map Integration: Key Features & Flows</h2>
+<p class="subtitle">Review the 4 primary touchpoints for the campus map across ibay</p>
+
+<div class="cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 20px;">
+
+  <!-- Card 1: Dedicated Browse Map -->
+  <div class="card" data-choice="map-tab" onclick="toggleSelect(this)" style="border: 1px solid var(--border, #e2e8f0); border-radius: 12px; overflow: hidden; background: var(--bg-card, #fff);">
+    <div style="background: #02505F; color: white; padding: 12px 16px; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: space-between;">
+      <span>1. Full-Screen Campus Map Tab (/map)</span>
+      <span style="background: #1FC9B2; color: #02505F; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 700;">BROWSE</span>
+    </div>
+    <div style="padding: 16px; font-size: 13px; line-height: 1.5;">
+      <p style="margin: 0 0 10px; color: var(--text-muted, #64748b);">Visual discovery for campus listings & time-sensitive drops.</p>
+      
+      <!-- Mini Mockup Frame -->
+      <div style="background: #f1f5f9; border-radius: 8px; padding: 12px; border: 1px dashed #cbd5e1; position: relative;">
+        <!-- Filters -->
+        <div style="display: flex; gap: 6px; margin-bottom: 10px; overflow-x: auto;">
+          <span style="background: #02505F; color: white; padding: 4px 10px; border-radius: 999px; font-size: 11px;">All (24)</span>
+          <span style="background: #fee2e2; color: #dc2626; padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 600;">🔥 Food Drops (3)</span>
+          <span style="background: white; border: 1px solid #cbd5e1; padding: 4px 10px; border-radius: 999px; font-size: 11px;">Rentals</span>
+        </div>
+        <!-- Mock Map Surface -->
+        <div style="height: 140px; background: #e2e8f0; border-radius: 6px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+          <div style="position: absolute; top: 20px; left: 30px; background: white; border: 2px solid #02505F; border-radius: 12px; padding: 4px 8px; font-size: 10px; font-weight: 700; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
+            🏢 Hostel 12 · 5 items
+          </div>
+          <div style="position: absolute; bottom: 25px; right: 25px; background: #dc2626; color: white; border-radius: 12px; padding: 4px 8px; font-size: 10px; font-weight: 700; box-shadow: 0 2px 8px rgba(220,38,38,0.4); animation: pulse 2s infinite;">
+            🍕 Night Mess · 12m left
+          </div>
+          <div style="position: absolute; top: 40px; right: 50px; background: white; border: 2px solid #02505F; border-radius: 12px; padding: 4px 8px; font-size: 10px; font-weight: 700;">
+            🏢 Hostel 3 · 2 items
+          </div>
+        </div>
+        <!-- Drawer Preview -->
+        <div style="background: white; margin-top: 8px; padding: 8px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 11px;">
+          <b>Hostel 12 (5 items):</b>
+          <div style="display: flex; justify-content: space-between; margin-top: 4px; color: #475569;">
+            <span>boAt Speaker · ₹80/day</span>
+            <span style="color: #02505F; font-weight: 600;">View ›</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2: Sell Form Spot Picker + Note -->
+  <div class="card" data-choice="sell-picker" onclick="toggleSelect(this)" style="border: 1px solid var(--border, #e2e8f0); border-radius: 12px; overflow: hidden; background: var(--bg-card, #fff);">
+    <div style="background: #02505F; color: white; padding: 12px 16px; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: space-between;">
+      <span>2. Handover Spot & Note in /sell</span>
+      <span style="background: #E0A526; color: #000; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 700;">LISTING</span>
+    </div>
+    <div style="padding: 16px; font-size: 13px; line-height: 1.5;">
+      <p style="margin: 0 0 10px; color: var(--text-muted, #64748b);">Seller drops a map pin + writes an optional handover note.</p>
+      
+      <!-- Mini Mockup Frame -->
+      <div style="background: #f1f5f9; border-radius: 8px; padding: 12px; border: 1px dashed #cbd5e1;">
+        <label style="font-size: 11px; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">Pickup Location</label>
+        <div style="height: 100px; background: #e2e8f0; border-radius: 6px; position: relative; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+          <div style="background: #02505F; color: white; padding: 4px 10px; border-radius: 6px; font-size: 11px; display: flex; align-items: center; gap: 4px;">
+            📍 Pin at Hostel 8 Courtyard
+          </div>
+        </div>
+        <label style="font-size: 11px; font-weight: 700; color: #334155; display: block; margin-bottom: 4px;">Handover Note (Optional)</label>
+        <div style="background: white; border: 1px solid #cbd5e1; border-radius: 6px; padding: 8px; font-size: 11px; color: #475569;">
+          "Room 312, 3rd floor. Please text on WhatsApp before coming up!"
+        </div>
+        <p style="font-size: 10px; color: #64748b; margin: 4px 0 0;">Visible to confirmed buyers on their order sheet.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3: Order Confirmation Handover Card -->
+  <div class="card" data-choice="deals-card" onclick="toggleSelect(this)" style="border: 1px solid var(--border, #e2e8f0); border-radius: 12px; overflow: hidden; background: var(--bg-card, #fff);">
+    <div style="background: #02505F; color: white; padding: 12px 16px; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: space-between;">
+      <span>3. Handover Card on /deals</span>
+      <span style="background: #10b981; color: white; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 700;">TRANSACTION</span>
+    </div>
+    <div style="padding: 16px; font-size: 13px; line-height: 1.5;">
+      <p style="margin: 0 0 10px; color: var(--text-muted, #64748b);">Buyer sees exact pickup pin, note & pathfinder walk directions.</p>
+      
+      <!-- Mini Mockup Frame -->
+      <div style="background: #f1f5f9; border-radius: 8px; padding: 12px; border: 1px dashed #cbd5e1;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <span style="font-size: 12px; font-weight: 700; color: #02505F;">Lord of the Rings Box Set</span>
+          <span style="background: #dcfce7; color: #15803d; font-size: 10px; padding: 2px 6px; border-radius: 4px; font-weight: 600;">Agreed</span>
+        </div>
+        
+        <!-- Handover Box -->
+        <div style="background: white; border: 1px solid #cbd5e1; border-radius: 6px; padding: 10px;">
+          <div style="display: flex; align-items: center; gap: 6px; font-weight: 600; font-size: 12px; color: #1e293b;">
+            📍 Pickup: Hostel 4 (Ground Floor)
+          </div>
+          <div style="margin: 4px 0 8px; font-size: 11px; color: #64748b; background: #f8fafc; padding: 6px; border-radius: 4px;">
+            💬 Note: <i>"Left with security desk, ask for packet with your name."</i>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 11px; padding-top: 6px; border-top: 1px solid #f1f5f9;">
+            <span style="color: #02505F; font-weight: 600;">🚶 5 min walk (340 steps · No stairs)</span>
+            <button style="background: #02505F; color: white; border: none; border-radius: 4px; padding: 4px 8px; font-size: 10px; cursor: pointer;">Open Route</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 4: Chat Meet Halfway -->
+  <div class="card" data-choice="chat-halfway" onclick="toggleSelect(this)" style="border: 1px solid var(--border, #e2e8f0); border-radius: 12px; overflow: hidden; background: var(--bg-card, #fff);">
+    <div style="background: #02505F; color: white; padding: 12px 16px; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: space-between;">
+      <span>4. "Meet Halfway" in Chat</span>
+      <span style="background: #6366f1; color: white; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 700;">CHAT</span>
+    </div>
+    <div style="padding: 16px; font-size: 13px; line-height: 1.5;">
+      <p style="margin: 0 0 10px; color: var(--text-muted, #64748b);">Coordinate neutral campus spots when buyers & sellers are in distant hostels.</p>
+      
+      <!-- Mini Mockup Frame -->
+      <div style="background: #f1f5f9; border-radius: 8px; padding: 12px; border: 1px dashed #cbd5e1;">
+        <div style="background: white; border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px;">
+          <div style="font-size: 11px; color: #64748b; margin-bottom: 4px;">Auto-suggested Meeting Point:</div>
+          <div style="font-size: 12px; font-weight: 700; color: #02505F; display: flex; align-items: center; gap: 4px;">
+            ☕ Nescafe Courtyard
+          </div>
+          <div style="font-size: 10px; color: #475569; margin: 4px 0 8px;">
+            ~3 min walk from Hostel 2 · ~3 min walk from Hostel 15
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button style="flex: 1; background: #02505F; color: white; border: none; border-radius: 4px; padding: 4px; font-size: 10px; cursor: pointer;">Agree on Nescafe</button>
+            <button style="flex: 1; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px; padding: 4px; font-size: 10px; cursor: pointer;">Pick Other Spot</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="section" style="margin-top: 24px; padding: 16px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+  <h3 style="margin: 0 0 8px; font-size: 15px;">Next Step</h3>
+  <p style="margin: 0; font-size: 13px; color: #475569;">
+    Click to highlight any options above, or head back to the chat to review the detailed implementation plan and let me know if you want all 4 or prefer to stage them!
+  </p>
+</div>

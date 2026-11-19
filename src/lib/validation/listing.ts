@@ -22,6 +22,13 @@ export const RENT_UNITS = ["hour", "day", "week", "month"] as const;
 export const AUCTION_HOURS = [6, 24, 72, 168] as const;
 export const DROP_MINUTES = [15, 30, 60, 180] as const;
 export const SEAL_STATUSES = ["Sealed", "Opened", "Opened, scoop inside"] as const;
+export const AVAILABILITY_SLOTS = [
+  "Morning (8 AM - 12 PM)",
+  "Afternoon (12 PM - 5 PM)",
+  "Evening (5 PM - 9 PM)",
+  "Late Night (9 PM - 12 AM)",
+  "Flexible / Anytime",
+] as const;
 export const CATEGORY_IDS = [
   "preprocess", "formals", "ethnic", "events", "books", "exam", "gadgets", "room", "appliances", "food", "free",
   "gym", "sports", "hobbies", "reads", "travel", "clothing", "tickets",
@@ -98,6 +105,7 @@ const common = {
   pickupLat: z.number().optional(),
   pickupLng: z.number().optional(),
   pickupNote: z.string().trim().max(300, { error: "Keep handover note under 300 characters." }).optional(),
+  pickupSlots: z.array(z.string()).default([]),
   /** Optimistic concurrency token (edit only): the updated_at you loaded. */
   updatedAt: z.string().optional(),
   captchaToken: z.string().optional(),
@@ -174,7 +182,7 @@ export type ListingData = z.output<typeof listingSchema>;
 export const STEP_FIELDS: Record<1 | 2 | 3, string[]> = {
   1: ["mode", "title", "categoryId", "photos"],
   2: ["price", "mrp", "purchasedOn", "rentUnit", "deposit", "buyNow", "durationHours", "availableMinutes", "size", "specs", "sealStatus", "expiresOn"],
-  3: ["condition", "description", "bundleContents", "pickupHostel", "pickupLat", "pickupLng", "pickupNote", "captchaToken"],
+  3: ["condition", "description", "bundleContents", "pickupHostel", "pickupLat", "pickupLng", "pickupNote", "pickupSlots", "captchaToken"],
 };
 
 /** Quick inline price edit from the My listings table. */
