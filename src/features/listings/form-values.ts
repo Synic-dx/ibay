@@ -33,6 +33,11 @@ export function emptyValues(mode: Mode = "sell") {
     bundleContents: "",
     sealStatus: "",
     expiresOn: "",
+    pickupHostel: "",
+    pickupLat: null,
+    pickupLng: null,
+    pickupNote: "",
+    pickupSlots: [] as string[],
   } as Record<string, unknown> & { mode: Mode };
 }
 
@@ -62,6 +67,11 @@ export function valuesFromListing(l: ListingDetail) {
     bundleContents: l.bundleContents.join("\n"),
     sealStatus: l.sealStatus ?? "",
     expiresOn: l.expiresOn ?? "",
+    pickupHostel: l.pickupHostel ?? "",
+    pickupLat: l.pickupLat ?? null,
+    pickupLng: l.pickupLng ?? null,
+    pickupNote: l.pickupNote ?? "",
+    pickupSlots: l.pickupSlots ?? [],
     updatedAt: l.updatedAt,
   };
 }

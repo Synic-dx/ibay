@@ -8,6 +8,7 @@
 import "server-only";
 import { tool } from "ai";
 import { z } from "zod";
+import { dbReady } from "@/lib/supabase/server";
 import { browseListings, getListingDetail } from "@/features/listings/queries";
 import { listRequests } from "@/features/requests/queries";
 import { listDeals } from "@/features/deals/queries";
@@ -47,28 +48,43 @@ export function mayuTools(viewer: Viewer | null, onCards: (cards: ListingCard[])
         sort: z.enum(["best", "low", "off", "new"]).optional().describe("low = cheapest first"),
       }),
       execute: async ({ query, mode, max_price, sort }) => {
-        const { items } = await browseListings({ q: query, modes: mode ? [mode] : undefined, max: max_price, sort: sort ?? "best", limit: 6 }, viewer);
-        onCards(items);
-        return { count: items.length, items: items.map(brief) };
+        if (!dbReady()) return { count: 0, items: [] };
+        try {
+          const { items } = await browseListings({ q: query, modes: mode ? [mode] : undefined, max: max_price, sort: sort ?? "best", limit: 6 }, viewer);
+          onCards(items);
+          return { count: items.length, items: items.map(brief) };
+        } catch {
+          return { count: 0, items: [] };
+        }
       },
     }),
     get_listing: tool({
       description: "Get full details of one listing by id.",
       inputSchema: z.object({ id: z.string() }),
       execute: async ({ id }) => {
-        const l = await getListingDetail(id, viewer);
-        if (!l || l.status !== "active") return { found: false };
-        onCards([l]);
-        return { found: true, ...brief(l), description: l.description.slice(0, 400), specs: l.specs };
+        if (!dbReady()) return { found: false };
+        try {
+          const l = await getListingDetail(id, viewer);
+          if (!l || l.status !== "active") return { found: false };
+          onCards([l]);
+          return { found: true, ...brief(l), description: l.description.slice(0, 400), specs: l.specs };
+        } catch {
+          return { found: false };
+        }
       },
     }),
     list_open_requests: tool({
       description: "List what people on campus are looking for right now.",
       inputSchema: z.object({ query: z.string().optional() }),
       execute: async ({ query }) => {
-        const rs = await listRequests("urgent", viewer?.id, 30);
-        const f = query ? rs.filter((r) => r.text.toLowerCase().includes(query.toLowerCase())) : rs;
-        return f.slice(0, 6).map((r) => ({ text: r.text, budget: r.budget, needed_by: r.neededBy, votes: r.votes }));
+        if (!dbReady()) return [];
+        try {
+          const rs = await listRequests("urgent", viewer?.id, 30);
+          const f = query ? rs.filter((r) => r.text.toLowerCase().includes(query.toLowerCase())) : rs;
+          return f.slice(0, 6).map((r) => ({ text: r.text, budget: r.budget, needed_by: r.neededBy, votes: r.votes }));
+        } catch {
+          return [];
+        }
       },
     }),
     explain_plume: tool({
@@ -84,9 +100,13 @@ export function mayuTools(viewer: Viewer | null, onCards: (cards: ListingCard[])
       description: "The signed-in user's Plume, level, deals and hostel.",
       inputSchema: z.object({}),
       execute: async () => {
-        if (!viewer) return { signed_in: false };
-        const deals = await listDeals(viewer.id);
-        return { signed_in: true, plume: viewer.plume, level: trustLevel(viewer.plume, viewer.ratedDeals).label, rated_deals: viewer.ratedDeals, deals: deals.length, hostel: viewer.hostel };
+        if (!viewer || !dbReady()) return { signed_in: false };
+        try {
+          const deals = await listDeals(viewer.id);
+          return { signed_in: true, plume: viewer.plume, level: trustLevel(viewer.plume, viewer.ratedDeals).label, rated_deals: viewer.ratedDeals, deals: deals.length, hostel: viewer.hostel };
+        } catch {
+          return { signed_in: false };
+        }
       },
     }),
   };

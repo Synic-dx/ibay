@@ -17,9 +17,9 @@ export async function listDeals(userId: string): Promise<Deal[]> {
   const { data } = await db()
     .from("transactions")
     .select(
-      "id,kind,amount,deposit,stage,created_at,buyer_id,seller_id," +
+      "id,kind,amount,deposit,stage,created_at,buyer_id,seller_id,handover_scheduled_at,handover_status,handover_proposed_by,delivery_otp_plain,return_otp_plain,otp_attempts,otp_locked_until," +
         "buyer:profiles!transactions_buyer_id_fkey(id,name,plume,rated_deals,hostel),seller:profiles!transactions_seller_id_fkey(id,name,plume,rated_deals,hostel)," +
-        `listing:listings(${CARD_SELECT})`,
+        `listing:listings(${CARD_SELECT},pickup_note)`,
     )
     .or(`buyer_id.eq.${userId},seller_id.eq.${userId}`)
     .order("created_at", { ascending: false });
@@ -43,6 +43,14 @@ export async function listDeals(userId: string): Promise<Deal[]> {
       stage: d.stage,
       createdAt: d.created_at,
       listing: mapCard(d.listing),
+      handoverNote: d.listing?.pickup_note ?? null,
+      handoverScheduledAt: d.handover_scheduled_at ?? null,
+      handoverStatus: d.handover_status ?? "proposed",
+      handoverProposedBy: d.handover_proposed_by ?? null,
+      deliveryOtp: role === "buyer" ? (d.delivery_otp_plain ?? null) : null,
+      returnOtp: role === "buyer" ? (d.return_otp_plain ?? null) : null,
+      otpAttempts: Number(d.otp_attempts ?? 0),
+      otpLockedUntil: d.otp_locked_until ?? null,
       other: { id: o.id, name: o.name, plume: Number(o.plume), ratedDeals: o.rated_deals, hostel: o.hostel },
       myRating: r ? { score: r.score, editableUntil: r.editable_until, reason: r.reason, tags: r.tags } : null,
     };

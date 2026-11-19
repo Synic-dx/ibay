@@ -19,6 +19,9 @@ import { ago, fmt } from "@/lib/format";
 import { plumeDelta } from "@/lib/plume";
 import { PhotoTile } from "@/features/listings/components/parts";
 import { useOpenChat } from "@/features/chat/use-open-chat";
+import HandoverCard from "@/features/map/components/handover-card";
+import HandoverOtpDisplay from "./components/handover-otp-display";
+import HandoverOtpModal from "./components/handover-otp-modal";
 import { advanceDeal, rateDeal } from "./actions";
 import { canRate, stagesFor, type Deal } from "./stages";
 
@@ -166,8 +169,10 @@ function RateSheet({ d, onClose }: { d: Deal; onClose: () => void }) {
 }
 
 export function DealsView({ deals, tab }: { deals: Deal[]; tab: string }) {
+  const { viewer } = useApp();
   const { open: openChat } = useOpenChat();
   const [handover, setHandover] = useState<Deal | null>(null);
+  const [otpModal, setOtpModal] = useState<{ deal: Deal; step: "pickup" | "return" } | null>(null);
   const [rate, setRate] = useState<Deal | null>(null);
   const tabs = { all: deals, buying: deals.filter((d) => d.role === "buyer"), selling: deals.filter((d) => d.role === "seller") };
   const list = tabs[(tab as keyof typeof tabs) in tabs ? (tab as keyof typeof tabs) : "all"];
@@ -220,6 +225,7 @@ export function DealsView({ deals, tab }: { deals: Deal[]; tab: string }) {
                   ];
                 })}
               </ol>
+              <HandoverCard deal={d} viewerHostel={viewer?.hostel} currentUserId={viewer?.id} />
               {rated ? (
                 <span className="sm faint row" style={{ gap: 4 }}>
                   <Icon name="check" className="icon i16" />
@@ -237,10 +243,30 @@ export function DealsView({ deals, tab }: { deals: Deal[]; tab: string }) {
                   Rate {d.other.name.split(" ")[0]}
                 </button>
               ) : (
-                <button type="button" className="btn sec block" onClick={() => setHandover(d)}>
-                  <Icon name="check" />
-                  Mark {st[d.stage + 1].toLowerCase()}
-                </button>
+                <>
+                  {d.role === "buyer" ? (
+                    <HandoverOtpDisplay
+                      txId={d.id}
+                      code={d.kind === "rental" && d.stage === 1 ? d.returnOtp : d.deliveryOtp}
+                      step={d.kind === "rental" && d.stage === 1 ? "return" : "pickup"}
+                      sellerName={d.other.name.split(" ")[0]}
+                    />
+                  ) : (
+                    <button
+                      type="button"
+                      className="btn sec block"
+                      onClick={() =>
+                        setOtpModal({
+                          deal: d,
+                          step: d.kind === "rental" && d.stage === 1 ? "return" : "pickup",
+                        })
+                      }
+                    >
+                      <Icon name="shield" />
+                      Verify {d.kind === "rental" && d.stage === 1 ? "Return" : "Delivery"} Code
+                    </button>
+                  )}
+                </>
               )}
             </div>
           );
@@ -255,6 +281,14 @@ export function DealsView({ deals, tab }: { deals: Deal[]; tab: string }) {
           </div>
         )}
       </div>
+      {otpModal && (
+        <HandoverOtpModal
+          open={Boolean(otpModal)}
+          onOpenChange={(open) => !open && setOtpModal(null)}
+          deal={otpModal.deal}
+          step={otpModal.step}
+        />
+      )}
       {handover && <HandoverSheet d={handover} onClose={() => setHandover(null)} />}
       {rate && <RateSheet d={rate} onClose={() => setRate(null)} />}
     </>

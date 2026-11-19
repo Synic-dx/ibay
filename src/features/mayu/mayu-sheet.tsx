@@ -6,7 +6,7 @@
  */
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { Component, useEffect, useRef, useState, type ReactNode } from "react";
 import { Peacock } from "@/components/brand";
 import { Icon } from "@/components/ui/icon";
 import { Sheet } from "@/components/ui/sheet";
@@ -21,15 +21,33 @@ const SUGGEST = ["Cheapest fx-991ES", "Yonex racquets", "One Piece manga", "How 
 const SHOW_ON = [/^\/$/, /^\/explore/, /^\/browse/, /^\/requests$/, /^\/you/, /^\/saved/];
 
 /** Renders **bold** from the answer text safely (no HTML from the model). */
-function Rich({ text }: { text: string }) {
+function Rich({ text }: { text: unknown }) {
+  const safeText = typeof text === "string" ? text : typeof text === "object" && text !== null ? JSON.stringify(text) : String(text ?? "");
   return (
     <>
-      {text.split(/(\*\*[^*]+\*\*)/g).map((p, i) => (p.startsWith("**") && p.endsWith("**") ? <b key={i}>{p.slice(2, -2)}</b> : <span key={i}>{p}</span>))}
+      {safeText.split(/(\*\*[^*]+\*\*)/g).map((p, i) => (p.startsWith("**") && p.endsWith("**") ? <b key={i}>{p.slice(2, -2)}</b> : <span key={i}>{p}</span>))}
     </>
   );
 }
 
-export function MayuLauncher() {
+class MayuErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error: unknown) {
+    console.warn("[Mayu] Handled error in assistant sheet:", error);
+  }
+  render() {
+    if (this.state.hasError) return null;
+    return this.props.children;
+  }
+}
+
+function MayuLauncherInner() {
   const { mayuOpen, setMayuOpen } = useApp();
   const path = usePathname();
   const [msgs, setMsgs] = useState<Msg[]>([{ role: "assistant", content: 'Hi, I am **Mayu**! Tell me what you need. Try "cheapest fx-991ES" or "Yonex racquets".' }]);
@@ -52,8 +70,16 @@ export function MayuLauncher() {
         body: JSON.stringify({ messages: history.slice(-10).map(({ role, content }) => ({ role, content })) }),
       });
       if (!res.ok || !res.body) {
-        const err = await res.json().catch(() => ({ error: "Mayu couldn't answer right now." }));
-        setMsgs([...history, { role: "assistant", content: err.error }]);
+        const data = await res.json().catch(() => null);
+        const errMsg =
+          typeof data?.error === "string"
+            ? data.error
+            : typeof data?.error?.message === "string"
+              ? data.error.message
+              : typeof data?.message === "string"
+                ? data.message
+                : "Mayu couldn't answer right now. Please try again.";
+        setMsgs([...history, { role: "assistant", content: errMsg }]);
         return;
       }
       // Read the newline-delimited JSON stream piece by piece.
@@ -148,5 +174,13 @@ export function MayuLauncher() {
         </div>
       </Sheet>
     </>
+  );
+}
+
+export function MayuLauncher() {
+  return (
+    <MayuErrorBoundary>
+      <MayuLauncherInner />
+    </MayuErrorBoundary>
   );
 }

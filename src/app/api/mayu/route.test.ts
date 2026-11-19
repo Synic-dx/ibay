@@ -12,6 +12,7 @@ vi.mock("@/lib/security/guard", () => ({
 }));
 
 vi.mock("@/lib/supabase/server", () => ({
+  dbReady: vi.fn(() => true),
   db: vi.fn().mockReturnValue({
     from: vi.fn().mockReturnValue({
       insert: vi.fn().mockResolvedValue({ error: null }),

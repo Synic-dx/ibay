@@ -6,6 +6,7 @@
  */
 import "server-only";
 import { browseListings } from "@/features/listings/queries";
+import { dbReady } from "@/lib/supabase/server";
 import { fmt, unitShort } from "@/lib/format";
 import type { Viewer } from "@/lib/auth/session";
 import type { ListingCard } from "@/features/listings/types";
@@ -29,7 +30,16 @@ export async function fallbackAnswer(q: string, viewer: Viewer | null): Promise<
   const max = Number(s.match(/under\s*₹?\s*(\d+)/)?.[1]) || undefined;
   const words = s.replace(/[^a-z0-9 -]/g, " ").split(/\s+/).filter((w) => w && !STOP.has(w) && !/^\d+$/.test(w));
   const cheap = /cheap|lowest|best price/.test(s);
-  const { items } = await browseListings({ q: words.join(" "), modes, max, sort: cheap ? "low" : "best", limit: 6 }, viewer);
+  if (!dbReady()) {
+    return { text: "I can help you search listings once the catalog database is connected.", cards: [] };
+  }
+  let items: ListingCard[] = [];
+  try {
+    const res = await browseListings({ q: words.join(" "), modes, max, sort: cheap ? "low" : "best", limit: 6 }, viewer);
+    items = res.items;
+  } catch {
+    return { text: "I had trouble searching the catalog right now. Please try again.", cards: [] };
+  }
   if (!items.length) return { text: `Nothing matches that right now. Want to post it on **Looking for**? People who have it can reply with a photo and price.`, cards: [] };
   const price = (l: ListingCard) => fmt(l.price) + (l.mode === "rent" ? "/" + unitShort(l.rentUnit) : "");
   const r = items.find((l) => l.mode === "rent");

@@ -17,6 +17,7 @@ import { messageSchema, offerSchema } from "@/lib/validation/market";
 import { rateLimit } from "@/lib/security/guard";
 import { getThread, listThreads, type Thread, type ThreadSummary } from "./queries";
 import { notify, ping, startConversation } from "./service";
+import { generateOtp, hashOtp } from "@/features/deals/otp-crypto";
 
 /** Loads a conversation and checks the viewer is in it. */
 async function membership(convId: string) {
@@ -109,9 +110,19 @@ export async function respondOffer(messageId: string, accept: boolean): Promise<
     const { data: l } = await db().from("listings").select("id,seller_id,mode,deposit,status").eq("id", m.conv.listing_id).single();
     if (l && l.status === "active") {
       const buyer = l.seller_id === viewer.id ? m.other : viewer.id;
+      const deliveryOtp = generateOtp();
       const { data: tx } = await db()
         .from("transactions")
-        .insert({ listing_id: l.id, buyer_id: buyer, seller_id: l.seller_id, kind: l.mode === "rent" ? "rental" : "sale", amount: msg.offer_amount, deposit: l.mode === "rent" ? (l.deposit ?? 0) : 0 })
+        .insert({
+          listing_id: l.id,
+          buyer_id: buyer,
+          seller_id: l.seller_id,
+          kind: l.mode === "rent" ? "rental" : "sale",
+          amount: msg.offer_amount,
+          deposit: l.mode === "rent" ? (l.deposit ?? 0) : 0,
+          delivery_otp_plain: deliveryOtp,
+          delivery_otp_hash: hashOtp(deliveryOtp),
+        })
         .select("id")
         .single();
       if (tx) await db().from("conversations").update({ transaction_id: tx.id }).eq("id", m.conv.id);

@@ -20,6 +20,8 @@ import { requestBuy } from "@/features/deals/actions";
 import { openChat, sendOffer } from "@/features/chat/actions";
 import { closeAuction, markSold } from "@/features/listings/actions/update";
 import { PhotoTile } from "@/features/listings/components/parts";
+import PickupSnippet from "@/features/map/components/pickup-snippet";
+import HandoverTimePicker from "@/features/deals/components/handover-time-picker";
 import type { ListingCard, ListingDetail } from "@/features/listings/types";
 
 type Base = { open: boolean; onOpenChange: (v: boolean) => void };
@@ -169,19 +171,23 @@ export function BidSheet({ open, onOpenChange, l }: Base & { l: ListingDetail })
 const WHEN = ["Today, evening", "Tomorrow, morning", "Tomorrow, evening", "Ask in chat"];
 
 export function BuySheet({ open, onOpenChange, l }: Base & { l: ListingCard }) {
-  const [when, setWhen] = useState(0);
+  const { viewer } = useApp();
+  const [scheduledIso, setScheduledIso] = useState<string | null>(null);
   const [pending, start] = useTransition();
   const goChat = useGoChat();
   const router = useRouter();
   const first = l.seller.name.split(" ")[0];
+  const isDrop = l.mode === "drop";
+
   const send = () =>
     start(async () => {
-      const r = await requestBuy(l.id, when);
+      const r = await requestBuy(l.id, isDrop ? null : scheduledIso);
       if (!r.ok) return void toast.error(r.formError);
       onOpenChange(false);
       toast("Request sent", { action: { label: "View deal", onClick: () => router.push("/deals") } });
       goChat(r.data.conversationId);
     });
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange} icon={l.price ? "bag" : "gift"} title={l.price ? "Confirm purchase" : "Ask for it"} subtitle={l.title}>
       <div className="stack" style={{ gap: 14 }}>
@@ -195,23 +201,52 @@ export function BuySheet({ open, onOpenChange, l }: Base & { l: ListingCard }) {
             </div>
           </div>
         </div>
-        <span className="label">
-          <Icon name="clock" />
-          When can you pick it up?
-        </span>
-        <div className="chips" role="radiogroup" aria-label="Pickup time">
-          {WHEN.map((x, i) => (
-            <button key={x} type="button" role="radio" aria-checked={when === i} className={`chip ${when === i ? "on" : ""}`} onClick={() => setWhen(i)}>
-              {x}
-            </button>
-          ))}
+        <div style={{ marginTop: "-4px", marginBottom: "2px" }}>
+          <PickupSnippet
+            pickupHostel={l.pickupHostel}
+            pickupLat={l.pickupLat}
+            pickupLng={l.pickupLng}
+            viewerHostel={viewer?.hostel}
+            title={l.title}
+          />
         </div>
+
+        {isDrop ? (
+          <div
+            style={{
+              padding: "12px 14px",
+              borderRadius: 10,
+              background: "var(--tint, rgba(2, 80, 95, 0.08))",
+              border: "1px solid var(--brand, #02505F)",
+              display: "flex",
+              alignItems: "flex-start",
+              gap: 10,
+            }}
+          >
+            <span style={{ color: "var(--brand, #02505F)", marginTop: 2 }}>
+              <Icon name="clock" className="icon i16" />
+            </span>
+            <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+              <strong style={{ fontSize: 13, color: "var(--brand, #02505F)" }}>Immediate Pickup · Ready Now</strong>
+              <span style={{ fontSize: 12, color: "var(--ink)", lineHeight: 1.4 }}>
+                Food drops expire quickly. Please meet {first} at {l.pickupHostel} right away after confirming.
+              </span>
+            </div>
+          </div>
+        ) : (
+          <HandoverTimePicker
+            sellerSlots={l.pickupSlots}
+            onChange={setScheduledIso}
+          />
+        )}
+
         <div className="note">
           <Icon name="wallet" />
           <span>Nothing is charged here. Pay {first} by UPI or cash at the handover.</span>
         </div>
         <button type="button" className="btn block" onClick={send} disabled={pending}>
-          {pending ? <span className="spin" /> : null}Send request to {first}
+          {pending ? <span className="spin" /> : null}
+          {isDrop ? "Claim food drop now" : `Send request to ${first}`}
         </button>
       </div>
     </Sheet>

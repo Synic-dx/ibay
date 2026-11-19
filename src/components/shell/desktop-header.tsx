@@ -148,6 +148,10 @@ export function DesktopHeader({ categories, collections, drops, auctions }: Prop
                 </span>
               </button>
             )}
+            <Link className="dact-b" href="/map" title="Browse listings on 3D campus map">
+              <Icon name="pin" />
+              <span>Map</span>
+            </Link>
             <Link className="dact-b" href="/saved" onClick={gated("Sign in to see your saved items", "/saved")}>
               <Icon name="heart" />
               <span>Saved</span>

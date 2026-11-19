@@ -45,6 +45,9 @@ export type ListingCard = {
   priceDropAmount: number | null;
   priceDroppedAt: string | null;
   pickupHostel: string;
+  pickupLat?: number | null;
+  pickupLng?: number | null;
+  pickupSlots?: string[];
   seller: SellerLite;
   views: number;
   saves: number;
@@ -63,6 +66,7 @@ export type ListingCard = {
 /** Item page: the card plus details, photos, specs, bundles, bookings and bids. */
 export type ListingDetail = ListingCard & {
   description: string;
+  pickupNote?: string | null;
   photos: ListingPhoto[];
   specs: { k: string; v: string }[];
   sealStatus: string | null;
