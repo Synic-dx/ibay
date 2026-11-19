@@ -131,10 +131,6 @@ export function AuthPanel({
   };
 
   const google = () => {
-    if (!token && !noValidate) {
-      setCapErr("Please complete the security check first.");
-      return;
-    }
     start(() => googleSignIn(next ?? window.location.pathname, up ? "signup" : "signin"));
   };
 
@@ -181,7 +177,6 @@ export function AuthPanel({
               {formErr}
             </div>
           )}
-          <Captcha onVerify={onToken} resetKey={capReset} error={capErr} id="auth-captcha" />
           {googleEnabled && (
             <>
               <button type="button" className="gbtn" onClick={google} disabled={pending}>
@@ -259,6 +254,7 @@ export function AuthPanel({
                 </button>
               )}
             </div>
+            <Captcha onVerify={onToken} resetKey={capReset} error={capErr} id="auth-captcha" />
             <button className="btn block" type="submit" disabled={pending}>
               {pending ? <span className="spin" /> : null}
               {up ? "Create account" : "Send sign-in code"}
