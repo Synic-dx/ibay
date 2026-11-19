@@ -10,7 +10,7 @@
  */
 import Link from "@/components/ui/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as Menu from "@radix-ui/react-dropdown-menu";
 import { Icon } from "@/components/ui/icon";
 import { Avatar, Peacock, Wordmark } from "@/components/brand";
@@ -19,6 +19,7 @@ import { ThemeToggle } from "./theme-toggle";
 import { LiveStrip } from "./live-strip";
 import { HostelSheet } from "./hostel-sheet";
 import { UspNavChips } from "./usp-nav";
+import { SearchAutocomplete, RECENT_SEARCHES_KEY } from "./search-autocomplete";
 import type { Category, Collection } from "@/features/shell/queries";
 import type { ListingCard } from "@/features/listings/types";
 
@@ -40,13 +41,54 @@ export function DesktopHeader({ categories, collections, drops, auctions }: Prop
   const [cat, setCat] = useState(sp.get("cat") ?? "all");
   const [q, setQ] = useState(sp.get("q") ?? "");
   const [hostelOpen, setHostelOpen] = useState(false);
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const current = categories.find((c) => c.id === cat);
 
-  const submit = (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(RECENT_SEARCHES_KEY);
+      if (stored) setRecentSearches(JSON.parse(stored));
+    } catch {}
+  }, []);
+
+  const saveRecentSearch = (term: string) => {
+    const trimmed = term.trim();
+    if (!trimmed) return;
+    try {
+      const next = [trimmed, ...recentSearches.filter((s) => s.toLowerCase() !== trimmed.toLowerCase())].slice(0, 8);
+      setRecentSearches(next);
+      localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(next));
+    } catch {}
+  };
+
+  const handleClearRecent = () => {
+    try {
+      setRecentSearches([]);
+      localStorage.removeItem(RECENT_SEARCHES_KEY);
+    } catch {}
+  };
+
+  const submit = (e?: React.FormEvent) => {
+    e?.preventDefault();
+    setSearchFocused(false);
+    if (q.trim()) saveRecentSearch(q.trim());
     const params = new URLSearchParams();
     if (q.trim()) params.set("q", q.trim());
     if (cat !== "all") params.set("cat", cat);
+    router.push(`/browse?${params}`);
+  };
+
+  const handleSelectSuggestion = (value: string, categoryId?: string) => {
+    setQ(value);
+    setSearchFocused(false);
+    saveRecentSearch(value);
+    const params = new URLSearchParams();
+    if (categoryId) {
+      params.set("cat", categoryId);
+    } else if (value.trim()) {
+      params.set("q", value.trim());
+    }
     router.push(`/browse?${params}`);
   };
   const gated = (reason: string, href: string) => (e: React.MouseEvent) => {
@@ -122,6 +164,7 @@ export function DesktopHeader({ categories, collections, drops, auctions }: Prop
               name="q"
               value={q}
               onChange={(e) => setQ(e.target.value)}
+              onFocus={() => setSearchFocused(true)}
               placeholder="Search racquets, whey, formals, gadgets, books…"
               aria-label="Search i-bay"
               autoComplete="off"
@@ -130,6 +173,15 @@ export function DesktopHeader({ categories, collections, drops, auctions }: Prop
             <button type="submit" aria-label="Search">
               <Icon name="search" />
             </button>
+            <SearchAutocomplete
+              query={q}
+              open={searchFocused}
+              categories={categories}
+              recentSearches={recentSearches}
+              onSelect={handleSelectSuggestion}
+              onClearRecent={handleClearRecent}
+              onClose={() => setSearchFocused(false)}
+            />
           </form>
 
           <nav className="dact" aria-label="Account">

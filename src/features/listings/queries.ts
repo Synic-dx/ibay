@@ -5,6 +5,7 @@
  *       food drops, banned sellers hidden) match the RLS policy in the database.
  */
 import "server-only";
+import { unstable_cache } from "next/cache";
 import { db } from "@/lib/supabase/server";
 import { istDay } from "@/lib/format";
 import { nextFreeLabel } from "@/features/rentals/slots";
@@ -185,14 +186,30 @@ export async function browseListings(p: BrowseParams, viewer: Viewer | null): Pr
   return { items: await cardsByIds(rows.map((r) => r.id), viewer?.id), total: rows[0]?.total ?? 0 };
 }
 
+/** Cached query for raw active listings across all campus visitors (30s revalidation with tag invalidation). */
+const fetchRawActiveListings = unstable_cache(
+  async () => {
+    const { data } = await db()
+      .from("listings")
+      .select(CARD_SELECT)
+      .eq("status", "active")
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false })
+      .limit(150);
+    return data ?? [];
+  },
+  ["raw-active-listings-cache"],
+  { revalidate: 30, tags: ["listings"] },
+);
+
 /**
  * Every listing a visitor can currently see (used for the home page rails,
  * which need many small slices of the same catalogue).
  */
 export async function visibleCatalogue(viewer: Viewer | null): Promise<ListingCard[]> {
   const nowIso = new Date().toISOString();
-  const [{ data }, saved] = await Promise.all([
-    db().from("listings").select(CARD_SELECT).eq("status", "active").is("deleted_at", null).order("created_at", { ascending: false }).limit(150),
+  const [data, saved] = await Promise.all([
+    fetchRawActiveListings(),
     savedIds(viewer?.id),
   ]);
   const cards = (data ?? [])

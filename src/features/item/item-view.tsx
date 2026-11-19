@@ -33,6 +33,7 @@ import { ReportButton } from "@/features/admin/report-sheet";
 import { BidSheet, BuySheet, CloseAuctionSheet, OfferSheet, SoldSheet } from "./sheets";
 import PickupSnippet from "@/features/map/components/pickup-snippet";
 import { findNearestResidence, getResidenceCoordinates, calculateDistanceMeters } from "@/features/map/proximity";
+import { Lightbox } from "@/components/ui/lightbox";
 import type { ListingCard, ListingDetail } from "@/features/listings/types";
 
 export type Review = { id: string; score: number; reason: string; tags: string[]; raterName: string; createdAt: string };
@@ -85,6 +86,7 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
   const [sheet, setSheet] = useState<SheetKey>((["bid", "buy", "offer", "dates", "hours", "close", "sold"].includes(initialSheet ?? "") ? initialSheet : null) as SheetKey);
   const [saved, setSaved] = useState(l.saved);
   const [slide, setSlide] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const [pending, start] = useTransition();
   const trackRef = useRef<HTMLDivElement>(null);
   const mine = viewer?.id === l.seller.id;
@@ -374,7 +376,13 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
                 aria-label="Photos"
               >
                 {slides.map(({ p, zoom }, i) => (
-                  <div className="gslide" key={i}>
+                  <div
+                    className="gslide"
+                    key={i}
+                    onClick={() => p && setLightboxOpen(true)}
+                    style={{ cursor: p ? "zoom-in" : "default" }}
+                    title={p ? "Click to view fullscreen photo" : undefined}
+                  >
                     {p ? (
                       // eslint-disable-next-line @next/next/no-img-element -- gallery photo, object-fit handled in CSS
                       <img src={p.url} alt={i === 0 ? l.title : ""} className={p.fit === "cover" ? "cover" : ""} style={zoom ? { transform: zoom } : undefined} decoding="async" />
@@ -787,6 +795,15 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
           <SoldSheet open={sheet === "sold"} onOpenChange={(o) => setSheet(o ? "sold" : null)} l={l} chatters={chatters} />
         </>
       )}
+
+      <Lightbox
+        open={lightboxOpen}
+        images={slides.map((s) => s.p?.url).filter(Boolean) as string[]}
+        currentIndex={slide}
+        alt={l.title}
+        onClose={() => setLightboxOpen(false)}
+        onIndexChange={setSlide}
+      />
     </>
   );
 }
