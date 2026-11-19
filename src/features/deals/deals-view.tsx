@@ -179,11 +179,30 @@ function RateSheet({ d, onClose }: { d: Deal; onClose: () => void }) {
   );
 }
 
-export function DealsView({ deals, tab }: { deals: Deal[]; tab: string }) {
+export function DealsView({
+  deals,
+  tab,
+  initialVerifyDealId,
+}: {
+  deals: Deal[];
+  tab: string;
+  initialVerifyDealId?: string;
+}) {
   const { viewer } = useApp();
   const { open: openChat } = useOpenChat();
   const [handover, setHandover] = useState<Deal | null>(null);
-  const [otpModal, setOtpModal] = useState<{ deal: Deal; step: "pickup" | "return" } | null>(null);
+  const [otpModal, setOtpModal] = useState<{ deal: Deal; step: "pickup" | "return" } | null>(() => {
+    if (initialVerifyDealId) {
+      const target = deals.find((d) => d.id === initialVerifyDealId && d.role === "seller");
+      if (target) {
+        return {
+          deal: target,
+          step: target.kind === "rental" && target.stage === 1 ? "return" : "pickup",
+        };
+      }
+    }
+    return null;
+  });
   const [rate, setRate] = useState<Deal | null>(null);
   const tabs = { all: deals, buying: deals.filter((d) => d.role === "buyer"), selling: deals.filter((d) => d.role === "seller") };
   const list = tabs[(tab as keyof typeof tabs) in tabs ? (tab as keyof typeof tabs) : "all"];

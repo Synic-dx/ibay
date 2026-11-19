@@ -159,7 +159,7 @@ export default function HandoverPassSheet({
               Ask {firstName} for their 6-digit delivery code when you meet. After inspecting the item and receiving payment, enter the code on the Deals page to confirm handover and release funds.
             </p>
             <a
-              href="/deals"
+              href={`/deals?dealId=${deal.id}`}
               className="btn block"
               style={{ marginTop: 4, textAlign: "center" }}
               onClick={() => onOpenChange(false)}
