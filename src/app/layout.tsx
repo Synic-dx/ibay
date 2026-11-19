@@ -1,6 +1,6 @@
 /**
  * FEATURE: Root layout
- * WHAT: Fonts (Poppins for UI, JetBrains Mono for labels and numbers), theme
+ * WHAT: Fonts (Inter for UI, Plus Jakarta Sans for display, JetBrains Mono for labels/numbers), theme
  *       (next-themes on data-theme, light by default; dark only after the toggle; no flash), toasts, and the
  *       client app context (who is signed in, header counts, feature flags).
  */
