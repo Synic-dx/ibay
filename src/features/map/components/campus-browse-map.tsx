@@ -7,6 +7,7 @@ import { Marker, MapRef } from "react-map-gl/maplibre";
 import type { ListingCard } from "@/features/listings/types";
 import { HOSTELS } from "@/lib/validation/auth";
 import { Icon } from "@/components/ui/icon";
+import { useApp } from "@/components/app-context";
 import { getResidenceCoordinates } from "../proximity";
 import MapDrawer from "./map-drawer";
 
@@ -37,6 +38,7 @@ export interface CampusBrowseMapProps {
 type FilterMode = "all" | "drop" | "rent" | "sell";
 
 export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
+  const { viewer } = useApp();
   const searchParams = useSearchParams();
   const [filterMode, setFilterMode] = useState<FilterMode>("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -47,7 +49,7 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
   useEffect(() => {
     const latParam = searchParams.get("lat");
     const lngParam = searchParams.get("lng");
-    const nameParam = searchParams.get("name");
+    const nameParam = searchParams.get("name") || searchParams.get("hostel");
 
     if (latParam && lngParam) {
       const lat = parseFloat(latParam);
@@ -119,17 +121,7 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
     <div style={{ position: "relative", width: "100%", height: "calc(100vh - 60px)", overflow: "hidden" }}>
       {/* Top Floating Filter Bar */}
       <div
-        style={{
-          position: "absolute",
-          top: "14px",
-          left: "14px",
-          right: "14px",
-          zIndex: 30,
-          display: "flex",
-          flexDirection: "column",
-          gap: "8px",
-          maxWidth: "480px",
-        }}
+        className={`map-floating-search ${selectedHostel ? "is-shifted" : ""}`}
       >
         <div
           style={{
@@ -237,7 +229,7 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
               longitude={cluster.coords.lng}
               anchor="center"
               onClick={(e) => {
-                e.originalEvent.stopPropagation();
+                e.originalEvent?.stopPropagation?.();
                 setSelectedHostel(cluster.name);
                 mapRef.current?.flyTo({
                   center: [cluster.coords.lng, cluster.coords.lat],
@@ -247,8 +239,18 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
               }}
             >
               <div
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedHostel(cluster.name);
+                  mapRef.current?.flyTo({
+                    center: [cluster.coords.lng, cluster.coords.lat],
+                    zoom: 17.2,
+                    duration: 400,
+                  });
+                }}
                 style={{
                   cursor: "pointer",
+                  pointerEvents: "auto",
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
@@ -326,11 +328,12 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
         })}
       </CampusMap>
 
-      {/* Slide-Up Hostel Inventory Drawer */}
+      {/* Responsive Floating Sidebar (Desktop) / Slide-Up Sheet (Mobile) */}
       <MapDrawer
         hostelName={selectedHostel}
         listings={filteredListings}
         onClose={() => setSelectedHostel(null)}
+        viewerHostel={viewer?.hostel}
       />
     </div>
   );
