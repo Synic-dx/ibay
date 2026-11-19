@@ -1,7 +1,7 @@
 /**
  * FEATURE: Photo uploads (server side)
  * WHAT: Signs Cloudinary uploads (so only our app can upload to our account),
- *       checks uploaded photos really are jpg/png/webp under 5 MB, and stores
+ *       checks uploaded photos are real photos under 10 MB, and stores
  *       photos in Supabase Storage when Cloudinary is not configured.
  * WHY check on the server: the browser can lie about a file's type and size,
  *       so we read the real bytes (fallback) or ask Cloudinary (signed uploads).
@@ -39,10 +39,11 @@ export function sniffImage(buf: Uint8Array): "image/jpeg" | "image/png" | "image
  * @returns the public URL and storage path, or an error message
  */
 export async function storeFallbackPhoto(file: File, ownerId: string): Promise<{ url: string; publicId: string } | { error: string }> {
-  if (file.size > MAX_PHOTO_BYTES) return { error: "Each photo must be 5 MB or smaller." };
+  if (file.size > MAX_PHOTO_BYTES) return { error: "Each photo must be 10 MB or smaller." };
   const buf = new Uint8Array(await file.arrayBuffer());
   const type = sniffImage(buf);
-  if (!type) return { error: "Use a JPG, PNG or WebP photo." };
+  // WHY: this backup store (used only without Cloudinary) can't convert formats.
+  if (!type) return { error: "Use a JPG, PNG or WebP photo (other formats need Cloudinary to be set up)." };
   const path = `${ownerId}/${randomUUID()}.${type.split("/")[1].replace("jpeg", "jpg")}`;
   const { error } = await db().storage.from("photos").upload(path, buf, { contentType: type, upsert: false });
   if (error) return { error: "Upload failed. Try again." };
@@ -62,8 +63,9 @@ export async function checkCloudinaryPhoto(publicId: string): Promise<string | n
   }).catch(() => null);
   if (!res || !res.ok) return "We couldn't find that photo. Upload it again.";
   const info = (await res.json()) as { format?: string; bytes?: number };
-  if (!["jpg", "jpeg", "png", "webp"].includes(String(info.format))) return "Use a JPG, PNG or WebP photo.";
-  if ((info.bytes ?? 0) > MAX_PHOTO_BYTES) return "Each photo must be 5 MB or smaller.";
+  // Any supported original format is fine: the saved link converts it for each browser.
+  if (!["jpg", "jpeg", "png", "webp", "heic", "heif", "avif", "gif", "bmp", "tif", "tiff"].includes(String(info.format))) return "That file isn't a supported photo.";
+  if ((info.bytes ?? 0) > MAX_PHOTO_BYTES) return "Each photo must be 10 MB or smaller.";
   return null;
 }
 

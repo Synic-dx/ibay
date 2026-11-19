@@ -6,6 +6,7 @@
  *       "Delete my account" which needs DELETE typed in capitals.
  * VALIDATION: the same profileSchema in the browser and in updateProfile().
  */
+import { PHOTO_ACCEPT } from "@/lib/validation/listing";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -85,7 +86,7 @@ export function AccountForm({ me }: { me: Me }) {
             Change photo
             <input
               type="file"
-              accept="image/jpeg,image/png,image/webp"
+              accept={PHOTO_ACCEPT}
               hidden
               onChange={async (ev) => {
                 const f = ev.target.files?.[0];

@@ -133,3 +133,9 @@ html[data-nav="busy"] main { opacity: .55; }
   .profmain > .seg:first-child { margin-top: 0 !important; }
   .profmain .g2 { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
 }
+
+/* Photo picker: "Take a photo" and "Choose photos" side by side (features/listings/listing-form/photo-field.tsx). */
+.photoadd { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.photoadd .drop { width: 100%; text-align: left; font: inherit; color: inherit; }
+.photoadd .drop:disabled { opacity: .5; cursor: not-allowed; }
+@media (max-width: 360px) { .photoadd { grid-template-columns: 1fr; } }

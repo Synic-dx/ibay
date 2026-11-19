@@ -34,7 +34,7 @@ export async function createListing(input: ListingInput): Promise<ActionResult<{
   // 4. Rate limit.
   if (!(await rateLimit(`listing:${viewer.id}`, 3600, 10))) return fail("You have posted a lot in the last hour. Try again later.");
 
-  // 5. Photos: real jpg/png/webp under 5 MB, uploaded through i-bay.
+  // 5. Photos: real photos under 10 MB, uploaded through i-bay (Cloudinary converts for each browser).
   const photoErr = await verifyPhotos(d.photos);
   if (photoErr) return fail(photoErr, { photos: photoErr });
 

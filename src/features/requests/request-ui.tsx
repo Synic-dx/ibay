@@ -7,6 +7,7 @@
  * ReplySheet    "I have this": description, price, optional photo
  * OwnerBar      Edit / Found it / Delete (confirm + Undo) for the request owner
  */
+import { PHOTO_ACCEPT } from "@/lib/validation/listing";
 import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
@@ -215,7 +216,7 @@ export function ReplySheet({ open, onOpenChange, requestId, requestText }: { ope
             {busy ? <span className="spin" /> : <Icon name="camera" />}
             <input
               type="file"
-              accept="image/jpeg,image/png,image/webp"
+              accept={PHOTO_ACCEPT}
               hidden
               onChange={async (e) => {
                 const f = e.target.files?.[0];

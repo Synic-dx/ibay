@@ -3,14 +3,17 @@
  * FEATURE: Photos in the sell / edit form
  * WHAT: Add up to 6 photos (first one is the cover), drag to reorder (dnd-kit,
  *       works with mouse, touch and keyboard), remove with the x.
+ *       Two ways in: "Take a photo" (phone camera app, or the in-page camera on
+ *       laptops) and "Choose photos" (gallery or files, any major format incl. HEIC).
  */
 import { DndContext, KeyboardSensor, PointerSensor, closestCenter, useSensor, useSensors, type DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, arrayMove, rectSortingStrategy, sortableKeyboardCoordinates, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
-import { MAX_PHOTOS } from "@/lib/validation/listing";
+import { CameraSheet } from "@/components/ui/camera-sheet";
+import { MAX_PHOTOS, PHOTO_ACCEPT, PHOTO_FORMATS_TEXT } from "@/lib/validation/listing";
 import { uploadPhoto } from "../upload-client";
 
 export type Photo = { url: string; publicId?: string | null; fit: "contain" | "cover" };
@@ -31,9 +34,11 @@ function Thumb({ p, i, onRemove }: { p: Photo; i: number; onRemove: () => void }
 
 export function PhotoField({ value, onChange, error }: { value: Photo[]; onChange: (v: Photo[]) => void; error?: string }) {
   const [busy, setBusy] = useState(0);
+  const [camOpen, setCamOpen] = useState(false);
+  const cameraInput = useRef<HTMLInputElement>(null);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }));
 
-  const add = async (files: FileList | null) => {
+  const add = async (files: FileList | File[] | null) => {
     if (!files?.length) return;
     const room = MAX_PHOTOS - value.length;
     const picked = Array.from(files).slice(0, room);
@@ -55,21 +60,45 @@ export function PhotoField({ value, onChange, error }: { value: Photo[]; onChang
     onChange(arrayMove(value, from, to));
   };
 
+  const full = value.length >= MAX_PHOTOS;
+  // Phones open their own camera app; laptops get the in-page camera sheet.
+  const takePhoto = () => {
+    if (full) return toast(`Up to ${MAX_PHOTOS} photos.`);
+    const phone = window.matchMedia("(pointer: coarse)").matches;
+    if (phone) cameraInput.current?.click();
+    else setCamOpen(true);
+  };
+  const errStyle = error ? { borderColor: "var(--bad)" } : undefined;
+
   return (
     <div className="field">
       <span className="label" id="photos-label">
         <Icon name="camera" />
         Photos
       </span>
-      <label className="drop" aria-describedby={error ? "photos-err" : undefined} aria-invalid={!!error} style={error ? { borderColor: "var(--bad)" } : undefined}>
-        <Icon name="img" />
-        <span>
-          <b>{busy ? `Uploading ${busy}...` : "Add photos"}</b>
-          <br />
-          <span className="faint sm">First one is the cover. Up to 6. JPG, PNG or WebP, 5 MB each.</span>
-        </span>
-        <input type="file" accept="image/jpeg,image/png,image/webp" multiple hidden onChange={(e) => (add(e.target.files), (e.target.value = ""))} disabled={value.length >= MAX_PHOTOS} aria-labelledby="photos-label" />
-      </label>
+      <div className="photoadd" aria-describedby={error ? "photos-err" : undefined}>
+        <button type="button" className="drop" onClick={takePhoto} disabled={full || busy > 0} style={errStyle}>
+          <Icon name="camera" />
+          <span>
+            <b>Take a photo</b>
+            <br />
+            <span className="faint sm">Opens your camera</span>
+          </span>
+        </button>
+        <label className="drop" style={{ ...errStyle, opacity: full ? 0.5 : undefined }} aria-invalid={!!error}>
+          <Icon name="img" />
+          <span>
+            <b>{busy ? `Uploading ${busy}...` : "Choose photos"}</b>
+            <br />
+            <span className="faint sm">From your gallery or files</span>
+          </span>
+          <input type="file" accept={PHOTO_ACCEPT} multiple hidden onChange={(e) => (add(e.target.files), (e.target.value = ""))} disabled={full} aria-labelledby="photos-label" />
+        </label>
+        {/* Phones: capture="environment" opens the back camera directly. */}
+        <input ref={cameraInput} type="file" accept="image/*" capture="environment" hidden onChange={(e) => (add(e.target.files), (e.target.value = ""))} aria-label="Take a photo" />
+      </div>
+      <span className="faint xs">First one is the cover. Up to {MAX_PHOTOS} photos, 10 MB each. {PHOTO_FORMATS_TEXT}, including iPhone photos.</span>
+      <CameraSheet open={camOpen} onOpenChange={setCamOpen} onCapture={(f) => add([f])} />
       {value.length > 0 && (
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
           <SortableContext items={value.map((p) => p.url)} strategy={rectSortingStrategy}>

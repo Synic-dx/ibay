@@ -45,8 +45,22 @@ export const CATEGORY_IDS = [
 ] as const;
 
 export const MAX_PHOTOS = 6;
-export const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
-export const PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
+/** Cloudinary's limit per photo. Big phone photos are shrunk in the browser first. */
+export const MAX_PHOTO_BYTES = 10 * 1024 * 1024;
+/** Photo formats people can upload. Cloudinary converts them for each browser on delivery. */
+export const PHOTO_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif", "image/avif", "image/gif", "image/bmp", "image/tiff"] as const;
+/** WHY: Windows often gives HEIC files no type at all, so the extension is checked too. */
+export const PHOTO_EXTENSIONS = ["jpg", "jpeg", "png", "webp", "heic", "heif", "avif", "gif", "bmp", "tif", "tiff"] as const;
+/** Value for <input type="file" accept>. */
+export const PHOTO_ACCEPT = "image/*,.heic,.heif,.avif";
+export const PHOTO_FORMATS_TEXT = "JPG, PNG, WebP, HEIC, AVIF, GIF, BMP or TIFF";
+
+/** True for a supported photo, judged by its type or, when the type is missing, its extension. */
+export function isPhotoFile(file: { name: string; type: string }): boolean {
+  if ((PHOTO_TYPES as readonly string[]).includes(file.type.toLowerCase())) return true;
+  const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
+  return (!file.type || file.type === "application/octet-stream") && (PHOTO_EXTENSIONS as readonly string[]).includes(ext);
+}
 
 /** Categories where an original price and purchase month don't apply. */
 export const NO_VALUE_CHECK = ["tickets", "free", "food"];

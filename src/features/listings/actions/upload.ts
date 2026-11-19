@@ -16,13 +16,21 @@ export type UploadTicket =
   | { provider: "cloudinary"; url: string; fields: Record<string, string> }
   | { provider: "fallback" };
 
-/** A signed, short-lived Cloudinary upload (jpg/png/webp, 5 MB max). */
+/**
+ * A signed, short-lived Cloudinary upload (10 MB max). Accepts JPG, PNG, WebP,
+ * HEIC/HEIF, AVIF, GIF, BMP and TIFF. The saved photo link asks Cloudinary to
+ * convert on delivery (f_auto), so iPhone HEIC photos show in every browser.
+ */
 export async function getUploadTicket(): Promise<ActionResult<UploadTicket>> {
   const viewer = await getViewer();
   if (!viewer) return fail("Please sign in again.", undefined, "AUTH");
   if (!(await rateLimit(`upload:${viewer.id}`, 3600, 40))) return fail("Too many uploads. Try again in an hour.");
   if (!features.cloudinary) return ok({ provider: "fallback" });
-  const params = { timestamp: Math.floor(Date.now() / 1000), folder: `${UPLOAD_FOLDER}/${viewer.id}`, allowed_formats: "jpg,png,webp" };
+  const params = {
+    timestamp: Math.floor(Date.now() / 1000),
+    folder: `${UPLOAD_FOLDER}/${viewer.id}`,
+    allowed_formats: "jpg,jpeg,png,webp,heic,heif,avif,gif,bmp,tif,tiff",
+  };
   return ok({
     provider: "cloudinary",
     url: `https://api.cloudinary.com/v1_1/${env.cloudName}/image/upload`,
