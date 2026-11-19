@@ -171,10 +171,18 @@ export function ThreadView({ initial, compact = false }: { initial: Thread; comp
           {viewer?.hostel && t.other.hostel && (
             <button
               type="button"
-              style={{ background: "rgba(2, 80, 95, 0.08)", color: "var(--brand, #02505f)", fontWeight: 600 }}
+              style={{
+                background: "rgba(2, 80, 95, 0.08)",
+                color: "var(--brand, #02505f)",
+                fontWeight: 600,
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 5,
+              }}
               onClick={() => setHalfwayOpen(true)}
             >
-              🤝 Meet Halfway
+              <Icon name="compass" className="icon i14" />
+              Meet Halfway
             </button>
           )}
           {quick.slice(0, compact ? 2 : 3).map((q) => (

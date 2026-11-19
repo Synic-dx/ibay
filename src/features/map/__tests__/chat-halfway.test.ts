@@ -23,7 +23,7 @@ describe("Chat Meet Halfway Coordination", () => {
     expect(spots.length).toBeGreaterThan(0);
 
     const msg = formatMeetHalfwayMessage(spots[0], "SR 18", "SR 04");
-    expect(msg).toContain("📍 How about we meet at");
+    expect(msg).toContain("How about we meet at");
     expect(msg).toContain(spots[0].location.name);
     expect(msg).toContain("SR 18");
     expect(msg).toContain("SR 04");

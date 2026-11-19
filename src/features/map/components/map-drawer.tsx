@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import { Icon } from "@/components/ui/icon";
 import type { ListingCard } from "@/features/listings/types";
 import { fmt } from "@/lib/format";
 import styles from "./map.module.css";
@@ -53,7 +54,9 @@ export default function MapDrawer({ hostelName, listings, onClose }: MapDrawerPr
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <span style={{ fontSize: "18px" }}>🏠</span>
+          <span style={{ color: "var(--brand, #02505F)", display: "flex", alignItems: "center" }}>
+            <Icon name="home" className="icon i18" />
+          </span>
           <div>
             <h3 style={{ margin: 0, fontSize: "16px", fontWeight: 700, color: "var(--ink, #0f172a)" }}>
               {hostelName}
@@ -76,13 +79,11 @@ export default function MapDrawer({ hostelName, listings, onClose }: MapDrawerPr
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            fontSize: "15px",
-            fontWeight: 600,
             color: "var(--ink, #334155)",
           }}
           aria-label="Close drawer"
         >
-          ✕
+          <Icon name="x" className="icon i16" />
         </button>
       </div>
 
@@ -113,7 +114,9 @@ export default function MapDrawer({ hostelName, listings, onClose }: MapDrawerPr
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <span style={{ fontSize: "22px" }}>🔥</span>
+              <span style={{ color: "#e11d48", display: "flex", alignItems: "center" }}>
+                <Icon name="flame" className="icon i20" />
+              </span>
               <div>
                 <b style={{ color: "#9f1239", fontSize: "14px", display: "block" }}>
                   Food Drop: {drop.title}
@@ -133,7 +136,7 @@ export default function MapDrawer({ hostelName, listings, onClose }: MapDrawerPr
                 borderRadius: "6px",
               }}
             >
-              Claim →
+              Claim
             </span>
           </Link>
         ))}
@@ -141,7 +144,9 @@ export default function MapDrawer({ hostelName, listings, onClose }: MapDrawerPr
         {/* Regular Items */}
         {regularListings.length === 0 && drops.length === 0 ? (
           <div style={{ padding: "30px 10px", textAlign: "center", color: "var(--text-muted, #64748b)" }}>
-            <span style={{ fontSize: "28px" }}>📦</span>
+            <span style={{ color: "var(--muted)", display: "flex", justifyContent: "center" }}>
+              <Icon name="pkg" className="icon i24" />
+            </span>
             <p style={{ marginTop: "6px", fontSize: "14px" }}>
               No active listings in {hostelName} right now.
             </p>
@@ -185,7 +190,9 @@ export default function MapDrawer({ hostelName, listings, onClose }: MapDrawerPr
                     style={{ width: "100%", height: "100%", objectFit: "cover" }}
                   />
                 ) : (
-                  <span style={{ fontSize: "20px" }}>📦</span>
+                  <span style={{ color: "var(--muted)", display: "flex" }}>
+                    <Icon name="pkg" className="icon i18" />
+                  </span>
                 )}
               </div>
               <div style={{ flex: 1, minWidth: 0 }}>

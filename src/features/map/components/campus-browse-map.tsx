@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Marker, MapRef } from "react-map-gl/maplibre";
 import type { ListingCard } from "@/features/listings/types";
 import { HOSTELS } from "@/lib/validation/auth";
+import { Icon } from "@/components/ui/icon";
 import { getResidenceCoordinates } from "../proximity";
 import MapDrawer from "./map-drawer";
 
@@ -142,7 +143,9 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
             padding: "4px 8px",
           }}
         >
-          <span style={{ fontSize: "16px", padding: "0 6px" }}>🔍</span>
+          <span style={{ color: "#64748b", padding: "0 6px", display: "flex", alignItems: "center" }}>
+            <Icon name="search" className="icon i16" />
+          </span>
           <input
             type="text"
             placeholder="Search items or hostels (e.g. SR 18, calculator, cycles)..."
@@ -168,10 +171,11 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
                 cursor: "pointer",
                 padding: "4px 6px",
                 color: "#64748b",
-                fontSize: "13px",
+                display: "flex",
+                alignItems: "center",
               }}
             >
-              ✕
+              <Icon name="x" className="icon i14" />
             </button>
           )}
         </div>
@@ -181,9 +185,9 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
           {(
             [
               ["all", "All Items"],
-              ["drop", "Food Drops 🔥"],
-              ["sell", "For Sale 🏷️"],
-              ["rent", "Rentals ⏱️"],
+              ["drop", "Food Drops"],
+              ["sell", "For Sale"],
+              ["rent", "Rentals"],
             ] as const
           ).map(([mode, label]) => (
             <button
@@ -269,7 +273,7 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
                       animation: "pulse 1.8s infinite",
                     }}
                   >
-                    🔥
+                    <Icon name="flame" className="icon i18" />
                   </div>
                 ) : cluster.count > 0 ? (
                   <div

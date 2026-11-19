@@ -103,6 +103,6 @@ export function formatMeetHalfwayMessage(
   resA: string,
   resB: string
 ): string {
-  return `📍 How about we meet at ${spot.location.name}? (~${spot.distA}m from ${resA}, ~${spot.distB}m from ${resB})`;
+  return `How about we meet at ${spot.location.name}? (~${spot.distA}m from ${resA}, ~${spot.distB}m from ${resB})`;
 }
 

@@ -4,6 +4,7 @@ import React, { useMemo } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Marker } from "react-map-gl/maplibre";
+import { Icon } from "@/components/ui/icon";
 import { getResidenceCoordinates, calculateWalkingEffort, findNearestLandmark } from "../proximity";
 import styles from "./map.module.css";
 
@@ -88,7 +89,10 @@ export default function PickupSnippet({
               margin: 0,
             }}
           >
-            <span>📍 Pickup Spot</span>
+            <span style={{ color: "var(--brand, #02505F)", display: "flex", alignItems: "center" }}>
+              <Icon name="pin" className="icon i16" />
+            </span>
+            <span>Pickup Spot</span>
           </h4>
           <span style={{ fontSize: "12px", color: "var(--text-muted, #64748b)" }}>
             {nearestLandmark
@@ -103,9 +107,13 @@ export default function PickupSnippet({
             color: "var(--brand, #02505f)",
             fontWeight: 600,
             textDecoration: "none",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 4,
           }}
         >
-          Open map ↗
+          <span>Open map</span>
+          <Icon name="expand" className="icon i14" />
         </Link>
       </div>
 
@@ -147,7 +155,8 @@ export default function PickupSnippet({
             fontWeight: 500,
           }}
         >
-          <span>⚡ In your hostel! ~1 min walk away</span>
+          <Icon name="zap" className="icon i14" />
+          <span>In your hostel! ~1 min walk away</span>
         </div>
       ) : walkingEffort ? (
         <div
@@ -163,8 +172,11 @@ export default function PickupSnippet({
             fontSize: "12px",
           }}
         >
+          <span style={{ color: "var(--muted)", display: "flex", alignItems: "center" }}>
+            <Icon name="compass" className="icon i14" />
+          </span>
           <span>
-            🚶 <b>{walkingEffort.distanceMeters}m</b> ({walkingEffort.steps} steps) · ~{walkingEffort.durationMinutes} min walk from {viewerHostel}
+            <b>{walkingEffort.distanceMeters}m</b> ({walkingEffort.steps} steps) · ~{walkingEffort.durationMinutes} min walk from {viewerHostel}
           </span>
         </div>
       ) : null}

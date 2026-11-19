@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import { Icon } from "@/components/ui/icon";
 import { findEquidistantMeetingSpots, formatMeetHalfwayMessage, type HalfwaySpot } from "../midpoint";
 import styles from "./map.module.css";
 
@@ -60,8 +61,9 @@ export default function MeetHalfwayPicker({
           }}
         >
           <div>
-            <h3 style={{ margin: 0, fontSize: "15px", fontWeight: 700, color: "var(--ink, #0f172a)" }}>
-              🤝 Meet Halfway
+            <h3 style={{ margin: 0, fontSize: "15px", fontWeight: 700, color: "var(--ink, #0f172a)", display: "flex", alignItems: "center", gap: 6 }}>
+              <Icon name="compass" className="icon i16" />
+              Meet Halfway
             </h3>
             <span style={{ fontSize: "12px", color: "var(--text-muted, #64748b)" }}>
               Fair neutral spots between {userHostel} & {otherHostel}
@@ -80,11 +82,11 @@ export default function MeetHalfwayPicker({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              fontSize: "13px",
               color: "#64748b",
             }}
+            aria-label="Close"
           >
-            ✕
+            <Icon name="x" className="icon i14" />
           </button>
         </div>
 
@@ -128,8 +130,9 @@ export default function MeetHalfwayPicker({
                       </span>
                     )}
                   </div>
-                  <div style={{ fontSize: "12px", color: "var(--text-muted, #64748b)", marginTop: "2px" }}>
-                    <span>🚶 {spot.distA}m from you</span> · <span>{spot.distB}m from them</span>
+                  <div style={{ fontSize: "12px", color: "var(--text-muted, #64748b)", marginTop: "2px", display: "flex", alignItems: "center", gap: 6 }}>
+                    <Icon name="compass" className="icon i14" />
+                    <span>{spot.distA}m from you · {spot.distB}m from them</span>
                   </div>
                 </div>
 

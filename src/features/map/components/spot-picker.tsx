@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { Marker, MapRef } from "react-map-gl/maplibre";
 import { getResidenceCoordinates, findNearestLandmark } from "../proximity";
 import { HOSTELS } from "@/lib/validation/auth";
+import { Icon } from "@/components/ui/icon";
 import styles from "./map.module.css";
 
 const CampusMap = dynamic(() => import("./campus-map"), {
@@ -131,7 +132,10 @@ export default function SpotPicker({
       <div className={styles.spotPickerHeader}>
         <div>
           <div className={styles.spotPickerTitle}>
-            <span>📍 Pickup Spot on Campus</span>
+            <span style={{ color: "var(--brand, #02505F)", display: "flex", alignItems: "center", gap: 6 }}>
+              <Icon name="pin" className="icon i16" />
+              Pickup Spot on Campus
+            </span>
           </div>
           <p className={styles.spotPickerSubtitle}>
             Drop or drag a pin where the buyer can meet you for handover.
@@ -143,8 +147,10 @@ export default function SpotPicker({
             className={styles.snapBtn}
             onClick={() => snapToResidence(initialHostel)}
             title={`Snap pin to ${initialHostel}`}
+            style={{ display: "inline-flex", alignItems: "center", gap: 5 }}
           >
-            🏠 Snap to {initialHostel}
+            <Icon name="home" className="icon i14" />
+            <span>Snap to {initialHostel}</span>
           </button>
         )}
       </div>
@@ -201,8 +207,9 @@ export default function SpotPicker({
       <div className={styles.noteField}>
         <div className={styles.noteFieldLabel}>
           <span>Handover instructions (Optional)</span>
-          <span className={styles.privacyLock}>
-            🔒 Only shared with buyer after deal confirmation
+          <span className={styles.privacyLock} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+            <Icon name="lock" className="icon i12" />
+            <span>Only shared with buyer after deal confirmation</span>
           </span>
         </div>
         <textarea
