@@ -7,7 +7,7 @@
  */
 import "server-only";
 
-const read = (k: string) => (process.env[k] ?? "").trim();
+const read = (k: string) => (process.env[k] ?? "").replace(/^["']|["']$/g, "").trim();
 
 export const env = {
   isProd: process.env.NODE_ENV === "production",

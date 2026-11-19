@@ -23,11 +23,14 @@ declare module "next-auth" {
   }
 }
 
-const DOMAIN = process.env.ALLOWED_EMAIL_DOMAIN || "iimidr.ac.in";
-const hasGoogle = Boolean(process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET);
+const clean = (s?: string) => s?.replace(/^["']|["']$/g, "").trim() || "";
+const DOMAIN = clean(process.env.ALLOWED_EMAIL_DOMAIN) || "iimidr.ac.in";
+const googleId = clean(process.env.AUTH_GOOGLE_ID);
+const googleSecret = clean(process.env.AUTH_GOOGLE_SECRET);
+const hasGoogle = Boolean(googleId && googleSecret);
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  secret: process.env.AUTH_SECRET,
+  secret: clean(process.env.AUTH_SECRET) || process.env.AUTH_SECRET,
   trustHost: true,
   session: { strategy: "jwt", maxAge: 30 * 24 * 3600 },
   pages: { signIn: "/login", error: "/login" },
@@ -35,8 +38,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     ...(hasGoogle
       ? [
           Google({
-            clientId: process.env.AUTH_GOOGLE_ID,
-            clientSecret: process.env.AUTH_GOOGLE_SECRET,
+            clientId: googleId,
+            clientSecret: googleSecret,
             authorization: { params: { hd: DOMAIN, prompt: "select_account" } },
           }),
         ]
