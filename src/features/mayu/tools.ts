@@ -87,23 +87,32 @@ export function mayuTools(viewer: Viewer | null, onCards: (cards: ListingCard[])
         }
       },
     }),
-    explain_plume: tool({
-      description: "Explain the Plume score and levels.",
+    explain_feather: tool({
+      description: "Explain the Feather trust score and levels.",
       inputSchema: z.object({}),
       execute: async () => ({
-        formula: "delta = K(n) * (rating/10) * w; K(n) = max(6, 40/sqrt(1+n/3)); w = clamp(1 + raterPlume/400, 0.5, 1.5)",
+        formula: "delta = K(n) * (rating/10) * w; K(n) = max(6, 40/sqrt(1+n/3)); w = clamp(1 + raterFeather/400, 0.5, 1.5)",
         levels: ["Top rated: 150+", "Well rated: 60 to 149", "Rising: 0 to 59", "Mixed reviews: -1 to -59", "Flagged: -60 or lower"],
-        notes: "Everyone starts at 0. Both sides rate after every deal from -10 to +10 with a reason.",
+        notes: "Everyone starts with a Feather score of 0. Both sides rate after every deal from -10 to +10 with a reason.",
+      }),
+    }),
+    explain_plume: tool({
+      description: "Alias for explain_feather. Explains the Feather trust score.",
+      inputSchema: z.object({}),
+      execute: async () => ({
+        formula: "delta = K(n) * (rating/10) * w; K(n) = max(6, 40/sqrt(1+n/3)); w = clamp(1 + raterFeather/400, 0.5, 1.5)",
+        levels: ["Top rated: 150+", "Well rated: 60 to 149", "Rising: 0 to 59", "Mixed reviews: -1 to -59", "Flagged: -60 or lower"],
+        notes: "Everyone starts with a Feather score of 0. Both sides rate after every deal from -10 to +10 with a reason.",
       }),
     }),
     get_my_stats: tool({
-      description: "The signed-in user's Plume, level, deals and hostel.",
+      description: "The signed-in user's Feather score, level, deals and hostel.",
       inputSchema: z.object({}),
       execute: async () => {
         if (!viewer || !dbReady()) return { signed_in: false };
         try {
           const deals = await listDeals(viewer.id);
-          return { signed_in: true, plume: viewer.plume, level: trustLevel(viewer.plume, viewer.ratedDeals).label, rated_deals: viewer.ratedDeals, deals: deals.length, hostel: viewer.hostel };
+          return { signed_in: true, feather: viewer.plume, plume: viewer.plume, level: trustLevel(viewer.plume, viewer.ratedDeals).label, rated_deals: viewer.ratedDeals, deals: deals.length, hostel: viewer.hostel };
         } catch {
           return { signed_in: false };
         }
@@ -114,6 +123,7 @@ export function mayuTools(viewer: Viewer | null, onCards: (cards: ListingCard[])
 
 export const MAYU_SYSTEM = `You are Mayu, the peacock assistant of i-bay, IIM Indore's campus marketplace.
 - Find things for students using the tools. Never invent listings, prices or people: only mention items returned by tools.
+- The campus trust and reputation score is called "Feather" (formerly Plume). Everyone starts at 0. Positive ratings after deals increase it; negative ratings reduce it.
 - Keep answers to 1 to 3 short sentences. Plain words, no emoji, no em dashes.
 - Prices are whole rupees, written like ₹1,200. Rentals show a unit (/hr, /day, /week).
 - When both renting and buying exist, compare sensibly: renting suits one-off needs (an exam day, one event); buying suits regular use.

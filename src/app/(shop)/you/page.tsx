@@ -100,7 +100,7 @@ export default async function YouPage() {
               <div className="between">
                 <span className="label">
                   <Icon name="shield" />
-                  Your Plume score
+                  Your Feather score
                 </span>
                 <span className={`trust pill ${t.tone}`}>{t.label}</span>
               </div>
@@ -112,7 +112,7 @@ export default async function YouPage() {
                 <span className="xs faint">{me.ratedDeals} rated deals</span>
               </div>
               <div
-                className="plumebar"
+                className="featherbar plumebar"
                 role="progressbar"
                 aria-valuenow={Math.round(nl.pct)}
                 aria-valuemin={0}
@@ -180,7 +180,7 @@ export default async function YouPage() {
                   <Icon name="help" />
                 </span>
                 <span className="lt">
-                  <b>How Plume works</b>
+                  <b>How Feather works</b>
                 </span>
                 <Icon name="chev" />
               </Link>

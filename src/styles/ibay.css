@@ -492,8 +492,8 @@ a.stat:active{transform:scale(.98)}
     font-size: 24px;
   }
 }
-.plumebar{height:8px;border-radius:99px;background:var(--sunken);box-shadow:var(--shw);overflow:hidden;border:1px solid var(--line-2)}
-.plumebar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--mint),var(--brand));transition:width .4s cubic-bezier(.2,.8,.3,1)}
+.plumebar, .featherbar{height:8px;border-radius:99px;background:var(--sunken);box-shadow:var(--shw);overflow:hidden;border:1px solid var(--line-2)}
+.plumebar i, .featherbar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--mint),var(--brand));transition:width .4s cubic-bezier(.2,.8,.3,1)}
 
 /* ================= responsive: tablet + desktop ================= */
 .itemcols{display:block}
@@ -1326,7 +1326,8 @@ main.mappage ~ .dfoot {
   gap: 6px;
 }
 
-.map-seller-plume {
+.map-seller-plume,
+.map-seller-feather {
   font-weight: 600;
   color: var(--ink-2, #334155);
   display: inline-flex;

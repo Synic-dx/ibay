@@ -3,7 +3,7 @@ import { Sk, SkHeading, SkPage, SkStats } from "@/components/ui/skeletons";
 
 export default function Loading() {
   return (
-    <SkPage label="Loading Plume">
+    <SkPage label="Loading Feather">
       <SkHeading />
       <SkStats n={3} />
       <div className="skp">

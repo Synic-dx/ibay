@@ -19,9 +19,9 @@ const STOP = new Set("cheapest cheap find show me for a an the to rent buy searc
  */
 export async function fallbackAnswer(q: string, viewer: Viewer | null): Promise<{ text: string; cards: ListingCard[] }> {
   const s = q.toLowerCase();
-  if (/plume|trust|rating|score|karma|review/.test(s)) {
+  if (/feather|plume|trust|rating|score|karma|review/.test(s)) {
     return {
-      text: "Everyone has a Plume score that starts at 0. After each deal both people rate it from -10 to +10 with a reason. New members move fast and veterans move slowly, so one bad review can't erase a good record. 60+ is Trusted, 150+ is Top rated.",
+      text: "Everyone has a Feather score that starts at 0. After each deal both people rate it from -10 to +10 with a reason. New members move fast and veterans move slowly, so one bad review can't erase a good record. 60+ is Trusted, 150+ is Top rated.",
       cards: [],
     };
   }

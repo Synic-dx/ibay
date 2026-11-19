@@ -141,7 +141,7 @@ export function HeroSide({ topRequest, openRequests, pendingRatings }: { topRequ
             <b>
               Rate {pendingRatings} finished deal{pendingRatings > 1 ? "s" : ""}
             </b>
-            <span className="sm muted">Ratings build your Plume score and help others trust you.</span>
+            <span className="sm muted">Ratings build your Feather score and help others trust you.</span>
             <span className="hc-go">
               Rate now
               <Icon name="arrow" className="icon i16" />

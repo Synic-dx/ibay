@@ -26,7 +26,7 @@ export const SORTS: [string, string, string][] = [
   ["high", "Price: high to low", "sort"],
   ["new", "Newest listings", "clock"],
   ["young", "Newest purchase", "hourglass"],
-  ["trust", "Highest Plume", "shield"],
+  ["trust", "Highest Feather", "shield"],
 ];
 
 type SP = Record<string, string | string[] | undefined>;

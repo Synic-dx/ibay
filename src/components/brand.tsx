@@ -1,8 +1,46 @@
 /**
  * FEATURE: Brand marks
- * WHAT: <Peacock /> is Mayu, the mascot (drawn in SVG, colours follow the theme
+ * WHAT: <Logo /> is the official i-bay logo mark (dark teal tile with mint "i").
+ *       <Peacock /> is Mayu, the mascot (drawn in SVG, colours follow the theme
  *       through --pk and --pk2). <Wordmark /> is "i-bay" with one colour per letter.
  */
+
+/** The official i-bay logo mark: dark teal rounded tile with vibrant mint letter "i". */
+export function Logo({
+  size = 32,
+  className = "brand-logo",
+  style,
+}: {
+  size?: number;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 64 64"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      style={{ flex: "none", ...style }}
+      aria-hidden="true"
+    >
+      <rect width="64" height="64" rx="16" fill="#02505F" />
+      <text
+        x="32"
+        y="44"
+        fontFamily="var(--font-jakarta), var(--font-inter), Arial, sans-serif"
+        fontWeight="800"
+        fontSize="34"
+        textAnchor="middle"
+        fill="#1FC9B2"
+      >
+        i
+      </text>
+    </svg>
+  );
+}
 
 /** Mayu the peacock. Decorative unless a parent labels it. */
 export function Peacock({ size = 40 }: { size?: number }) {
@@ -35,7 +73,7 @@ export function Wordmark({ size = 22 }: { size?: number }) {
     <span className="wm" style={{ fontSize: size }} aria-label="i-bay">
       <i style={{ color: "#1FC9B2" }}>i</i>
       <i style={{ color: "var(--ink-3)", margin: "0 .02em" }}>-</i>
-      <i style={{ color: "#02637A" }}>b</i>
+      <i style={{ color: "var(--brand-ink, #02637A)" }}>b</i>
       <i style={{ color: "#E0A526" }}>a</i>
       <i style={{ color: "#DF524A" }}>y</i>
     </span>
