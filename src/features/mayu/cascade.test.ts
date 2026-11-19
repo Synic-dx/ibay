@@ -3,7 +3,8 @@ import { GEMINI_FALLBACK_MODELS, isRateLimitOrModelError } from "./cascade";
 
 describe("Gemini Cascade Configuration", () => {
   it("defines cascade models with Flash Lite as priority", () => {
-    expect(GEMINI_FALLBACK_MODELS.length).toBeGreaterThanOrEqual(3);
+    // Only models that answer with our key are listed (see cascade.ts), currently 2.
+    expect(GEMINI_FALLBACK_MODELS.length).toBeGreaterThanOrEqual(2);
     expect(GEMINI_FALLBACK_MODELS[0]).toContain("flash");
   });
 

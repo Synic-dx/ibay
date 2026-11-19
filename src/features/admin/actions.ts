@@ -1,8 +1,9 @@
 "use server";
 /**
  * FEATURE: Safety: reports and admin moderation
- * WHAT: report() lets anyone signed in report a listing, message or person. Admin actions: hide / unhide a listing, ban / unban a
- *       person, and resolve a report. Admin actions check role = 'admin'.
+ * WHAT: report() lets anyone signed in report a listing, message or person. Admin actions: hide / unhide,
+ *       delete / restore any listing, ban / unban or delete a person, and resolve a report.
+ *       Admin actions check role = 'admin' here, and the database functions check it again.
  */
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -11,6 +12,8 @@ import { db } from "@/lib/supabase/server";
 import { fail, invalid, ok, type ActionResult } from "@/lib/action-result";
 import { rateLimit } from "@/lib/security/guard";
 import { reportSchema } from "@/lib/validation/market";
+import { friendlyDbError } from "@/lib/db-errors";
+import { refreshListingPages } from "@/features/listings/actions/shared";
 
 /** File a report (Zod, then a rate limit). */
 export async function report(input: z.input<typeof reportSchema>): Promise<ActionResult<null>> {
@@ -52,6 +55,49 @@ export async function setBanned(userId: string, banned: boolean): Promise<Action
   revalidatePath("/admin");
   revalidatePath("/");
   return ok(null, banned ? "User banned" : "User unbanned");
+}
+
+/**
+ * Delete any listing (it can be restored from the admin Listings tab).
+ * Unlike owners, admins can also remove auctions with bids and rentals with bookings.
+ */
+export async function adminDeleteListing(listingId: string): Promise<ActionResult<null>> {
+  const admin = await requireAdmin();
+  if (!admin) return fail("Admins only.");
+  if (!z.uuid().safeParse(listingId).success) return fail("Listing not found.");
+  const { error } = await db().rpc("soft_delete_listing", { p_listing: listingId, p_actor: admin.id });
+  if (error) return fail(friendlyDbError(error).message);
+  refreshListingPages(listingId);
+  revalidatePath("/admin");
+  return ok(null, "Listing deleted");
+}
+
+/** Bring back a deleted listing. */
+export async function adminRestoreListing(listingId: string): Promise<ActionResult<null>> {
+  const admin = await requireAdmin();
+  if (!admin) return fail("Admins only.");
+  if (!z.uuid().safeParse(listingId).success) return fail("Listing not found.");
+  const { error } = await db().rpc("restore_listing", { p_listing: listingId, p_actor: admin.id });
+  if (error) return fail(friendlyDbError(error).message);
+  refreshListingPages(listingId);
+  revalidatePath("/admin");
+  return ok(null, "Listing restored");
+}
+
+/**
+ * Permanently delete a person's account with their listings, bids, deals and chats.
+ * Admin accounts (including your own) can't be deleted. This can't be undone;
+ * to stop someone without losing data, ban them instead.
+ */
+export async function adminDeleteUser(userId: string): Promise<ActionResult<null>> {
+  const admin = await requireAdmin();
+  if (!admin) return fail("Admins only.");
+  if (!z.uuid().safeParse(userId).success) return fail("Account not found.");
+  const { data, error } = await db().rpc("admin_delete_user", { p_user: userId, p_actor: admin.id });
+  if (error) return fail(friendlyDbError(error).message);
+  revalidatePath("/", "layout");
+  const n = (data as { listings?: number } | null)?.listings ?? 0;
+  return ok(null, `Account deleted${n ? ` with ${n} listing${n === 1 ? "" : "s"}` : ""}`);
 }
 
 /** Mark a report as actioned or dismissed. */

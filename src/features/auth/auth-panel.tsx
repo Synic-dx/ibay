@@ -17,7 +17,7 @@ import { Icon } from "@/components/ui/icon";
 import { Peacock } from "@/components/brand";
 import { Captcha } from "@/features/captcha/captcha";
 import { useNoValidate } from "@/lib/hooks/use-novalidate";
-import { HOSTELS, loginSchema, type LoginInput } from "@/lib/validation/auth";
+import { HOSTELS, loginSchema, personName, type LoginInput } from "@/lib/validation/auth";
 import { googleSignIn, requestOtp, verifyOtp } from "./actions";
 import { completeOnboarding, skipOnboarding } from "@/features/profile/actions";
 import type { AuthGate } from "@/components/app-context";
@@ -55,8 +55,21 @@ export function AuthPanel({
   const [capReset, setCapReset] = useState(0);
   const [formErr, setFormErr] = useState<string | null>(initialError ?? null);
   const [devCode, setDevCode] = useState<string | undefined>();
+  const [nameErr, setNameErr] = useState<string | null>(null);
+  // True when "Create an account" was tried with an email that already has one.
+  const [exists, setExists] = useState(false);
+  // True when "Sign in" was tried with an email that has no account yet.
+  const [missing, setMissing] = useState(false);
   const [pending, start] = useTransition();
   const up = mode === "signup";
+  const switchMode = (m: "signin" | "signup") => {
+    setMode(m);
+    setExists(false);
+    setMissing(false);
+    setNameErr(null);
+    setFormErr(null);
+    form.clearErrors();
+  };
   const next = gate.next ?? null;
 
   const form = useForm<LoginInput>({
@@ -75,18 +88,32 @@ export function AuthPanel({
     (v) =>
       start(async () => {
         setFormErr(null);
+        setExists(false);
+        setMissing(false);
+        // Client-side name check for sign-up (the server checks again).
+        if (up && !noValidate) {
+          const n = personName.safeParse(name);
+          if (!n.success) {
+            setNameErr(n.error.issues[0].message);
+            document.getElementById("anm")?.focus();
+            return;
+          }
+        }
         // Client-side CAPTCHA check (the server checks again). Skipped with ?novalidate=1.
         if (!token && !noValidate) {
           setCapErr("Please complete the security check first.");
           return;
         }
-        const r = await requestOtp({ email: v.email, name, captchaToken: noValidate ? undefined : (token ?? undefined) });
+        const r = await requestOtp({ email: v.email, name, intent: up ? "signup" : "signin", captchaToken: noValidate ? undefined : (token ?? undefined) });
         if (!r.ok) {
+          if (r.code === "EXISTS") setExists(true);
+          if (r.code === "NO_ACCOUNT") setMissing(true);
+          if (r.fieldErrors?.name) setNameErr(r.fieldErrors.name);
           if (r.fieldErrors?.email) form.setError("email", { message: r.fieldErrors.email });
           if (r.fieldErrors?.captchaToken) {
             setCapErr(r.fieldErrors.captchaToken);
             setCapReset((n) => n + 1);
-          } else if (!r.fieldErrors?.email) setFormErr(r.formError ?? "Something went wrong.");
+          } else if (!r.fieldErrors?.email && !r.fieldErrors?.name) setFormErr(r.formError ?? "Something went wrong.");
           return;
         }
         setEmail(v.email.trim().toLowerCase());
@@ -108,7 +135,7 @@ export function AuthPanel({
       setCapErr("Please complete the security check first.");
       return;
     }
-    start(() => googleSignIn(next ?? window.location.pathname));
+    start(() => googleSignIn(next ?? window.location.pathname, up ? "signup" : "signin"));
   };
 
   return (
@@ -169,9 +196,32 @@ export function AuthPanel({
           )}
           <form onSubmit={send} className="stack" style={{ gap: 10 }} noValidate>
             {up && (
-              <div className="iwrap">
-                <Icon name="user" className="icon i18" />
-                <input className="input" placeholder="Full name" value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" aria-label="Full name" maxLength={60} />
+              <div className="field">
+                <div className="iwrap">
+                  <Icon name="user" className="icon i18" />
+                  <input
+                    id="anm"
+                    className="input"
+                    placeholder="Full name"
+                    value={name}
+                    onChange={(e) => {
+                      setName(e.target.value);
+                      if (nameErr) setNameErr(null);
+                    }}
+                    onBlur={() => name.trim() && setNameErr(personName.safeParse(name).error?.issues[0].message ?? null)}
+                    autoComplete="name"
+                    aria-label="Full name"
+                    aria-invalid={!!nameErr}
+                    aria-describedby={nameErr ? "anm-err" : undefined}
+                    maxLength={60}
+                  />
+                </div>
+                {nameErr && (
+                  <span className="ferr" role="alert" id="anm-err">
+                    <Icon name="alert" className="icon i14" />
+                    {nameErr}
+                  </span>
+                )}
               </div>
             )}
             <div className="field">
@@ -196,6 +246,18 @@ export function AuthPanel({
                   {form.formState.errors.email.message}
                 </span>
               )}
+              {exists && (
+                <button type="button" className="btn sec small" style={{ alignSelf: "flex-start" }} onClick={() => switchMode("signin")}>
+                  Sign in instead
+                  <Icon name="arrow" />
+                </button>
+              )}
+              {missing && (
+                <button type="button" className="btn sec small" style={{ alignSelf: "flex-start" }} onClick={() => switchMode("signup")}>
+                  Create an account
+                  <Icon name="arrow" />
+                </button>
+              )}
             </div>
             <button className="btn block" type="submit" disabled={pending}>
               {pending ? <span className="spin" /> : null}
@@ -207,14 +269,14 @@ export function AuthPanel({
             {up ? (
               <>
                 Already on i-bay?{" "}
-                <button type="button" className="btn quiet small" style={{ minHeight: 0, display: "inline" }} onClick={() => setMode("signin")}>
+                <button type="button" className="btn quiet small" style={{ minHeight: 0, display: "inline" }} onClick={() => switchMode("signin")}>
                   Sign in
                 </button>
               </>
             ) : (
               <>
                 New here?{" "}
-                <button type="button" className="btn quiet small" style={{ minHeight: 0, display: "inline" }} onClick={() => setMode("signup")}>
+                <button type="button" className="btn quiet small" style={{ minHeight: 0, display: "inline" }} onClick={() => switchMode("signup")}>
                   Create an account
                 </button>
               </>
@@ -332,14 +394,29 @@ function OtpStep({
               refs.current[i] = el;
             }}
             inputMode="numeric"
+            pattern="[0-9]*"
             autoComplete={i === 0 ? "one-time-code" : "off"}
             maxLength={i === 0 ? 6 : 1}
             aria-label={`Digit ${i + 1}`}
             aria-invalid={!!err}
             value={d}
+            // Selecting the digit means typing replaces it instead of being blocked.
+            onFocus={(e) => e.currentTarget.select()}
             onChange={(e) => setAt(i, e.target.value)}
+            // Pasting into any box fills all six (letters and spaces are ignored).
+            onPaste={(e) => {
+              const pasted = e.clipboardData.getData("text").replace(/\D/g, "");
+              if (pasted.length > 1) {
+                e.preventDefault();
+                setAt(0, pasted);
+              }
+            }}
             onKeyDown={(e) => {
               if (e.key === "Backspace" && !digits[i] && i) refs.current[i - 1]?.focus();
+              if (e.key === "ArrowLeft" && i) refs.current[i - 1]?.focus();
+              if (e.key === "ArrowRight" && i < 5) refs.current[i + 1]?.focus();
+              // Block letters and symbols; allow digits, editing keys and shortcuts like Ctrl+V.
+              if (e.key.length === 1 && !/\d/.test(e.key) && !e.ctrlKey && !e.metaKey) e.preventDefault();
             }}
           />
         ))}

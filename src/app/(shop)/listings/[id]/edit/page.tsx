@@ -1,6 +1,6 @@
 /**
  * FEATURE: /listings/[id]/edit, update a listing [RUBRIC:CRUD-UPDATE]
- * WHO: only the owner. Anyone else gets a 404 (not a 403).
+ * WHO: the owner, or an admin (shown a banner naming the owner). Anyone else gets a 404 (not a 403).
  * WHY 404: so people can't guess which listing ids exist.
  * SHOWS: the same 3-step form prefilled, locked fields with reasons, the edit
  *        history from audit_log and a red "Delete listing" danger zone.
@@ -44,8 +44,10 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
   const { id } = await params;
   const viewer = await requireViewer(`/listings/${id}/edit`);
   const l = await getListingDetail(id, viewer);
-  // Owner only: everyone else sees "not found".
-  if (!l || l.seller.id !== viewer.id || l.status === "deleted") notFound();
+  // Owner (or an admin) only: everyone else sees "not found".
+  const isOwner = l?.seller.id === viewer.id;
+  const asAdmin = !isOwner && viewer.role === "admin";
+  if (!l || (!isOwner && !asAdmin) || l.status === "deleted") notFound();
 
   if (!["active", "paused"].includes(l.status)) {
     return (
@@ -80,7 +82,7 @@ export default async function EditListingPage({ params }: { params: Promise<{ id
     <ListingForm
       categories={categories}
       initial={valuesFromListing(l) as never}
-      edit={{ id: l.id, bids: l.bidCount, bookedAhead: (upcoming ?? 0) > 0, status: l.status, createdAt: l.createdAt, history, card: l }}
+      edit={{ id: l.id, bids: l.bidCount, bookedAhead: (upcoming ?? 0) > 0, status: l.status, createdAt: l.createdAt, history, card: l, adminFor: asAdmin ? l.seller.name : undefined }}
     />
   );
 }

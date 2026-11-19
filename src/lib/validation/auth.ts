@@ -39,36 +39,67 @@ export const HOSTELS = [
 ] as const;
 export type Hostel = (typeof HOSTELS)[number];
 
-/** Only campus emails: trimmed, lowercased, must end in @iimidr.ac.in. */
+/**
+ * Campus email rule (kept loose on purpose): letters, digits and . _ % + -
+ * before the @ (at most 64), no dot at the start or end, no two dots in a row,
+ * and it must end in @iimidr.ac.in.
+ */
+export const EMAIL_RE = /^(?!\.)(?!.*\.\.)[a-z0-9._%+-]{1,64}(?<!\.)@iimidr\.ac\.in$/;
+
+/**
+ * Only campus emails: trimmed and lowercased. Typing just the part before the @
+ * (e.g. "i25name") is accepted and completed with @iimidr.ac.in.
+ */
 export const campusEmail = z
   .string()
   .trim()
   .toLowerCase()
   .min(1, { error: "Enter your institute email." })
-  .regex(/^[a-z0-9._%+-]+@iimidr\.ac\.in$/, { error: "Use your @iimidr.ac.in email. Only IIM Indore accounts can use i-bay." });
+  .transform((t) => (t.includes("@") ? t : `${t}@iimidr.ac.in`))
+  .pipe(
+    z
+      .string()
+      .refine((e) => e.endsWith("@iimidr.ac.in"), { error: "Use your @iimidr.ac.in email. Only IIM Indore accounts can use i-bay." })
+      .refine((e) => !e.endsWith("@iimidr.ac.in") || EMAIL_RE.test(e), { error: "That email doesn't look right. Check for spaces, extra dots or symbols." }),
+  );
 
-export const loginSchema = z.object({
-  email: campusEmail,
-  name: z.string().trim().max(60).optional(),
-  captchaToken: z.string().optional(),
-});
-export type LoginInput = z.infer<typeof loginSchema>;
+/** A person's name: letters from any language, spaces, dots, apostrophes and hyphens. */
+export const personName = z
+  .string()
+  .trim()
+  .min(2, { error: "Name must be at least 2 letters." })
+  .max(60, { error: "Keep your name under 60 characters." })
+  .regex(/^\p{L}[\p{L}\p{M} .'-]*$/u, { error: "Use letters and spaces only." });
+
+export const loginSchema = z
+  .object({
+    email: campusEmail,
+    /** "signup" = Create an account (the email must be new). "signin" = sign in. */
+    intent: z.enum(["signin", "signup"]).optional(),
+    name: z.string().trim().max(60).optional(),
+    captchaToken: z.string().optional(),
+  })
+  .superRefine((v, ctx) => {
+    if (v.intent !== "signup") return;
+    const r = personName.safeParse(v.name ?? "");
+    if (!r.success) ctx.addIssue({ code: "custom", path: ["name"], message: r.error.issues[0].message });
+  });
+export type LoginInput = z.input<typeof loginSchema>;
 
 export const otpSchema = z.object({
   email: campusEmail,
-  code: z.string().trim().regex(/^\d{6}$/, { error: "Enter all 6 digits." }),
+  // Spaces are dropped so a pasted "123 456" still works.
+  code: z
+    .string()
+    .transform((v) => v.replace(/\s/g, ""))
+    .pipe(z.string().regex(/^\d{6}$/, { error: "Enter all 6 digits." })),
 });
 export type OtpInput = z.infer<typeof otpSchema>;
 
 const emptyToUndef = (v: unknown) => (typeof v === "string" && v.trim() === "" ? undefined : v);
 
 export const profileSchema = z.object({
-  name: z
-    .string()
-    .trim()
-    .min(2, { error: "Name must be at least 2 letters." })
-    .max(60, { error: "Keep your name under 60 characters." })
-    .regex(/^[A-Za-z][A-Za-z .'-]*$/, { error: "Use letters and spaces only." }),
+  name: personName,
   hostel: z.enum(HOSTELS, { error: "Pick your hostel from the list." }),
   room: z.preprocess(
     emptyToUndef,
@@ -76,7 +107,8 @@ export const profileSchema = z.object({
       .string()
       .trim()
       .toUpperCase()
-      .regex(/^[A-Z]?\d{1,4}$/, { error: "Room looks like 212 or B204." })
+      // Loose on purpose: 212, B204, B-204 and 204A all work.
+      .regex(/^(?=.*\d)[A-Z0-9][A-Z0-9 -]{0,9}$/, { error: "Room looks like 212, B204 or B-204." })
       .optional(),
   ),
   whatsapp: z.preprocess(

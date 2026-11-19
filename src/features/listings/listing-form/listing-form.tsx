@@ -45,6 +45,8 @@ export type EditInfo = {
   createdAt: string;
   history: { at: string; changes: string }[];
   card: ListingCard;
+  /** Set when an admin edits someone else's listing: the owner's name. */
+  adminFor?: string;
 };
 
 const TYPES: [Mode, string, string, string][] = [
@@ -220,6 +222,14 @@ export function ListingForm({ categories, initial, edit }: { categories: Categor
 
       <main className="withbar formpage">
         <form className="stack" style={{ gap: 18 }} noValidate onSubmit={(e) => e.preventDefault()}>
+          {edit?.adminFor && (
+            <div className="note" role="note">
+              <Icon name="shield" />
+              <span>
+                Editing as admin. This listing belongs to <b>{edit.adminFor}</b>. Changes are saved in the edit history under your name.
+              </span>
+            </div>
+          )}
           {noValidate && (
             <div className="capoff">
               <Icon name="alert" className="icon i16" />
@@ -664,7 +674,7 @@ export function ListingForm({ categories, initial, edit }: { categories: Categor
           {step < 3 ? "Continue" : edit ? "Save changes" : "Publish listing"}
         </button>
       </div>
-      {edit && <DeleteDialog open={delOpen} onOpenChange={setDelOpen} listing={edit.card} bids={edit.bids} bookedAhead={edit.bookedAhead} afterDelete={() => router.push("/my-listings")} />}
+      {edit && <DeleteDialog open={delOpen} onOpenChange={setDelOpen} listing={edit.card} bids={edit.bids} bookedAhead={edit.bookedAhead} afterDelete={() => router.push(edit.adminFor ? "/admin?tab=listings" : "/my-listings")} />}
     </>
   );
 }

@@ -25,12 +25,13 @@ import { notify, startConversation } from "@/features/chat/service";
 import { generateOtp, hashOtp } from "@/features/deals/actions";
 import { columnsFor, refreshListingPages } from "./shared";
 
-/** Loads a listing for its owner, or null (so other people get "not found"). */
-async function ownListing(id: string, viewerId: string) {
+/** Loads a listing for its owner (or an admin), or null (so other people get "not found"). */
+async function ownListing(id: string, viewer: { id: string; role?: string }) {
   if (!z.uuid().safeParse(id).success) return null;
   const { data } = await db().from("listings").select("*, images:listing_images(url), bids(count)").eq("id", id).maybeSingle();
   // WHY: someone else's id looks exactly like a missing one, so ids can't be probed.
-  return data && data.seller_id === viewerId ? data : null;
+  // Admins can manage any listing; the database functions check the same rule again.
+  return data && (data.seller_id === viewer.id || viewer.role === "admin") ? data : null;
 }
 
 /** True if someone holds a confirmed booking that has not ended yet. */
@@ -64,7 +65,7 @@ export async function updateListing(id: string, input: ListingInput): Promise<Ac
   if (!parsed.success) return invalid(parsed.error);
   const d = parsed.data;
   // 3. Owner only.
-  const l = await ownListing(id, viewer.id);
+  const l = await ownListing(id, viewer);
   if (!l) return fail("Listing not found.", undefined, "NOT_FOUND");
   if (l.deleted_at) return fail("This listing was deleted. Restore it first.");
   if (d.mode !== l.mode) return fail("Deal type can't be changed after posting. Delete this and list it again.", { mode: "Locked after posting." });
@@ -119,7 +120,7 @@ export async function quickPrice(id: string, price: string | number): Promise<Ac
   if (!viewer) return fail("Please sign in again.", undefined, "AUTH");
   const parsed = quickPriceSchema.safeParse({ id, price });
   if (!parsed.success) return invalid(parsed.error);
-  const l = await ownListing(id, viewer.id);
+  const l = await ownListing(id, viewer);
   if (!l) return fail("Listing not found.");
   if (l.mode !== "sell" && l.mode !== "rent") return fail("Change auction and food drop prices from the edit form.");
   if (l.mrp && l.mode === "sell" && parsed.data.price > l.mrp) return fail(`Price can't be more than the original price (${fmt(l.mrp)}).`, { price: "Above the original price." });
@@ -134,7 +135,7 @@ export async function quickPrice(id: string, price: string | number): Promise<Ac
 export async function setPaused(id: string, paused: boolean): Promise<ActionResult<null>> {
   const viewer = await getViewer();
   if (!viewer) return fail("Please sign in again.", undefined, "AUTH");
-  const l = await ownListing(id, viewer.id);
+  const l = await ownListing(id, viewer);
   if (!l) return fail("Listing not found.");
   const { error } = await db().rpc("update_listing", { p_listing: id, p_actor: viewer.id, p_expected: null, p_patch: { status: paused ? "paused" : "active" } });
   if (error) return dbFail(error);
@@ -147,7 +148,7 @@ export async function extendAuction(id: string, hours: number): Promise<ActionRe
   const viewer = await getViewer();
   if (!viewer) return fail("Please sign in again.", undefined, "AUTH");
   if (![6, 24, 72].includes(hours)) return fail("Pick 6 hours, 1 day or 3 days.");
-  const l = await ownListing(id, viewer.id);
+  const l = await ownListing(id, viewer);
   if (!l || l.mode !== "auction") return fail("Listing not found.");
   if ((l.bids?.[0]?.count ?? 0) > 0) return fail("People have already bid, so the end time is locked.");
   const base = Math.max(Date.now(), new Date(l.ends_at).getTime());

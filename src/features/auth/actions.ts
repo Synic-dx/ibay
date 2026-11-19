@@ -5,6 +5,8 @@
  * SECURITY (what to say in Q&A):
  *   - the CAPTCHA is checked first, so bots can't make us send OTP emails
  *   - the domain is checked on the server (never trust the browser)
+ *   - one account per email: "Create an account" with a used email is refused,
+ *     and "Sign in" with an email that has no account is refused
  *   - only a bcrypt hash of the code is stored; codes expire in 10 minutes
  *   - 5 wrong tries lock that code; resend has a 30 s cooldown
  *   - rate limits per email (5 codes / 15 min) and per IP (20 / 15 min)
@@ -15,7 +17,8 @@ import { randomInt } from "node:crypto";
 import { AuthError } from "next-auth";
 import { signIn, signOut } from "@/lib/auth";
 import { issueTicket } from "@/lib/auth/ticket";
-import { upsertProfileByEmail } from "@/lib/auth/profiles";
+import { cookies } from "next/headers";
+import { AUTH_INTENT_COOKIE, accountExists, upsertProfileByEmail } from "@/lib/auth/profiles";
 import { env, features } from "@/lib/env";
 import { db } from "@/lib/supabase/server";
 import { fail, invalid, ok, type ActionResult } from "@/lib/action-result";
@@ -25,6 +28,8 @@ import { sendOtpEmail } from "@/lib/email";
 
 const OTP_TTL_MS = 10 * 60 * 1000;
 const RESEND_COOLDOWN_MS = 30 * 1000;
+const ACCOUNT_EXISTS = "An account with this email already exists. Please sign in instead.";
+const NO_ACCOUNT = "No account found for this email. Please create an account first.";
 
 /**
  * Step 1: send a sign-in code.
@@ -35,13 +40,25 @@ export async function requestOtp(input: LoginInput, resend = false): Promise<Act
   // 1. Validate the email shape and domain on the server.
   const parsed = loginSchema.safeParse(input);
   if (!parsed.success) return invalid(parsed.error);
-  const { email, captchaToken } = parsed.data;
+  const { email, captchaToken, intent } = parsed.data;
 
   // 2. Rate limits per email and per IP.
   const ip = await clientIp();
   const okEmail = await rateLimit(`otp:email:${email}`, 900, 5);
   const okIp = await rateLimit(`otp:ip:${ip}`, 900, 20);
   if (!okEmail || !okIp) return fail("Too many codes requested. Wait 15 minutes and try again.", undefined, "RATE");
+
+  // 2b. Sign in needs an account; Create an account needs a new email (one account per email).
+  if (!resend) {
+    let exists: boolean;
+    try {
+      exists = await accountExists(email);
+    } catch {
+      return fail("Couldn't check your account. Try again in a moment.");
+    }
+    if (intent === "signup" && exists) return fail(ACCOUNT_EXISTS, { email: ACCOUNT_EXISTS }, "EXISTS");
+    if (intent !== "signup" && !exists) return fail(NO_ACCOUNT, { email: NO_ACCOUNT }, "NO_ACCOUNT");
+  }
 
   // 3. Resend rules: 30 s cooldown. The CAPTCHA is only checked on the first request.
   const { data: last } = await db().from("email_otps").select("id,created_at,resends").eq("email", email).is("used_at", null).order("created_at", { ascending: false }).limit(1).maybeSingle();
@@ -116,8 +133,19 @@ export async function verifyOtp(input: OtpInput & { name?: string }): Promise<Ac
   return ok({ isNew: !p?.onboarded }, "Signed in");
 }
 
-/** Continue with Google (domain-locked in lib/auth). */
-export async function googleSignIn(next: string) {
+/**
+ * Continue with Google (domain-locked in lib/auth).
+ * @param intent "signin" needs an existing account; "signup" needs a new email.
+ *               Remembered in a short-lived cookie and checked when Google sends the person back.
+ */
+export async function googleSignIn(next: string, intent: "signin" | "signup" = "signin") {
+  (await cookies()).set(AUTH_INTENT_COOKIE, intent === "signup" ? "signup" : "signin", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: env.isProd,
+    path: "/",
+    maxAge: 600,
+  });
   await signIn("google", { redirectTo: next.startsWith("/") ? next : "/" });
 }
 

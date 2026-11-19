@@ -14,7 +14,8 @@ import NextAuth, { type DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Google from "next-auth/providers/google";
 import { readTicket } from "./ticket";
-import { upsertProfileByEmail } from "./profiles";
+import { cookies } from "next/headers";
+import { AUTH_INTENT_COOKIE, accountExists, upsertProfileByEmail } from "./profiles";
 
 declare module "next-auth" {
   interface Session {
@@ -58,6 +59,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       const email = String(profile?.email ?? "").toLowerCase();
       const verified = (profile as { email_verified?: boolean } | undefined)?.email_verified === true;
       if (!verified || !email.endsWith("@" + DOMAIN)) return "/login?error=domain";
+      // Same rules as email sign-in: "sign in" needs an account, "create account" needs a new email.
+      const jar = await cookies();
+      const intent = jar.get(AUTH_INTENT_COOKIE)?.value === "signup" ? "signup" : "signin";
+      jar.delete(AUTH_INTENT_COOKIE);
+      const exists = await accountExists(email);
+      if (intent === "signin" && !exists) return "/login?error=noaccount";
+      if (intent === "signup" && exists) return "/login?error=exists";
       return true;
     },
     /** Put our profile id into the JWT. For Google, create the profile on first sign-in. */

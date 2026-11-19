@@ -21,6 +21,8 @@ const ERRORS: Record<string, string> = {
   AccessDenied: "Only @iimidr.ac.in Google accounts can use i-bay. Try your campus account.",
   OAuthCallbackError: "Google sign-in was cancelled. Try again.",
   Configuration: "Sign-in is not set up correctly. Use the email code instead.",
+  noaccount: "No account found for this Google email. Please create an account first.",
+  exists: "An account with this email already exists. Please sign in instead.",
 };
 
 export default async function LoginPage({ searchParams }: { searchParams: Promise<{ next?: string; error?: string }> }) {

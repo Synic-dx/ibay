@@ -3,6 +3,8 @@
  * WHAT: POST /api/mayu streams an answer as newline-delimited JSON:
  *       {"t":"text","v":"..."} pieces, {"t":"cards","v":[...]} with real
  *       listings from tool results, then {"t":"done"}.
+ * SPEED: the database search runs first and its cards are sent at once; Gemini
+ *        then writes the reply (usually one call). Every model has a time limit.
  * MODEL: Google Gemini free-tier multi-model cascade (Gemini Flash Lite priority,
  *        falling back down tiers on 429/quota error).
  *        Without GEMINI_API_KEY (or if all models fail) it falls back to
@@ -15,6 +17,7 @@ import { db, dbReady } from "@/lib/supabase/server";
 import { clientIp, rateLimit } from "@/lib/security/guard";
 import { fallbackAnswer } from "@/features/mayu/fallback";
 import { runGeminiCascade } from "@/features/mayu/cascade";
+import { brief } from "@/features/mayu/tools";
 import type { ListingCard } from "@/features/listings/types";
 
 const bodySchema = z.object({
@@ -46,21 +49,44 @@ export async function POST(req: Request) {
       let answer = "";
       const apiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
 
+      // SPEED: search the database first (well under a second) and show the cards
+      // straight away, then let Gemini write the reply using those results.
+      // Gemini then usually needs one call instead of two (search, then answer).
+      let quick: Awaited<ReturnType<typeof fallbackAnswer>> | null = null;
+      if (dbReady()) {
+        try {
+          quick = await fallbackAnswer(question, viewer);
+          if (quick.cards.length) {
+            quick.cards.forEach((c) => cards.set(c.id, c));
+            send({ t: "cards", v: quick.cards });
+          }
+        } catch (err) {
+          console.warn("[Mayu Route] Quick search failed:", err);
+        }
+      }
+
       if (apiKey) {
+        // Cards from Gemini's own searches replace the quick ones (the latest search wins).
+        let latest: ListingCard[] = [];
+        const context = quick?.cards.length
+          ? `Listings already found for the latest question and shown to the student as cards (JSON): ${JSON.stringify(quick.cards.map(brief))}\nIf these answer the question, reply directly in 1-2 short sentences without calling search_listings. Search again only if they don't fit.`
+          : undefined;
         try {
           await runGeminiCascade({
             messages,
             viewer,
             apiKey,
-            onCards: (cs) => cs.forEach((c) => cards.set(c.id, c)),
+            context,
+            onCards: (cs) => {
+              latest = cs;
+              cs.forEach((c) => cards.set(c.id, c));
+            },
             onTextDelta: (v) => {
               answer += v;
               send({ t: "text", v });
             },
             onToolResult: () => {
-              if (cards.size) {
-                send({ t: "cards", v: [...cards.values()].slice(0, 4) });
-              }
+              if (latest.length) send({ t: "cards", v: latest.slice(0, 4) });
             },
           });
         } catch (err) {
@@ -68,7 +94,11 @@ export async function POST(req: Request) {
         }
       }
 
-      // Fallback: local database keyword search over the same listings if no AI response
+      // Fallback: the keyword answer when Gemini is missing, out of quota or too slow.
+      if (!answer && quick) {
+        answer = quick.text;
+        send({ t: "text", v: quick.text });
+      }
       if (!answer) {
         try {
           if (dbReady()) {

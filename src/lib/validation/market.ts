@@ -18,7 +18,8 @@ export const requestSchema = z.object({
     .string()
     .trim()
     .min(5, { error: "Describe what you need in at least 5 characters." })
-    .max(120, { error: "Keep it under 120 characters." }),
+    .max(120, { error: "Keep it under 120 characters." })
+    .refine((t) => /\p{L}{2}/u.test(t), { error: "Describe it in words, e.g. \"fx-991ES calculator\"." }),
   categoryId: z.enum(CATEGORY_IDS, { error: "Choose a category." }),
   budget: z.string().trim().max(40, { error: "Keep the budget under 40 characters." }).default(""),
   neededBy: z
@@ -41,7 +42,7 @@ export type RequestInput = z.input<typeof requestSchema>;
 export const replySchema = z.object({
   text: z.string().trim().min(2, { error: "Add a short description." }).max(500, { error: "Keep it under 500 characters." }),
   priceText: z.string().trim().max(40, { error: "Keep the price under 40 characters." }).default(""),
-  imageUrl: z.string().optional(),
+  imageUrl: z.string().max(2048).optional(),
 });
 
 /** A bid must be whole rupees and at least the minimum next bid (checked again under a row lock). */

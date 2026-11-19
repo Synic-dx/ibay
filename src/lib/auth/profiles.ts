@@ -15,6 +15,19 @@ export function nameFromEmail(email: string): string {
 }
 
 /**
+ * Whether an email already has an account (deleted accounts don't count).
+ * @param email a campus email (already validated)
+ */
+export async function accountExists(email: string): Promise<boolean> {
+  const { data, error } = await db().from("profiles").select("id").eq("email", email.trim().toLowerCase()).is("deleted_at", null).maybeSingle();
+  if (error) throw new Error(error.message);
+  return Boolean(data);
+}
+
+/** Cookie that remembers "sign in" vs "create account" across the Google round trip. */
+export const AUTH_INTENT_COOKIE = "ibay_auth_intent";
+
+/**
  * Returns the profile for an email, creating it on first sign-in.
  * @param email a campus email (already validated)
  * @param name optional display name (sign-up form or Google)
@@ -33,7 +46,7 @@ export async function upsertProfileByEmail(email: string, name?: string, avatarU
     }
     return { id: existing.id, isNew: false };
   }
-  const clean = (name ?? "").trim().replace(/[^A-Za-z .'-]/g, "").slice(0, 60);
+  const clean = (name ?? "").trim().replace(/[^\p{L}\p{M} .'-]/gu, "").slice(0, 60);
   const { data: created, error: insErr } = await db()
     .from("profiles")
     .insert({

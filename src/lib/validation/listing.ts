@@ -69,7 +69,7 @@ const optionalRupees = (label: string, min: number, max: number) =>
   z.preprocess((v) => (v === "" || v === null || v === undefined ? undefined : v), rupees(label, min, max).optional());
 
 const photo = z.object({
-  url: z.string().min(1),
+  url: z.string().min(1).max(2048),
   publicId: z.string().nullable().optional(),
   fit: z.enum(["contain", "cover"]).default("cover"),
 });
@@ -99,7 +99,9 @@ const common = {
     .trim()
     .min(1, { error: "Add a title so people know what it is." })
     .min(5, { error: "Title is too short. Use at least 5 characters, e.g. brand and model." })
-    .max(80, { error: "Keep the title under 80 characters." }),
+    .max(80, { error: "Keep the title under 80 characters." })
+    // Needs some real words or a model number, not just symbols like "-----".
+    .refine((t) => /[\p{L}\p{N}]{2}/u.test(t), { error: "Use words or a model number in the title." }),
   description: z.string().trim().max(1000, { error: "Keep the description under 1,000 characters." }).default(""),
   condition: z.enum(CONDITIONS, { error: "Pick the condition." }).default("Good"),
   photos: z.array(photo).max(MAX_PHOTOS, { error: `Up to ${MAX_PHOTOS} photos.` }).default([]),
@@ -112,10 +114,11 @@ const common = {
   sealStatus: z.string().optional(),
   expiresOn: z.string().optional(),
   pickupHostel: z.enum(HOSTELS).optional(),
-  pickupLat: z.number().optional(),
-  pickupLng: z.number().optional(),
+  pickupLat: z.number().min(-90).max(90).optional(),
+  pickupLng: z.number().min(-180).max(180).optional(),
   pickupNote: z.string().trim().max(300, { error: "Keep handover note under 300 characters." }).optional(),
-  pickupSlots: z.array(z.string()).default([]),
+  // Generous limits: only stop junk, never a normal schedule.
+  pickupSlots: z.array(z.string().max(80)).max(100, { error: "Up to 100 pickup slots." }).default([]),
   /** Optimistic concurrency token (edit only): the updated_at you loaded. */
   updatedAt: z.string().optional(),
   captchaToken: z.string().optional(),
