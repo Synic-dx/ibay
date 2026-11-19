@@ -8,7 +8,7 @@ import Link from "@/components/ui/link";
 import { useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Icon } from "@/components/ui/icon";
-import { Avatar, Peacock, Wordmark } from "@/components/brand";
+import { Avatar, Logo, Wordmark } from "@/components/brand";
 import { useApp } from "@/components/app-context";
 import { trustLevel } from "@/lib/plume";
 import { ThemeSwitchRow } from "./theme-toggle";
@@ -49,8 +49,8 @@ export function Drawer({ categories, liveDrops }: { categories: Category[]; live
               </div>
             ) : (
               <>
-                <div className="row">
-                  <Peacock size={40} />
+                <div className="row" style={{ gap: 10 }}>
+                  <Logo size={38} />
                   <Wordmark size={26} />
                 </div>
                 <p className="sm" style={{ margin: "10px 0 12px", opacity: 0.85 }}>

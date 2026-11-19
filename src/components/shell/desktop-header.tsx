@@ -13,7 +13,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import * as Menu from "@radix-ui/react-dropdown-menu";
 import { Icon } from "@/components/ui/icon";
-import { Avatar, Peacock, Wordmark } from "@/components/brand";
+import { Avatar, Logo, Wordmark } from "@/components/brand";
 import { useApp } from "@/components/app-context";
 import { ThemeToggle } from "./theme-toggle";
 import { LiveStrip } from "./live-strip";
@@ -62,7 +62,7 @@ export function DesktopHeader({ categories, collections, drops, auctions }: Prop
       <div className="dh-top">
         <div className="dh-in">
           <Link className="brand" href="/" aria-label="i-bay home">
-            <Peacock size={34} />
+            <Logo size={34} />
             <Wordmark size={28} />
           </Link>
           <button
