@@ -28,6 +28,7 @@
   --color-good: var(--good);
   --color-bad: var(--bad);
   --color-warn-ink: var(--warn-ink);
-  --font-sans: var(--font-poppins), "Poppins", system-ui, sans-serif;
+  --font-sans: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: var(--font-jakarta), "Plus Jakarta Sans", var(--font-inter), sans-serif;
   --font-mono: var(--font-jetbrains), "JetBrains Mono", monospace;
 }
