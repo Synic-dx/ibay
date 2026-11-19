@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
-import { Peacock } from "@/components/brand";
+import { Logo } from "@/components/brand";
 import { Captcha } from "@/features/captcha/captcha";
 import { useNoValidate } from "@/lib/hooks/use-novalidate";
 import { HOSTELS, loginSchema, personName, type LoginInput } from "@/lib/validation/auth";
@@ -138,8 +138,8 @@ export function AuthPanel({
     <div className="stack" style={{ gap: 14 }}>
       {step === "form" && (
         <>
-          <div className="row" style={{ gap: 10 }}>
-            <Peacock size={44} />
+          <div className="row" style={{ gap: 12 }}>
+            <Logo size={44} />
             <div>
               <h2 id="authT" style={{ fontSize: 20 }}>
                 {up ? "Join i-bay" : "Welcome to i-bay"}
@@ -459,8 +459,8 @@ export function Onboarding({ onFinish }: { onFinish: () => void }) {
     });
   return (
     <div className="stack" style={{ gap: 14 }}>
-      <div className="row">
-        <Peacock size={40} />
+      <div className="row" style={{ gap: 12 }}>
+        <Logo size={40} />
         <div>
           <span className="faint sm">Welcome</span>
           <h2 id="authT" style={{ fontSize: 20 }}>
