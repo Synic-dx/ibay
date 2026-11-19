@@ -11,18 +11,22 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
+import { useApp } from "@/components/app-context";
 import { fmt } from "@/lib/format";
 import { PhotoTile, priceText } from "@/features/listings/components/parts";
+import MeetHalfwayPicker from "@/features/map/components/meet-halfway-picker";
 import { fetchThread, respondOffer, sendMessage, sendOffer } from "./actions";
 import type { ChatMessage, Thread } from "./queries";
 
 const STATUS_TXT = { pending: "Waiting for reply", accepted: "Accepted", declined: "Declined", countered: "Countered" } as const;
 
 export function ThreadView({ initial, compact = false }: { initial: Thread; compact?: boolean }) {
+  const { viewer } = useApp();
   const qc = useQueryClient();
   const { data } = useQuery({ queryKey: ["thread", initial.id], queryFn: () => fetchThread(initial.id), initialData: initial, refetchInterval: 15000 });
   const t = data ?? initial;
   const [draft, setDraft] = useState("");
+  const [halfwayOpen, setHalfwayOpen] = useState(false);
   const [optimistic, setOptimistic] = useState<ChatMessage[]>([]);
   const [pending, start] = useTransition();
   const end = useRef<HTMLDivElement>(null);
@@ -147,7 +151,16 @@ export function ThreadView({ initial, compact = false }: { initial: Thread; comp
       </div>
       <div className={compact ? "" : "composer"}>
         <div className={`qr ${compact ? "dk-qr" : ""}`}>
-          {quick.slice(0, compact ? 3 : 4).map((q) => (
+          {viewer?.hostel && t.other.hostel && (
+            <button
+              type="button"
+              style={{ background: "rgba(2, 80, 95, 0.08)", color: "var(--brand, #02505f)", fontWeight: 600 }}
+              onClick={() => setHalfwayOpen(true)}
+            >
+              🤝 Meet Halfway
+            </button>
+          )}
+          {quick.slice(0, compact ? 2 : 3).map((q) => (
             <button key={q} type="button" onClick={() => send(q)}>
               {q}
             </button>
@@ -171,6 +184,15 @@ export function ThreadView({ initial, compact = false }: { initial: Thread; comp
           </button>
         </form>
       </div>
+
+      {halfwayOpen && viewer?.hostel && t.other.hostel && (
+        <MeetHalfwayPicker
+          userHostel={viewer.hostel}
+          otherHostel={t.other.hostel}
+          onSelectSpot={(msg) => send(msg)}
+          onClose={() => setHalfwayOpen(false)}
+        />
+      )}
     </>
   );
 }

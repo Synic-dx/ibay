@@ -69,3 +69,32 @@ export async function rateDeal(input: RatingInput): Promise<ActionResult<{ delta
   revalidatePath("/you");
   return ok({ delta: Number(r.delta), plumeAfter: Number(r.plume_after) }, "Thanks. Your rating is on their profile.");
 }
+
+/** Updates the agreed meeting spot on a deal. */
+export async function updateHandoverSpot(
+  txId: string,
+  spot: { name: string; lat: number; lng: number }
+): Promise<ActionResult<{ txId: string; spot: string }>> {
+  const viewer = await getViewer();
+  if (!viewer) return fail("Please sign in again.", undefined, "AUTH");
+  if (!z.uuid().safeParse(txId).success) return fail("Deal not found.");
+
+  const { data: tx, error: fetchErr } = await db()
+    .from("transactions")
+    .select("id, buyer_id, seller_id")
+    .eq("id", txId)
+    .single();
+
+  if (fetchErr || !tx) return fail("Transaction not found.");
+  if (tx.buyer_id !== viewer.id && tx.seller_id !== viewer.id) {
+    return fail("Unauthorized to update this deal.", undefined, "AUTH");
+  }
+
+  const label = `Spot: ${spot.name} (${spot.lat.toFixed(4)}, ${spot.lng.toFixed(4)})`;
+  const { error } = await db().from("transactions").update({ pickup_note: label }).eq("id", txId);
+  if (error) return fail(friendlyDbError(error).message);
+
+  revalidatePath("/deals");
+  return ok({ txId, spot: spot.name }, `Meeting spot updated to ${spot.name}`);
+}
+
