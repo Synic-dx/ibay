@@ -351,7 +351,7 @@ export default function MapDrawer({
                   <div className="map-seller-row">
                     <span>by {item.seller.name.split(" ")[0]}</span>
                     <span>·</span>
-                    <span className="map-seller-plume" title="Plume Trust Score">
+                    <span className="map-seller-plume" title="Plume score">
                       <span style={{ color: "var(--brand, #02505f)", display: "flex", alignItems: "center" }}>
                         <Icon name="shield" className="icon i12" />
                       </span>

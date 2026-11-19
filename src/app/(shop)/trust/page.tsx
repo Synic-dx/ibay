@@ -1,17 +1,17 @@
-/** FEATURE: "How trust works": the Plume levels and the maths, in plain words. */
+/** FEATURE: "How Plume works": the Plume levels and the maths, in plain words. */
 import type { Metadata } from "next";
 import { Icon } from "@/components/ui/icon";
 import { Peacock } from "@/components/brand";
 import { SubBar } from "@/components/shell/mobile-bars";
 import { getViewer } from "@/lib/auth/session";
 
-export const metadata: Metadata = { title: "How trust works" };
+export const metadata: Metadata = { title: "How Plume works" };
 
 export default async function TrustPage() {
   const me = await getViewer();
   return (
     <>
-      <SubBar title="How trust works" sub="The Plume score" />
+      <SubBar title="How Plume works" sub="i-bay's rating score" />
       <main className="withtabs">
         <div className="stack" style={{ gap: 14 }}>
           <div className="panel pad stack" style={{ gap: 8 }}>
@@ -28,8 +28,8 @@ export default async function TrustPage() {
             {(
               [
                 ["trophy", "Top rated", "150 and above", "t-good"],
-                ["shield", "Trusted", "60 to 149", "t-good"],
-                ["sparkles", "Building trust", "0 to 59", "t-new"],
+                ["shield", "Well rated", "60 to 149", "t-good"],
+                ["sparkles", "Rising", "0 to 59", "t-new"],
                 ["info", "Mixed reviews", "-1 to -59", "t-bad"],
                 ["flag", "Flagged", "-60 or lower, listings hidden", "t-bad"],
               ] as const

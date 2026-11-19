@@ -115,7 +115,7 @@ export function Drawer({ categories, liveDrops }: { categories: Category[]; live
           )}
           <div className="dsec">More</div>
           <ThemeSwitchRow className="dl" />
-          {dl("help", "How trust works", "/trust")}
+          {dl("help", "How Plume works", "/trust")}
           <button
             type="button"
             className="dl"

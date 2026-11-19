@@ -33,7 +33,7 @@ export function BrowseControls({ state, sizes, total }: { state: BrowseState; si
   const chips: [string, Partial<BrowseState>][] = [
     ...state.modes.map((m): [string, Partial<BrowseState>] => [{ sell: "Buy", rent: "Rent", auction: "Auction", drop: "Food drop" }[m] ?? m, { modes: state.modes.filter((x) => x !== m) }]),
     ...(state.near ? [["My hostel", { near: false }] as [string, Partial<BrowseState>]] : []),
-    ...(state.trusted ? [["Trusted sellers", { trusted: false }] as [string, Partial<BrowseState>]] : []),
+    ...(state.trusted ? [["Well-rated sellers", { trusted: false }] as [string, Partial<BrowseState>]] : []),
     ...(state.avail ? [[`Free on ${state.avail}`, { avail: "" }] as [string, Partial<BrowseState>]] : []),
     ...(state.size ? [[`Size ${state.size}`, { size: "" }] as [string, Partial<BrowseState>]] : []),
     ...(state.age ? [[`Under ${state.age} months old`, { age: null }] as [string, Partial<BrowseState>]] : []),
@@ -145,7 +145,7 @@ export function BrowseControls({ state, sizes, total }: { state: BrowseState; si
           <button type="button" className="between" style={{ width: "100%" }} role="switch" aria-checked={draft.trusted} onClick={() => setDraft({ ...draft, trusted: !draft.trusted })}>
             <span className="row">
               <Icon name="shield" />
-              Trusted sellers only
+              Well-rated sellers only
             </span>
             <span className={`sw ${draft.trusted ? "on" : ""}`} />
           </button>

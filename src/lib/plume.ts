@@ -25,12 +25,12 @@ export const plumeDelta = (ratedDeals: number, score: number, raterPlume: number
 
 export type TrustLevel = { label: string; tone: "t-good" | "t-new" | "t-bad" };
 
-/** Trust in words first: New member, Building trust, Trusted, Top rated, Mixed reviews, Flagged. */
+/** Plume level in words first: New member, Rising, Well rated, Top rated, Mixed reviews, Flagged. */
 export function trustLevel(plume: number, ratedDeals: number): TrustLevel {
   if (!ratedDeals) return { label: "New member", tone: "t-new" };
   if (plume >= 150) return { label: "Top rated", tone: "t-good" };
-  if (plume >= 60) return { label: "Trusted", tone: "t-good" };
-  if (plume >= 0) return { label: "Building trust", tone: "t-new" };
+  if (plume >= 60) return { label: "Well rated", tone: "t-good" };
+  if (plume >= 0) return { label: "Rising", tone: "t-new" };
   if (plume > -60) return { label: "Mixed reviews", tone: "t-bad" };
   return { label: "Flagged", tone: "t-bad" };
 }
@@ -38,6 +38,6 @@ export function trustLevel(plume: number, ratedDeals: number): TrustLevel {
 /** Next level target and progress (0 to 100) for the profile bar. */
 export function nextLevel(plume: number): { target: number | null; pct: number; name: string | null } {
   if (plume >= 150) return { target: null, pct: 100, name: null };
-  const [lo, target, name] = plume < 60 ? [0, 60, "Trusted"] : [60, 150, "Top rated"];
+  const [lo, target, name] = plume < 60 ? [0, 60, "Well rated"] : [60, 150, "Top rated"];
   return { target, name, pct: Math.max(4, Math.min(100, ((plume - lo) / (target - lo)) * 100)) };
 }

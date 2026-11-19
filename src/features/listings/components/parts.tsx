@@ -196,7 +196,7 @@ export function PriceDrop({ l, short = false }: { l: Pick<ListingCard, "priceDro
   );
 }
 
-/** "★ Trusted · 23 deals" in words first, numbers second. */
+/** "★ Well rated · 23 deals" in words first, numbers second. */
 export function TrustLine({ plume, ratedDeals, deals = true }: { plume: number; ratedDeals: number; deals?: boolean }) {
   const t = trustLevel(plume, ratedDeals);
   return (

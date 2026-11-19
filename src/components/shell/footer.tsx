@@ -8,7 +8,7 @@ import { Peacock, Wordmark } from "@/components/brand";
 const COLS: [string, [string, string][]][] = [
   ["Shop", [["Preprocess Store", "/browse?cat=preprocess"], ["Gym Corner", "/browse?cat=gym"], ["Gadgets", "/browse?cat=gadgets"], ["Manga & novels", "/browse?cat=reads"], ["All categories", "/explore"]]],
   ["Sell", [["List an item", "/sell"], ["Start an auction", "/sell?mode=auction"], ["Rent something out", "/sell?mode=rent"], ["Food drop", "/sell?mode=drop"]]],
-  ["Help", [["How trust works", "/trust"], ["Requests board", "/requests"], ["My listings", "/my-listings"], ["Icons by Lucide (ISC licence)", "https://lucide.dev/license"]]],
+  ["Help", [["How Plume works", "/trust"], ["Requests board", "/requests"], ["My listings", "/my-listings"], ["Icons by Lucide (ISC licence)", "https://lucide.dev/license"]]],
 ];
 
 export function Footer() {

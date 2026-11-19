@@ -123,7 +123,7 @@ export default async function HomePage() {
               ["shield", "Only IIM Indore", "Every account is a verified @iimidr.ac.in email"],
               ["wallet", "Pay at handover", "UPI or cash when you meet. Nothing charged online"],
               ["pin", "Pickup from your hostel", "Filter by your hostel and walk over"],
-              ["star", "Ratings after every deal", "Both sides rate, so you know who to trust"],
+              ["star", "Ratings after every deal", "Both sides rate, and it builds their Plume"],
             ] as const
           ).map(([i, t, d]) => (
             <div className="vp" key={t}>

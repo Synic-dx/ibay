@@ -88,11 +88,11 @@ export function mayuTools(viewer: Viewer | null, onCards: (cards: ListingCard[])
       },
     }),
     explain_plume: tool({
-      description: "Explain the Plume trust score and levels.",
+      description: "Explain the Plume score and levels.",
       inputSchema: z.object({}),
       execute: async () => ({
         formula: "delta = K(n) * (rating/10) * w; K(n) = max(6, 40/sqrt(1+n/3)); w = clamp(1 + raterPlume/400, 0.5, 1.5)",
-        levels: ["Top rated: 150+", "Trusted: 60 to 149", "Building trust: 0 to 59", "Mixed reviews: -1 to -59", "Flagged: -60 or lower"],
+        levels: ["Top rated: 150+", "Well rated: 60 to 149", "Rising: 0 to 59", "Mixed reviews: -1 to -59", "Flagged: -60 or lower"],
         notes: "Everyone starts at 0. Both sides rate after every deal from -10 to +10 with a reason.",
       }),
     }),
