@@ -13,9 +13,8 @@ export const metadata: Metadata = {
 };
 
 export default async function CampusMapPage() {
-  if (!dbReady()) return <SetupNotice />;
-  const viewer = await getViewer();
-  const listings = await visibleCatalogue(viewer);
+  const viewer = dbReady() ? await getViewer() : null;
+  const listings = dbReady() ? await visibleCatalogue(viewer) : [];
 
   return (
     <main style={{ width: "100%", height: "100%", overflow: "hidden" }}>

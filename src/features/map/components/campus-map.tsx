@@ -8,7 +8,7 @@ import campusOutline from "../data/campus-outline.json";
 import styles from "./map.module.css";
 
 if (typeof window !== "undefined") {
-  setWorkerUrl("https://unpkg.com/maplibre-gl@6.2.0/dist/maplibre-gl-worker.mjs");
+  setWorkerUrl("/maplibre-gl-worker.mjs");
 }
 
 export const CAMPUS_BOUNDS: [number, number, number, number] = [
