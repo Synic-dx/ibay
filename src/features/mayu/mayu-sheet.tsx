@@ -68,9 +68,14 @@ function MiniCard({ l, onClose }: { l: ListingCard; onClose: () => void }) {
   if (!l || !l.id) return null;
   const title = l.title ?? "Listing";
   const price = priceText(l);
-  const age = hasAge(l) ? ageText(ageMonths(l.purchasedOn)) : (l.pickupHostel ?? "");
+  let age = "";
+  try {
+    age = hasAge(l) ? ageText(ageMonths(l.purchasedOn)) : (l.pickupHostel ?? "");
+  } catch {
+    age = l.pickupHostel ?? "";
+  }
   return (
-    <Link className="mini" href={`/item/${l.id}`} onClick={onClose}>
+    <Link className="mini" href={`/item/${l.id}`} onClick={onClose} prefetch={false}>
       <PhotoTile l={l} />
       <span style={{ flex: 1, minWidth: 0 }}>
         <span className="sm" style={{ display: "block", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -84,14 +89,48 @@ function MiniCard({ l, onClose }: { l: ListingCard; onClose: () => void }) {
   );
 }
 
-export function MayuLauncher() {
+class MayuRootErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean }> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+  componentDidCatch(error: unknown) {
+    console.error("[Mayu] Handled error in launcher:", error);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <button
+          type="button"
+          className="mayu"
+          aria-label="Ask Mayu, the shopping assistant"
+          onClick={() => this.setState({ hasError: false })}
+        >
+          <Peacock size={40} />
+        </button>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+function MayuLauncherInner() {
   const { mayuOpen, setMayuOpen } = useApp();
   const path = usePathname();
   const [msgs, setMsgs] = useState<Msg[]>([{ role: "assistant", content: 'Hi, I am **Mayu**! Tell me what you need. Try "cheapest fx-991ES" or "Yonex racquets".' }]);
   const [q, setQ] = useState("");
   const [busy, setBusy] = useState(false);
   const end = useRef<HTMLDivElement>(null);
-  useEffect(() => end.current?.scrollIntoView({ block: "end" }), [msgs]);
+  useEffect(() => {
+    try {
+      end.current?.scrollIntoView({ block: "end" });
+    } catch {
+      // scrollIntoView unsupported or failed silently
+    }
+  }, [msgs]);
 
   const ask = async (text: string) => {
     const question = text.trim();
@@ -143,6 +182,17 @@ export function MayuLauncher() {
           }
         }
       }
+      if (buf.trim()) {
+        try {
+          const ev = JSON.parse(buf) as { t: string; v?: unknown };
+          if (ev.t === "text" && typeof ev.v === "string") content += ev.v;
+          if (ev.t === "cards" && Array.isArray(ev.v)) cards = ev.v as ListingCard[];
+        } catch {
+          // ignore trailing invalid JSON fragment
+        }
+      }
+      // Ensure stream completion marks typing as done
+      setMsgs([...history, { role: "assistant", content: content || "Here is what I found:", cards, typing: false }]);
     } catch {
       setMsgs([...history, { role: "assistant", content: "Mayu couldn't answer right now. Try again." }]);
     } finally {
@@ -216,5 +266,13 @@ export function MayuLauncher() {
         </div>
       </Sheet>
     </>
+  );
+}
+
+export function MayuLauncher() {
+  return (
+    <MayuRootErrorBoundary>
+      <MayuLauncherInner />
+    </MayuRootErrorBoundary>
   );
 }
