@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useTransition } from "react";
+import React, { useState, useEffect, useTransition } from "react";
 import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
-import { regenerateHandoverOtp } from "../actions";
+import { getHandoverOtp, regenerateHandoverOtp } from "../actions";
 
 interface HandoverOtpDisplayProps {
   txId: string;
@@ -23,6 +23,29 @@ export default function HandoverOtpDisplay({
   const [currentCode, setCurrentCode] = useState<string | null>(initialCode ?? null);
   const [copied, setCopied] = useState(false);
   const [pending, startTransition] = useTransition();
+
+  // Sync state if initialCode prop updates
+  useEffect(() => {
+    if (initialCode) {
+      setCurrentCode(initialCode);
+    }
+  }, [initialCode]);
+
+  // Auto-generate/retrieve OTP immediately if missing on mount
+  useEffect(() => {
+    if (!currentCode && txId) {
+      let active = true;
+      startTransition(async () => {
+        const res = await getHandoverOtp(txId, step);
+        if (active && res.ok && res.data.code) {
+          setCurrentCode(res.data.code);
+        }
+      });
+      return () => {
+        active = false;
+      };
+    }
+  }, [currentCode, txId, step]);
 
   const isReturn = step === "return";
   const title = isReturn ? "Rental Return Code" : "Delivery Pickup Code";

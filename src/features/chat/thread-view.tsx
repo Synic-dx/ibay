@@ -108,7 +108,7 @@ export function ThreadView({ initial, compact = false }: { initial: Thread; comp
           />
         </div>
       )}
-      {t.deal && (t.deal.deliveryOtp || t.deal.returnOtp) && (
+      {t.deal && t.deal.isBuyer && (
         <div style={{ padding: compact ? "0 10px 6px" : "0 16px 8px" }}>
           <HandoverOtpDisplay
             txId={t.deal.id}

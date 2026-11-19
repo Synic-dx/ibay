@@ -17,6 +17,7 @@ import { ratingSchema, type RatingInput } from "@/lib/validation/market";
 import { notify, startConversation } from "@/features/chat/service";
 import { formatHandoverSchedule } from "./scheduling";
 import { generateOtp, hashOtp } from "./otp-crypto";
+export { generateOtp, hashOtp };
 
 const WHEN = ["Today, evening", "Tomorrow, morning", "Tomorrow, evening", "Ask in chat"];
 

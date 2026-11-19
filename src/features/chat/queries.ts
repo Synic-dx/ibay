@@ -46,6 +46,7 @@ export type Thread = {
     handoverProposedBy?: string | null;
     deliveryOtp?: string | null;
     returnOtp?: string | null;
+    isBuyer?: boolean;
   } | null;
   messages: ChatMessage[];
 };
@@ -126,6 +127,7 @@ export async function getThread(id: string, me: string): Promise<Thread | null> 
           handoverProposedBy: conv.tx.handover_proposed_by ?? null,
           deliveryOtp: conv.tx.buyer_id === me ? (conv.tx.delivery_otp_plain ?? null) : null,
           returnOtp: conv.tx.buyer_id === me ? (conv.tx.return_otp_plain ?? null) : null,
+          isBuyer: conv.tx.buyer_id === me,
         }
       : null,
     messages: (msgs ?? []).map((m: any) => ({

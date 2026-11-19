@@ -14,6 +14,7 @@ import { db } from "@/lib/supabase/server";
 import { fail, ok, type ActionResult } from "@/lib/action-result";
 import { friendlyDbError } from "@/lib/db-errors";
 import { startConversation } from "@/features/chat/service";
+import { generateOtp, hashOtp } from "@/features/deals/actions";
 
 const schema = z
   .object({
@@ -40,6 +41,20 @@ export async function bookRental(input: { listingId: string; start: string; end:
   const { data, error } = await db().rpc("book_rental", { p_listing: listingId, p_renter: viewer.id, p_start: start, p_end: end });
   if (error) return fail(friendlyDbError(error).message);
   const res = data as { transaction_id: string; amount: number };
+
+  // Auto-generate delivery and return OTPs immediately upon booking
+  const deliveryOtp = generateOtp();
+  const returnOtp = generateOtp();
+  await db()
+    .from("transactions")
+    .update({
+      delivery_otp_plain: deliveryOtp,
+      delivery_otp_hash: hashOtp(deliveryOtp),
+      return_otp_plain: returnOtp,
+      return_otp_hash: hashOtp(returnOtp),
+    })
+    .eq("id", res.transaction_id);
+
   const { data: l } = await db().from("listings").select("seller_id").eq("id", listingId).single();
   const conv = l ? await startConversation(viewer.id, l.seller_id, listingId, message, res.transaction_id) : null;
   revalidatePath(`/item/${listingId}`);

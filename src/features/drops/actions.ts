@@ -13,6 +13,7 @@ import { db } from "@/lib/supabase/server";
 import { fail, ok, type ActionResult } from "@/lib/action-result";
 import { friendlyDbError } from "@/lib/db-errors";
 import { startConversation } from "@/features/chat/service";
+import { generateOtp, hashOtp } from "@/features/deals/actions";
 
 /**
  * Claims a drop for the signed-in student.
@@ -24,6 +25,17 @@ export async function claimDrop(listingId: string): Promise<ActionResult<{ conve
   if (!z.uuid().safeParse(listingId).success) return fail("Listing not found.");
   const { data: txId, error } = await db().rpc("claim_drop", { p_listing: listingId, p_user: viewer.id });
   if (error) return fail(friendlyDbError(error).message);
+
+  // Auto-generate delivery OTP immediately upon drop claim
+  const deliveryOtp = generateOtp();
+  await db()
+    .from("transactions")
+    .update({
+      delivery_otp_plain: deliveryOtp,
+      delivery_otp_hash: hashOtp(deliveryOtp),
+    })
+    .eq("id", txId as string);
+
   const { data: l } = await db().from("listings").select("seller_id,pickup_hostel").eq("id", listingId).single();
   const conv = l ? await startConversation(viewer.id, l.seller_id, listingId, "Claimed! On my way, be there in 5 min.", txId as string) : null;
   revalidatePath("/");
