@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Icon } from "@/components/ui/icon";
 import type { ListingCard } from "@/features/listings/types";
 import { fmt } from "@/lib/format";
-import { getResidenceCoordinates, calculateDistanceMeters } from "../proximity";
+import { getResidenceCoordinates, calculateDistanceMeters, getEffectiveListingHostel } from "../proximity";
 
 export interface MapDrawerProps {
   hostelName: string | null;
@@ -28,7 +28,7 @@ export default function MapDrawer({
   const hostelListings = useMemo(() => {
     if (!hostelName) return [];
     return listings.filter(
-      (l) => l.pickupHostel.toLowerCase() === hostelName.toLowerCase()
+      (l) => getEffectiveListingHostel(l).toLowerCase() === hostelName.toLowerCase()
     );
   }, [hostelName, listings]);
 

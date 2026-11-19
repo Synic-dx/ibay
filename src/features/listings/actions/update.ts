@@ -23,6 +23,7 @@ import { verifyPhotos } from "@/lib/uploads";
 import { listingSchema, quickPriceSchema, type ListingInput } from "@/lib/validation/listing";
 import { notify, startConversation } from "@/features/chat/service";
 import { generateOtp, hashOtp } from "@/features/deals/actions";
+import { findNearestResidence } from "@/features/map/proximity";
 import { columnsFor, refreshListingPages } from "./shared";
 
 /** Loads a listing for its owner (or an admin), or null (so other people get "not found"). */
@@ -121,7 +122,12 @@ export async function updateListing(id: string, input: ListingInput): Promise<Ac
 
   // 7. Persist location updates directly in listings table
   const locUpdate: Record<string, unknown> = {};
-  if (d.pickupHostel) locUpdate.pickup_hostel = d.pickupHostel;
+  if (d.pickupLat != null && d.pickupLng != null) {
+    const effectiveHostel = findNearestResidence(d.pickupLat, d.pickupLng)?.location.name || d.pickupHostel;
+    if (effectiveHostel) locUpdate.pickup_hostel = effectiveHostel;
+  } else if (d.pickupHostel) {
+    locUpdate.pickup_hostel = d.pickupHostel;
+  }
   if (d.pickupLat !== undefined) locUpdate.pickup_lat = d.pickupLat;
   if (d.pickupLng !== undefined) locUpdate.pickup_lng = d.pickupLng;
   if (d.pickupNote !== undefined) locUpdate.pickup_note = d.pickupNote;

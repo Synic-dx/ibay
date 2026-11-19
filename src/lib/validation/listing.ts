@@ -127,9 +127,9 @@ const common = {
   bundleContents: z.string().max(1000).default(""),
   sealStatus: z.string().optional(),
   expiresOn: z.string().optional(),
-  pickupHostel: z.enum(HOSTELS).optional(),
-  pickupLat: z.number().min(-90).max(90).optional(),
-  pickupLng: z.number().min(-180).max(180).optional(),
+  pickupHostel: z.preprocess((v) => (v === "" || v === null ? undefined : v), z.enum(HOSTELS).optional()),
+  pickupLat: z.preprocess((v) => (v === "" || v === null ? undefined : v), z.number().min(-90).max(90).optional()),
+  pickupLng: z.preprocess((v) => (v === "" || v === null ? undefined : v), z.number().min(-180).max(180).optional()),
   pickupNote: z.string().trim().max(300, { error: "Keep handover note under 300 characters." }).optional(),
   // Generous limits: only stop junk, never a normal schedule.
   pickupSlots: z.array(z.string().max(80)).max(100, { error: "Up to 100 pickup slots." }).default([]),

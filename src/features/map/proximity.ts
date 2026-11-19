@@ -117,4 +117,30 @@ export function calculateWalkingEffort(
   };
 }
 
+/**
+ * Resolves the effective campus residence for a listing.
+ * If exact pickup coordinates are provided (custom pin on map or landmark),
+ * the nearest recognized campus residence is resolved.
+ * Otherwise, falls back to pickupHostel, then the seller's home residence.
+ */
+export function getEffectiveListingHostel(listing: {
+  pickupHostel?: string | null;
+  pickupLat?: number | null;
+  pickupLng?: number | null;
+  seller?: { hostel?: string | null } | null;
+}): string {
+  if (listing.pickupLat != null && listing.pickupLng != null) {
+    const lat = Number(listing.pickupLat);
+    const lng = Number(listing.pickupLng);
+    if (!Number.isNaN(lat) && !Number.isNaN(lng)) {
+      const res = findNearestResidence(lat, lng);
+      if (res?.location?.name) {
+        return res.location.name;
+      }
+    }
+  }
+  return listing.pickupHostel || listing.seller?.hostel || "SR 18";
+}
+
+
 

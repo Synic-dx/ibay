@@ -35,9 +35,16 @@ export async function updateProfile(input: ProfileInput): Promise<ActionResult<n
     const f = friendlyDbError(error);
     return fail(f.message, f.field ? { [f.field]: f.message } : undefined);
   }
-  // 4. Your listings are picked up from your new hostel.
+  // 4. Your listings are picked up from your new hostel (only for listings without custom coordinates).
   if (v.hostel !== viewer.hostel) {
-    await db().from("listings").update({ pickup_hostel: v.hostel }).eq("seller_id", viewer.id).in("status", ["active", "paused"]).neq("mode", "drop");
+    await db()
+      .from("listings")
+      .update({ pickup_hostel: v.hostel })
+      .eq("seller_id", viewer.id)
+      .in("status", ["active", "paused"])
+      .neq("mode", "drop")
+      .is("pickup_lat", null)
+      .is("pickup_lng", null);
   }
   revalidatePath("/", "layout");
   return ok(null, "Saved");
@@ -49,7 +56,14 @@ export async function setHostel(hostel: string): Promise<ActionResult<null>> {
   if (!viewer) return fail("Please sign in again.", undefined, "AUTH");
   if (!(HOSTELS as readonly string[]).includes(hostel)) return fail("Pick a hostel from the list.");
   await db().from("profiles").update({ hostel }).eq("id", viewer.id);
-  await db().from("listings").update({ pickup_hostel: hostel }).eq("seller_id", viewer.id).in("status", ["active", "paused"]).neq("mode", "drop");
+  await db()
+    .from("listings")
+    .update({ pickup_hostel: hostel })
+    .eq("seller_id", viewer.id)
+    .in("status", ["active", "paused"])
+    .neq("mode", "drop")
+    .is("pickup_lat", null)
+    .is("pickup_lng", null);
   revalidatePath("/", "layout");
   return ok(null);
 }

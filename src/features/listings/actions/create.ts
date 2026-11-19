@@ -14,6 +14,7 @@ import { friendlyDbError } from "@/lib/db-errors";
 import { rateLimit } from "@/lib/security/guard";
 import { verifyPhotos } from "@/lib/uploads";
 import { listingSchema, type ListingInput } from "@/lib/validation/listing";
+import { findNearestResidence } from "@/features/map/proximity";
 import { columnsFor, refreshListingPages } from "./shared";
 
 /**
@@ -38,15 +39,19 @@ export async function createListing(input: ListingInput): Promise<ActionResult<{
   const photoErr = await verifyPhotos(d.photos);
   if (photoErr) return fail(photoErr, { photos: photoErr });
 
-  // 6. Save. Owner and pickup hostel come from the session, never from the form.
+  // 6. Save. Persist effective pickup hostel based on chosen coordinates/hostel or default to seller's hostel.
   const now = Date.now();
+  const effectiveHostel = (d.pickupLat != null && d.pickupLng != null)
+    ? (findNearestResidence(d.pickupLat, d.pickupLng)?.location.name || d.pickupHostel || viewer.hostel)
+    : (d.pickupHostel || viewer.hostel);
+
   const { data: row, error } = await db()
     .from("listings")
     .insert({
       ...columnsFor(d),
       seller_id: viewer.id,
       mode: d.mode,
-      pickup_hostel: d.pickupHostel || viewer.hostel,
+      pickup_hostel: effectiveHostel,
       ends_at: d.mode === "auction" ? new Date(now + d.durationHours * 3600e3).toISOString() : d.mode === "drop" ? new Date(now + d.availableMinutes * 60e3).toISOString() : null,
     })
     .select("id")
