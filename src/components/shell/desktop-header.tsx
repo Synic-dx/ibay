@@ -18,6 +18,7 @@ import { useApp } from "@/components/app-context";
 import { ThemeToggle } from "./theme-toggle";
 import { LiveStrip } from "./live-strip";
 import { HostelSheet } from "./hostel-sheet";
+import { UspNavChips } from "./usp-nav";
 import type { Category, Collection } from "@/features/shell/queries";
 import type { ListingCard } from "@/features/listings/types";
 
@@ -26,7 +27,7 @@ const GROUP_ICON: Record<string, string> = { Seasons: "cal", Study: "grad", "Hos
 const QUICK: [string, string][] = [
   ["preprocess", "Getups"], ["formals", "Formals"], ["ethnic", "Ethnic"], ["clothing", "Fashion"], ["gadgets", "Gadgets"],
   ["sports", "Sports"], ["gym", "Gym Corner"], ["books", "Books"], ["exam", "CFA & CAT"], ["reads", "Manga & Novels"],
-  ["room", "Room"], ["appliances", "Appliances"], ["food", "Food drops"], ["free", "Free"],
+  ["room", "Room"], ["appliances", "Appliances"], ["free", "Free"],
 ];
 
 type Props = { categories: Category[]; collections: Collection[]; drops: ListingCard[]; auctions: ListingCard[] };
@@ -218,16 +219,14 @@ export function DesktopHeader({ categories, collections, drops, auctions }: Prop
               </div>
             </div>
           </div>
+          <UspNavChips />
+          <span className="dusp-div" aria-hidden="true" />
           <div className="dscroll">
             {QUICK.map(([k, n]) => (
               <Link key={k} href={`/browse?cat=${k}`} className={browseOn(k) ? "on" : ""}>
                 {n}
               </Link>
             ))}
-            <Link href="/browse?modes=auction">
-              <Icon name="hammer" className="icon i14" />
-              Auctions
-            </Link>
             <Link href="/requests" onClick={gated("Sign in to see requests", "/requests")}>
               Looking for
             </Link>
