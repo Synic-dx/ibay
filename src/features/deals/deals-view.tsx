@@ -222,7 +222,7 @@ export function DealsView({ deals, tab }: { deals: Deal[]; tab: string }) {
                   ];
                 })}
               </ol>
-              <HandoverCard deal={d} viewerHostel={viewer?.hostel} />
+              <HandoverCard deal={d} viewerHostel={viewer?.hostel} currentUserId={viewer?.id} />
               {rated ? (
                 <span className="sm faint row" style={{ gap: 4 }}>
                   <Icon name="check" className="icon i16" />

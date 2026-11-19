@@ -15,6 +15,7 @@ import { useApp } from "@/components/app-context";
 import { fmt } from "@/lib/format";
 import { PhotoTile, priceText } from "@/features/listings/components/parts";
 import MeetHalfwayPicker from "@/features/map/components/meet-halfway-picker";
+import HandoverStatusBadge from "@/features/deals/components/handover-status-badge";
 import { fetchThread, respondOffer, sendMessage, sendOffer } from "./actions";
 import type { ChatMessage, Thread } from "./queries";
 
@@ -88,6 +89,22 @@ export function ThreadView({ initial, compact = false }: { initial: Thread; comp
           <Link href="/deals" style={{ color: "inherit", fontWeight: 700, marginLeft: "auto" }}>
             Track ›
           </Link>
+        </div>
+      )}
+      {t.deal?.handoverScheduledAt && (
+        <div style={{ padding: compact ? "0 10px 6px" : "0 16px 8px" }}>
+          <HandoverStatusBadge
+            txId={t.deal.id}
+            scheduledAt={t.deal.handoverScheduledAt}
+            status={t.deal.handoverStatus}
+            proposedBy={t.deal.handoverProposedBy}
+            currentUserId={viewer?.id}
+            otherName={t.other.name.split(" ")[0]}
+            listingTitle={t.listing?.title ?? "Item"}
+            locationName={t.listing?.pickupHostel ?? "Campus"}
+            sellerSlots={t.listing?.pickupSlots}
+            compact={compact}
+          />
         </div>
       )}
       {t.other.whatsapp && !compact && (

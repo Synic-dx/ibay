@@ -3,7 +3,9 @@
 import React, { useState, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { Marker, Source, Layer } from "react-map-gl/maplibre";
+import { Icon } from "@/components/ui/icon";
 import type { Deal } from "@/features/deals/stages";
+import HandoverStatusBadge from "@/features/deals/components/handover-status-badge";
 import { getResidenceCoordinates, findNearestLandmark } from "../proximity";
 import { findShortestCampusPath } from "../pathfinder";
 import type { NavigationRoute } from "../types";
@@ -32,9 +34,10 @@ const CampusMap = dynamic(() => import("./campus-map"), {
 export interface HandoverCardProps {
   deal: Deal;
   viewerHostel?: string | null;
+  currentUserId?: string;
 }
 
-export default function HandoverCard({ deal, viewerHostel }: HandoverCardProps) {
+export default function HandoverCard({ deal, viewerHostel, currentUserId }: HandoverCardProps) {
   const [showMap, setShowMap] = useState(false);
 
   const destCoords = useMemo(() => {
@@ -84,12 +87,29 @@ export default function HandoverCard({ deal, viewerHostel }: HandoverCardProps) 
         borderRadius: "12px",
         display: "flex",
         flexDirection: "column",
-        gap: "8px",
+        gap: "10px",
       }}
     >
+      {/* Handover scheduling badge */}
+      {deal.handoverScheduledAt && (
+        <HandoverStatusBadge
+          txId={deal.id}
+          scheduledAt={deal.handoverScheduledAt}
+          status={deal.handoverStatus}
+          proposedBy={deal.handoverProposedBy}
+          currentUserId={currentUserId}
+          otherName={deal.other.name.split(" ")[0]}
+          listingTitle={deal.listing.title}
+          locationName={landmark ? landmark.location.name : deal.listing.pickupHostel}
+          sellerSlots={deal.listing.pickupSlots}
+        />
+      )}
+
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-          <span style={{ fontSize: "14px" }}>📍</span>
+          <span style={{ color: "var(--brand, #02505f)", display: "flex", alignItems: "center" }}>
+            <Icon name="pin" className="icon i16" />
+          </span>
           <b style={{ fontSize: "13px", color: "var(--ink, #0f172a)" }}>
             Pickup: {landmark ? `${landmark.location.name}` : deal.listing.pickupHostel}
           </b>
@@ -105,9 +125,13 @@ export default function HandoverCard({ deal, viewerHostel }: HandoverCardProps) 
             border: "none",
             cursor: "pointer",
             padding: "2px 6px",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "4px",
           }}
         >
-          {showMap ? "Hide map ▲" : "View route on map ▼"}
+          <span>{showMap ? "Hide map" : "View route on map"}</span>
+          <Icon name={showMap ? "up" : "down"} className="icon i14" />
         </button>
       </div>
 
@@ -122,11 +146,12 @@ export default function HandoverCard({ deal, viewerHostel }: HandoverCardProps) 
             color: "#1e3a8a",
             display: "flex",
             flexDirection: "column",
-            gap: "2px",
+            gap: "3px",
           }}
         >
-          <span style={{ fontWeight: 600, fontSize: "11px", color: "#1d4ed8" }}>
-            🔒 Seller Handover Instructions:
+          <span style={{ fontWeight: 600, fontSize: "11px", color: "#1d4ed8", display: "flex", alignItems: "center", gap: 5 }}>
+            <Icon name="lock" className="icon i14" />
+            Seller Handover Instructions
           </span>
           <span>{deal.handoverNote}</span>
         </div>
@@ -142,8 +167,11 @@ export default function HandoverCard({ deal, viewerHostel }: HandoverCardProps) 
             gap: "6px",
           }}
         >
+          <span style={{ color: "var(--muted)", display: "flex", alignItems: "center" }}>
+            <Icon name="compass" className="icon i14" />
+          </span>
           <span>
-            🚶 <b>{route.totalDistanceMeters}m</b> ({route.stepCount} steps) · ~{route.estimatedDurationMinutes} min walk from {viewerHostel}
+            <b>{route.totalDistanceMeters}m</b> ({route.stepCount} steps) · ~{route.estimatedDurationMinutes} min walk from {viewerHostel}
           </span>
         </div>
       )}
