@@ -47,6 +47,7 @@ export function columnsFor(d: ListingData) {
     pickup_lat: d.pickupLat ?? null,
     pickup_lng: d.pickupLng ?? null,
     pickup_note: d.pickupNote ?? null,
+    pickup_slots: d.pickupSlots || [],
     tags: tagsFor(d),
   };
 }

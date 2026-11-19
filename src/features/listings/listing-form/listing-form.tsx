@@ -31,6 +31,7 @@ import { updateListing } from "../actions/update";
 import { DeleteDialog } from "../delete-dialog";
 import { PhotoField, type Photo } from "./photo-field";
 import SpotPicker from "@/features/map/components/spot-picker";
+import AvailabilityPicker from "../components/availability-picker";
 import type { ListingCard, Mode } from "../types";
 import type { Category } from "@/features/shell/queries";
 
@@ -618,6 +619,12 @@ export function ListingForm({ categories, initial, edit }: { categories: Categor
                   setValue("pickupNote", note as never);
                 }}
               />
+              {mode !== "drop" && (
+                <AvailabilityPicker
+                  value={(v.pickupSlots as string[]) || []}
+                  onChange={(slots) => setValue("pickupSlots", slots as never, { shouldDirty: true })}
+                />
+              )}
               {edit && edit.history.length > 0 && (
                 <div className="panel pad">
                   <h3 style={{ marginBottom: 6 }}>

@@ -29,6 +29,16 @@ export const AVAILABILITY_SLOTS = [
   "Late Night (9 PM - 12 AM)",
   "Flexible / Anytime",
 ] as const;
+
+export const AVAILABILITY_SLOT_CONFIG = [
+  { id: "morning", label: "Morning", sublabel: "8 AM – 12 PM", value: "Morning (8 AM - 12 PM)", icon: "sun" },
+  { id: "afternoon", label: "Afternoon", sublabel: "12 PM – 5 PM", value: "Afternoon (12 PM - 5 PM)", icon: "sun" },
+  { id: "evening", label: "Evening", sublabel: "5 PM – 9 PM", value: "Evening (5 PM - 9 PM)", icon: "sparkles" },
+  { id: "latenight", label: "Late Night", sublabel: "9 PM – 12 AM", value: "Late Night (9 PM - 12 AM)", icon: "moon" },
+  { id: "flexible", label: "Flexible", sublabel: "Anytime", value: "Flexible / Anytime", icon: "clock" },
+] as const;
+
+export type AvailabilitySlotId = (typeof AVAILABILITY_SLOT_CONFIG)[number]["id"];
 export const CATEGORY_IDS = [
   "preprocess", "formals", "ethnic", "events", "books", "exam", "gadgets", "room", "appliances", "food", "free",
   "gym", "sports", "hobbies", "reads", "travel", "clothing", "tickets",
