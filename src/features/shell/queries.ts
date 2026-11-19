@@ -5,6 +5,7 @@
  */
 import "server-only";
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 import { db, dbReady } from "@/lib/supabase/server";
 import type { Viewer } from "@/lib/auth/session";
 import { CARD_SELECT, mapCard } from "@/features/listings/queries";
@@ -16,21 +17,33 @@ export type Collection = { id: string; name: string; description: string; rule: 
 export const GROUPS = ["Seasons", "Study", "Hostel life", "Play"] as const;
 export const GROUP_ICON: Record<string, string> = { Seasons: "cal", Study: "grad", "Hostel life": "bed", Play: "trophy" };
 
-/** All categories in display order (cached per request). */
-export const getCategories = cache(async (): Promise<Category[]> => {
+/** All categories in display order (cached in memory across requests). */
+const fetchCategories = async (): Promise<Category[]> => {
   if (!dbReady()) return [];
   const { data } = await db().from("categories").select("*").order("sort");
   return (data ?? []).map((c) => ({
     id: c.id, name: c.name, short: c.short_name, group: c.group, description: c.description, icon: c.icon, cover: c.cover_url, coverFit: c.cover_fit,
   }));
-});
+};
 
-/** Shop-by-moment collections. */
-export const getCollections = cache(async (): Promise<Collection[]> => {
+export const getCategories = unstable_cache(
+  fetchCategories,
+  ["ibay-categories-v1"],
+  { revalidate: 3600, tags: ["categories"] }
+);
+
+/** Shop-by-moment collections (cached in memory across requests). */
+const fetchCollections = async (): Promise<Collection[]> => {
   if (!dbReady()) return [];
   const { data } = await db().from("collections").select("*").order("sort");
   return (data ?? []) as Collection[];
-});
+};
+
+export const getCollections = unstable_cache(
+  fetchCollections,
+  ["ibay-collections-v1"],
+  { revalidate: 3600, tags: ["collections"] }
+);
 
 /** Does a listing belong to a collection (same rule as the SQL browse function)? */
 export function inCollection(l: Pick<ListingCard, "tags" | "categoryId">, c: Collection): boolean {

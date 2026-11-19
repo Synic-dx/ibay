@@ -219,7 +219,12 @@ export function DealsView({ deals, tab }: { deals: Deal[]; tab: string }) {
                   <br />
                   <span className="xs faint">{ago(d.createdAt)}</span>
                 </div>
-                <button type="button" className="ib" onClick={() => openChat(d.other.id, d.listing.id)} aria-label={`Chat with ${d.other.name}`}>
+                <button
+                  type="button"
+                  className="ib"
+                  onClick={() => openChat(d.other.id, d.listing.id, undefined, { other: d.other, listing: d.listing })}
+                  aria-label={`Chat with ${d.other.name}`}
+                >
                   <Icon name="chat" />
                 </button>
               </div>

@@ -81,7 +81,7 @@ function RevRow({ r }: { r: Review }) {
 export function ItemView({ l, similar, typical, reviews, reviewCount, categoryShort, categoryIcon, chatters, history, upcomingBookings, initialSheet }: Props) {
   const { viewer, openAuth } = useApp();
   const router = useRouter();
-  const { open: openChat } = useOpenChat();
+  const { open: openChat, pending: chatPending } = useOpenChat();
   const [sheet, setSheet] = useState<SheetKey>((["bid", "buy", "offer", "dates", "hours", "close", "sold"].includes(initialSheet ?? "") ? initialSheet : null) as SheetKey);
   const [saved, setSaved] = useState(l.saved);
   const [slide, setSlide] = useState(0);
@@ -213,8 +213,15 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
           : "";
 
   const chatBtn = (
-    <button type="button" className="btn sec" onClick={() => openChat(s.id, l.id)}>
-      <Icon name="chat" />
+    <button
+      key="chat"
+      type="button"
+      className="btn sec"
+      onClick={() => openChat(s.id, l.id, undefined, { other: s, listing: { id: l.id, title: l.title, price: l.price, photoUrl: l.photo?.url } })}
+      disabled={chatPending}
+      aria-label={`Chat with ${first}`}
+    >
+      {chatPending ? <span className="spin" /> : <Icon name="chat" />}
       Chat with {first}
     </button>
   );
@@ -742,8 +749,14 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
           </>
         ) : (
           <>
-            <button type="button" className="sqbtn" onClick={() => openChat(s.id, l.id)} aria-label="Chat with seller">
-              <Icon name="chat" />
+            <button
+              type="button"
+              className="sqbtn"
+              onClick={() => openChat(s.id, l.id, undefined, { other: s, listing: { id: l.id, title: l.title, price: l.price, photoUrl: l.photo?.url } })}
+              disabled={chatPending}
+              aria-label="Chat with seller"
+            >
+              {chatPending ? <span className="spin" /> : <Icon name="chat" />}
             </button>
             {l.mode === "sell" && l.price > 0 ? (
               <>
