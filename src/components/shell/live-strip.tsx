@@ -41,7 +41,10 @@ export function LiveStrip({ drops, auctions }: { drops: ListingCard[]; auctions:
                 // eslint-disable-next-line @next/next/no-img-element -- tiny local thumbnail
                 <img src={l.photo.url} alt="" className={l.photo.fit === "cover" ? "cover" : ""} />
               ) : (
-                <Icon name="ticket" />
+                <Icon
+                  name={l.categoryId === "tickets" ? "ticket" : k === "d" ? "flame" : "hammer"}
+                  className="icon i16"
+                />
               )}
             </span>
             <span className="lc-t">

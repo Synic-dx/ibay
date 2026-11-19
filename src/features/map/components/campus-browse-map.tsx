@@ -118,7 +118,7 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
   }, [filteredListings]);
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "calc(100vh - 60px)", overflow: "hidden" }}>
+    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
       {/* Top Floating Filter Bar */}
       <div
         className={`map-floating-search ${selectedHostel ? "is-shifted" : ""}`}
