@@ -64,7 +64,7 @@ export function PhotoField({ value, onChange, error }: { value: Photo[]; onChang
       <label className="drop" aria-describedby={error ? "photos-err" : undefined} aria-invalid={!!error} style={error ? { borderColor: "var(--bad)" } : undefined}>
         <Icon name="img" />
         <span>
-          <b>{busy ? `Uploading ${busy}...` : "Add photos"}</b>
+          <b>{busy ? `Uploading ${busy}…` : "Add photos"}</b>
           <br />
           <span className="faint sm">First one is the cover. Up to 6. JPG, PNG or WebP, 5 MB each.</span>
         </span>

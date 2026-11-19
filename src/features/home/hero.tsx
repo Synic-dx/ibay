@@ -30,6 +30,9 @@ export function HeroCarousel() {
   const { viewer, openAuth } = useApp();
 
   useEffect(() => {
+    const prefersReducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) return;
+
     const t = setInterval(() => {
       const c = ref.current;
       // WHY: never move while someone is reading a dialog or hovering the slide.
@@ -143,7 +146,7 @@ export function HeroSide({ topRequest, openRequests, pendingRatings }: { topRequ
               <Icon name="help" />
               Can&apos;t find it?
             </span>
-            <b>Post &quot;I am looking for a...&quot;</b>
+            <b>Post &quot;I am looking for a…&quot;</b>
             <span className="sm muted">{openRequests} open requests. People reply with photos and prices.</span>
             <span className="hc-go">
               Post a request

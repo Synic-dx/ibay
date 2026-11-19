@@ -413,7 +413,7 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
                       {fmt(l.price)}
                     </div>
                     <span className="sm muted">
-                      <Icon name="pin" className="icon i14" /> {l.pickupHostel} · only people in {l.pickupHostel} can see this
+                      <Icon name="pin" className="icon i14" /> {effectivePickupHostel} · only people in {effectivePickupHostel} can see this
                     </span>
                   </div>
                   <div style={{ textAlign: "right" }}>

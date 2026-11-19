@@ -107,6 +107,7 @@ export default function HandoverOtpDisplay({
             type="button"
             onClick={handleCopy}
             title="Copy code"
+            aria-label="Copy verification code"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -116,7 +117,7 @@ export default function HandoverOtpDisplay({
               padding: "4px 8px",
               borderRadius: 6,
               background: copied ? "var(--brand, #02505F)" : "var(--surface, #ffffff)",
-              color: copied ? "#ffffff" : "var(--ink, #0f172a)",
+              color: copied ? "var(--on-brand, #ffffff)" : "var(--ink, #0f172a)",
               border: "1px solid var(--shr, rgba(0,0,0,0.1))",
               cursor: "pointer",
               transition: "all 0.15s ease",
@@ -131,6 +132,7 @@ export default function HandoverOtpDisplay({
             onClick={handleRegenerate}
             disabled={pending}
             title="Regenerate code"
+            aria-label="Regenerate verification code"
             style={{
               display: "inline-flex",
               alignItems: "center",
@@ -149,6 +151,8 @@ export default function HandoverOtpDisplay({
 
       {/* Segmented OTP Digits */}
       <div
+        role="region"
+        aria-label={`Verification code: ${rawCode}`}
         style={{
           display: "flex",
           alignItems: "center",

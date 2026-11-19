@@ -258,9 +258,18 @@ function MayuLauncherInner() {
               ask(q);
             }}
           >
-            <input placeholder="Ask Mayu to find something" aria-label="Ask Mayu" autoComplete="off" value={q} onChange={(e) => setQ(e.target.value)} maxLength={500} />
-            <button className="rb send" type="submit" aria-label="Send" disabled={busy}>
-              <Icon name="send" />
+            <input
+              name="query"
+              placeholder="Ask Mayu to find something…"
+              aria-label="Ask Mayu"
+              autoComplete="off"
+              spellCheck={false}
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              maxLength={500}
+            />
+            <button className="rb send" type="submit" aria-label={busy ? "Sending…" : "Send"} disabled={busy}>
+              {busy ? <span className="spin" /> : <Icon name="send" />}
             </button>
           </form>
         </div>

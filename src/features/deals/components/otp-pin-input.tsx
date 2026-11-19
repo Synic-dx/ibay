@@ -107,6 +107,7 @@ export default function OtpPinInput({
           pattern="[0-9]*"
           maxLength={1}
           value={digits[i] || ""}
+          className="otp-digit"
           onChange={(e) => handleChange(i, e)}
           onKeyDown={(e) => handleKeyDown(i, e)}
           onPaste={handlePaste}
@@ -126,7 +127,6 @@ export default function OtpPinInput({
               : "1px solid var(--shr, rgba(0,0,0,0.15))",
             background: "var(--surface, #ffffff)",
             color: "var(--ink, #0f172a)",
-            outline: "none",
             fontVariantNumeric: "tabular-nums",
             boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
             transition: "all 0.15s ease",
@@ -149,6 +149,7 @@ export default function OtpPinInput({
           pattern="[0-9]*"
           maxLength={1}
           value={digits[i] || ""}
+          className="otp-digit"
           onChange={(e) => handleChange(i, e)}
           onKeyDown={(e) => handleKeyDown(i, e)}
           onPaste={handlePaste}
@@ -168,7 +169,6 @@ export default function OtpPinInput({
               : "1px solid var(--shr, rgba(0,0,0,0.15))",
             background: "var(--surface, #ffffff)",
             color: "var(--ink, #0f172a)",
-            outline: "none",
             fontVariantNumeric: "tabular-nums",
             boxShadow: "0 1px 2px rgba(0,0,0,0.05)",
             transition: "all 0.15s ease",

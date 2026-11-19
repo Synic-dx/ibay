@@ -76,13 +76,13 @@ export default function MeetHalfwayPicker({
               width: "28px",
               height: "28px",
               borderRadius: "50%",
-              border: "1px solid var(--line, #cbd5e1)",
-              background: "#ffffff",
+              border: "1px solid var(--line)",
+              background: "var(--surface)",
               cursor: "pointer",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "#64748b",
+              color: "var(--ink-2)",
             }}
             aria-label="Close"
           >
@@ -103,7 +103,7 @@ export default function MeetHalfwayPicker({
                   padding: "12px 14px",
                   borderRadius: "10px",
                   border: isTop ? "2px solid var(--brand, #02505f)" : "1px solid var(--line, #e2e8f0)",
-                  background: isTop ? "rgba(2, 80, 95, 0.04)" : "var(--card-bg, #ffffff)",
+                  background: isTop ? "var(--brand-soft)" : "var(--card-bg, #ffffff)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
@@ -122,8 +122,8 @@ export default function MeetHalfwayPicker({
                           fontWeight: 700,
                           padding: "2px 6px",
                           borderRadius: "4px",
-                          background: "#02505F",
-                          color: "#ffffff",
+                          background: "var(--brand)",
+                          color: "var(--on-brand)",
                         }}
                       >
                         Closest Midpoint
@@ -146,7 +146,7 @@ export default function MeetHalfwayPicker({
                     padding: "6px 12px",
                     borderRadius: "6px",
                     background: "var(--brand, #02505f)",
-                    color: "#ffffff",
+                    color: "var(--on-brand, #ffffff)",
                     border: "none",
                     fontWeight: 600,
                     fontSize: "12px",

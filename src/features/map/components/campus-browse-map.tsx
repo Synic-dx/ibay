@@ -26,7 +26,7 @@ const CampusMap = dynamic(() => import("./campus-map"), {
         fontSize: "14px",
       }}
     >
-      Loading Campus Map...
+      Loading Campus Map…
     </div>
   ),
 });
@@ -127,22 +127,27 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
           style={{
             display: "flex",
             alignItems: "center",
-            background: "rgba(255, 255, 255, 0.94)",
-            backdropFilter: "blur(12px)",
-            borderRadius: "12px",
-            border: "1px solid rgba(226, 232, 240, 0.8)",
-            boxShadow: "0 4px 16px rgba(0, 0, 0, 0.12)",
+            background: "var(--glass, rgba(255, 255, 255, 0.94))",
+            backdropFilter: "blur(14px) saturate(1.5)",
+            WebkitBackdropFilter: "blur(14px) saturate(1.5)",
+            borderRadius: "14px",
+            border: "1px solid var(--glass-edge, rgba(2, 32, 38, 0.12))",
+            boxShadow: "var(--shg)",
             padding: "4px 8px",
           }}
         >
-          <span style={{ color: "#64748b", padding: "0 6px", display: "flex", alignItems: "center" }}>
+          <span style={{ color: "var(--ink-3)", padding: "0 6px", display: "flex", alignItems: "center" }}>
             <Icon name="search" className="icon i16" />
           </span>
           <input
-            type="text"
-            placeholder="Search items or hostels (e.g. SR 18, calculator, cycles)..."
+            type="search"
+            name="q"
+            aria-label="Search items or hostels"
+            placeholder="Search items or hostels (e.g. SR 18, calculator, cycles)…"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            autoComplete="off"
+            spellCheck={false}
             style={{
               flex: 1,
               border: "none",
@@ -150,21 +155,26 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
               background: "transparent",
               fontSize: "13px",
               padding: "8px 4px",
-              color: "#0f172a",
+              color: "var(--ink)",
             }}
           />
           {searchQuery && (
             <button
               type="button"
               onClick={() => setSearchQuery("")}
+              aria-label="Clear search"
               style={{
                 border: "none",
                 background: "transparent",
                 cursor: "pointer",
-                padding: "4px 6px",
-                color: "#64748b",
+                padding: "6px 8px",
+                minWidth: "32px",
+                minHeight: "32px",
+                color: "var(--ink-3)",
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "8px",
               }}
             >
               <Icon name="x" className="icon i14" />
@@ -173,7 +183,7 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
         </div>
 
         {/* Mode Filter Pills */}
-        <div style={{ display: "flex", gap: "6px", overflowX: "auto", paddingBottom: "2px" }}>
+        <div style={{ display: "flex", gap: "6px", overflowX: "auto", paddingBottom: "2px" }} role="tablist" aria-label="Listing mode filter">
           {(
             [
               ["all", "All Items"],
@@ -181,29 +191,35 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
               ["sell", "For Sale"],
               ["rent", "Rentals"],
             ] as const
-          ).map(([mode, label]) => (
-            <button
-              key={mode}
-              type="button"
-              onClick={() => setFilterMode(mode)}
-              style={{
-                whiteSpace: "nowrap",
-                padding: "6px 12px",
-                borderRadius: "20px",
-                fontSize: "12px",
-                fontWeight: 600,
-                cursor: "pointer",
-                border: "1px solid",
-                borderColor: filterMode === mode ? "transparent" : "rgba(255,255,255,0.7)",
-                background: filterMode === mode ? "#02505F" : "rgba(255, 255, 255, 0.9)",
-                color: filterMode === mode ? "#ffffff" : "#1e293b",
-                boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
-                transition: "all 0.15s ease",
-              }}
-            >
-              {label}
-            </button>
-          ))}
+          ).map(([mode, label]) => {
+            const active = filterMode === mode;
+            return (
+              <button
+                key={mode}
+                type="button"
+                role="tab"
+                aria-selected={active}
+                aria-pressed={active}
+                onClick={() => setFilterMode(mode)}
+                style={{
+                  whiteSpace: "nowrap",
+                  padding: "6px 14px",
+                  borderRadius: "999px",
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  border: "1px solid",
+                  borderColor: active ? "var(--brand)" : "var(--line)",
+                  background: active ? "var(--brand)" : "var(--surface)",
+                  color: active ? "var(--on-brand)" : "var(--ink)",
+                  boxShadow: active ? "var(--btn-sh)" : "var(--shr)",
+                  transition: "all 0.15s ease",
+                }}
+              >
+                {label}
+              </button>
+            );
+          })}
         </div>
       </div>
 

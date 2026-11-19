@@ -91,8 +91,18 @@ export async function updateListing(id: string, input: ListingInput): Promise<Ac
     return fail("Someone has an upcoming booking, so the unit is locked.", { rentUnit: "Locked: there is an upcoming booking." });
   }
   if (l.mode === "drop") {
-    // Only the description and a longer time are allowed.
-    for (const k of Object.keys(patch)) if (k !== "description") delete patch[k];
+    // Description, longer time, and pickup location are allowed to change for drops.
+    const allowedDropKeys = new Set([
+      "description",
+      "pickup_hostel",
+      "pickup_lat",
+      "pickup_lng",
+      "pickup_note",
+      "pickup_slots",
+    ]);
+    for (const k of Object.keys(patch)) {
+      if (!allowedDropKeys.has(k)) delete patch[k];
+    }
     if (d.mode === "drop") {
       const newEnd = new Date(new Date(l.created_at).getTime() + d.availableMinutes * 60e3);
       if (newEnd.getTime() > new Date(l.ends_at).getTime()) patch.ends_at = newEnd.toISOString();
@@ -108,6 +118,25 @@ export async function updateListing(id: string, input: ListingInput): Promise<Ac
   // 6. Save in one transaction (ownership, concurrency, audit, price history).
   const { error } = await db().rpc("update_listing", { p_listing: id, p_actor: viewer.id, p_expected: d.updatedAt ?? null, p_patch: patch });
   if (error) return dbFail(error);
+
+  // 7. Persist location updates directly in listings table
+  const locUpdate: Record<string, unknown> = {};
+  if (d.pickupHostel) locUpdate.pickup_hostel = d.pickupHostel;
+  if (d.pickupLat !== undefined) locUpdate.pickup_lat = d.pickupLat;
+  if (d.pickupLng !== undefined) locUpdate.pickup_lng = d.pickupLng;
+  if (d.pickupNote !== undefined) locUpdate.pickup_note = d.pickupNote;
+  if (d.pickupSlots !== undefined) locUpdate.pickup_slots = d.pickupSlots;
+
+  if (Object.keys(locUpdate).length > 0) {
+    const { error: locErr } = await db()
+      .from("listings")
+      .update(locUpdate)
+      .eq("id", id);
+    if (locErr) {
+      console.error("Failed to update listing pickup location:", locErr);
+    }
+  }
+
   refreshListingPages(id);
   return ok({ id }, "Changes saved");
 }
