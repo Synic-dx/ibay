@@ -217,6 +217,7 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
 
       {/* Full-Screen Campus Map */}
       <CampusMap
+        id="campus-browse-map"
         mapRef={mapRef}
         style={{ width: "100%", height: "100%" }}
         initialViewState={{

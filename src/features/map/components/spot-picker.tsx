@@ -155,8 +155,10 @@ export default function SpotPicker({
         )}
       </div>
 
-      <div style={{ height: "260px", width: "100%" }}>
+      <div style={{ height: "260px", width: "100%", position: "relative" }}>
         <CampusMap
+          id="spot-picker-map"
+          style={{ width: "100%", height: "100%" }}
           initialViewState={{
             latitude: coords.lat,
             longitude: coords.lng,

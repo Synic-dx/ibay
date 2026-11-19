@@ -117,8 +117,10 @@ export default function PickupSnippet({
         </Link>
       </div>
 
-      <div style={{ height: "180px", width: "100%", borderRadius: "8px", overflow: "hidden" }}>
+      <div style={{ height: "180px", width: "100%", borderRadius: "8px", overflow: "hidden", position: "relative" }}>
         <CampusMap
+          id={`pickup-map-${pickupHostel.replace(/[^a-zA-Z0-9]/g, "-")}`}
+          style={{ width: "100%", height: "100%" }}
           initialViewState={{
             latitude: coords.lat,
             longitude: coords.lng,

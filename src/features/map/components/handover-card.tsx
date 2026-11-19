@@ -177,8 +177,10 @@ export default function HandoverCard({ deal, viewerHostel, currentUserId }: Hand
       )}
 
       {showMap && (
-        <div style={{ height: "190px", width: "100%", borderRadius: "8px", overflow: "hidden", marginTop: "4px" }}>
+        <div style={{ height: "190px", width: "100%", borderRadius: "8px", overflow: "hidden", marginTop: "4px", position: "relative" }}>
           <CampusMap
+            id={`handover-map-${deal.id}`}
+            style={{ width: "100%", height: "100%" }}
             initialViewState={{
               latitude: destCoords.lat,
               longitude: destCoords.lng,
@@ -216,9 +218,9 @@ export default function HandoverCard({ deal, viewerHostel, currentUserId }: Hand
 
             {/* Polyline Route Layer */}
             {routeGeojson && (
-              <Source id="handover-route" type="geojson" data={routeGeojson as any}>
+              <Source id={`handover-route-${deal.id}`} type="geojson" data={routeGeojson as any}>
                 <Layer
-                  id="handover-route-casing"
+                  id={`handover-route-casing-${deal.id}`}
                   type="line"
                   paint={{
                     "line-color": "#ffffff",
@@ -227,7 +229,7 @@ export default function HandoverCard({ deal, viewerHostel, currentUserId }: Hand
                   }}
                 />
                 <Layer
-                  id="handover-route-line"
+                  id={`handover-route-line-${deal.id}`}
                   type="line"
                   paint={{
                     "line-color": "#02505F",

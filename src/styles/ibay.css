@@ -96,6 +96,9 @@ main.withbar{padding-bottom:calc(110px + var(--safe-b))}
 .tab .cnt{top:0;right:calc(50% - 16px);min-width:15px;height:15px;font-size:9px;padding:0 3px}
 .sellfab{width:46px;height:46px;border-radius:16px;background:var(--mint);color:var(--on-mint);display:grid;place-items:center;margin-top:-22px;box-shadow:0 8px 18px -6px rgba(35,223,198,.75),0 0 0 3px var(--bg)}
 .sellfab .icon{width:22px;height:22px}
+/* maplibre responsive fill */
+.maplibregl-map{position:absolute!important;top:0!important;left:0!important;width:100%!important;height:100%!important}
+.maplibregl-canvas-container,.maplibregl-canvas{width:100%!important;height:100%!important}
 /* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:0 20px;border-radius:999px;font-weight:600;font-size:14.5px;background:var(--brand);color:var(--on-brand);box-shadow:var(--btn-sh);white-space:nowrap;transition:transform .1s}
 .btn:active{transform:scale(.98)}

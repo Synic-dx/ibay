@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useRef, useEffect, useCallback, ReactNode } from "react";
+import React, { useState, useRef, useEffect, useCallback, useId, ReactNode } from "react";
 import MapGl, { Source, Layer, MapRef, ViewStateChangeEvent } from "react-map-gl/maplibre";
 import "maplibre-gl/dist/maplibre-gl.css";
+import * as maplibregl from "maplibre-gl";
 import { setWorkerUrl } from "maplibre-gl";
 import campusOutline from "../data/campus-outline.json";
 import styles from "./map.module.css";
@@ -90,6 +91,7 @@ export interface CampusMapProps {
   minZoom?: number;
   maxZoom?: number;
   mapRef?: React.RefObject<MapRef | null>;
+  id?: string;
 }
 
 export default function CampusMap({
@@ -103,15 +105,28 @@ export default function CampusMap({
   minZoom = 14,
   maxZoom = 19.5,
   mapRef: externalMapRef,
+  id,
 }: CampusMapProps) {
   const [mounted, setMounted] = useState(false);
   const [is3D, setIs3D] = useState(false);
   const internalMapRef = useRef<MapRef | null>(null);
   const mapRef = externalMapRef || internalMapRef;
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const generatedId = useId();
+  const mapId = id || `campus-map-${generatedId.replace(/:/g, "")}`;
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const ro = new ResizeObserver(() => {
+      mapRef.current?.resize();
+    });
+    ro.observe(containerRef.current);
+    return () => ro.disconnect();
+  }, [mapRef]);
 
   const toggle3D = useCallback(() => {
     const current = mapRef.current;
@@ -147,7 +162,7 @@ export default function CampusMap({
           justifyContent: "center",
           color: "var(--text-muted, #64748b)",
           fontSize: 13,
-          minHeight: 280,
+          minHeight: 180,
           ...style,
         }}
       >
@@ -157,8 +172,10 @@ export default function CampusMap({
   }
 
   return (
-    <div className={`${styles.mapContainer} ${className}`} style={style}>
+    <div ref={containerRef} className={`${styles.mapContainer} ${className}`} style={style}>
       <MapGl
+        id={mapId}
+        mapLib={maplibregl}
         ref={mapRef as any}
         initialViewState={{
           latitude: initialViewState.latitude,
@@ -172,6 +189,9 @@ export default function CampusMap({
         maxZoom={maxZoom}
         mapStyle={ESRI_SATELLITE_STYLE}
         style={{ width: "100%", height: "100%" }}
+        onLoad={(e) => {
+          e.target.resize();
+        }}
         onClick={interactive ? onClick : undefined}
         dragPan={interactive}
         scrollZoom={interactive}
@@ -182,9 +202,9 @@ export default function CampusMap({
         touchZoomRotate={interactive}
       >
         {/* Campus Outer Boundary Glow */}
-        <Source id="campus-boundary" type="geojson" data={campusOutline as any}>
+        <Source id={`campus-boundary-${mapId}`} type="geojson" data={campusOutline as any}>
           <Layer
-            id="campus-boundary-outer-glow"
+            id={`campus-boundary-outer-glow-${mapId}`}
             type="line"
             paint={{
               "line-color": "#f5a623",
@@ -194,7 +214,7 @@ export default function CampusMap({
             }}
           />
           <Layer
-            id="campus-boundary-line"
+            id={`campus-boundary-line-${mapId}`}
             type="line"
             paint={{
               "line-color": "#f5a623",
