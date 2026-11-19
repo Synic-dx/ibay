@@ -510,7 +510,8 @@ a.stat:active{transform:scale(.98)}
 /* ===== desktop: classic ecommerce layout (top header + category strip, no sidebar / tab bar) ===== */
 .dh,.dfoot,.buybox{display:none}
 @media (min-width:1080px){
- :root{--col:2200px;--wmax:2200px;--gut:clamp(28px,4.2vw,84px)}
+ html{zoom:1.2}
+ :root{--col:1600px;--wmax:1600px;--gut:clamp(24px,3.8vw,64px)}
  #shell{max-width:none;background:var(--bg)}
  .dh-in{max-width:var(--wmax);margin:0 auto;padding:0 var(--gut)}
  main,#shell>.tb,.composer .qr,.msgs{max-width:var(--wmax);margin-left:auto;margin-right:auto}
@@ -520,28 +521,28 @@ a.stat:active{transform:scale(.98)}
  /* header */
  .dh{display:block;position:sticky;top:0;z-index:60;box-shadow:0 1px 0 var(--line),0 8px 24px -18px rgba(0,0,0,.4)}
  .dh-top{background:var(--surface)}
- .dh-top .dh-in{display:flex;align-items:center;gap:18px;height:72px}
+ .dh-top .dh-in{display:flex;align-items:center;gap:12px;height:72px}
  .dh .brand{flex:none}
- .dloc{display:flex;align-items:center;gap:6px;text-align:left;color:var(--ink-2);flex:none;padding:6px 8px;border-radius:12px}
+ .dloc{display:flex;align-items:center;gap:6px;text-align:left;color:var(--ink-2);flex:none;padding:6px 8px;border-radius:12px;max-width:180px}
  .dloc:hover,.dact-b:hover{background:var(--sunken)}
  .dloc small,.dacc small{display:block;font-size:11px;color:var(--ink-3);line-height:1.1}
- .dloc b,.dacc b{font-size:13.5px;color:var(--ink);line-height:1.2}
- .dsearch{flex:1;display:flex;height:46px;border-radius:14px;background:var(--sunken);box-shadow:var(--shw);overflow:hidden;min-width:0}
+ .dloc b,.dacc b{font-size:13.5px;color:var(--ink);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .dsearch{flex:1 1 320px;display:flex;height:46px;border-radius:14px;background:var(--sunken);box-shadow:var(--shw);overflow:hidden;min-width:240px}
  .dsearch:focus-within{box-shadow:0 0 0 2px var(--mint)}
  .dsearch select{border:0;background:var(--surface-2);color:var(--ink-2);font:inherit;font-size:13px;padding:0 10px;border-right:1px solid var(--line);max-width:140px;outline:0}
  .dsearch input{flex:1;min-width:0;border:0;background:transparent;font:inherit;font-size:14.5px;color:var(--ink);padding:0 16px;outline:0}
  .dsearch input:focus,.dsearch input:focus-visible{outline:none!important;box-shadow:none!important}
  .dsc-b:focus-visible{outline:none!important;box-shadow:none!important}
  .dsearch>button[type=submit]{width:56px;background:var(--brand);color:var(--on-brand);display:grid;place-items:center}
- .dact{display:flex;align-items:center;gap:4px;flex:none}
- .dact-b{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;font-weight:600;color:var(--ink-2);padding:6px 10px;border-radius:12px}
+ .dact{display:flex;align-items:center;gap:2px;flex:none}
+ .dact-b{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;font-weight:600;color:var(--ink-2);padding:6px 8px;border-radius:12px}
  .dact-b .cnt{position:absolute;top:0;right:4px;font-style:normal}
  .dacc{flex-direction:row;gap:8px;text-align:left}
- .dsell{min-height:42px;padding:0 18px;margin-left:6px}
+ .dsell{min-height:42px;padding:0 16px;margin-left:4px}
  .dthm{margin-left:4px;box-shadow:var(--shr);background:var(--surface)}
  .dcats{background:var(--brand);color:var(--on-brand)}
  [data-theme=dark] .dcats{background:var(--surface-2);color:var(--ink)}
- .dcats .dh-in{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;height:42px;align-items:center}
+ .dcats .dh-in{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;height:42px;align-items:center;mask-image:linear-gradient(to right,black calc(100% - 32px),transparent 100%);-webkit-mask-image:linear-gradient(to right,black calc(100% - 32px),transparent 100%)}
  .dcats button{white-space:nowrap;font-size:13px;font-weight:600;padding:7px 12px;border-radius:10px;display:flex;align-items:center;gap:5px;opacity:.92}
  .dcats button:hover,.dcats button.on{background:rgba(255,255,255,.14);opacity:1}
  [data-theme=dark] .dcats button:hover,[data-theme=dark] .dcats button.on{background:var(--sunken)}
@@ -900,6 +901,7 @@ a.stat:active{transform:scale(.98)}
 
 html:has(main.mappage),
 body:has(main.mappage) {
+  zoom: 1 !important;
   height: 100dvh !important;
   max-height: 100dvh !important;
   overflow: hidden !important;
