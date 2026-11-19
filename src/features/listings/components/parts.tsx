@@ -20,31 +20,36 @@ export function PhotoTile({
   children,
   zoom,
 }: {
-  l: Pick<ListingCard, "photo" | "ticketInfo" | "title" | "categoryId">;
+  l?: Partial<Pick<ListingCard, "photo" | "ticketInfo" | "title" | "categoryId">> | null;
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;
   zoom?: string;
 }) {
   let inner: React.ReactNode;
-  const photoUrl = typeof l.photo === "string" ? l.photo : (l.photo as { url?: string } | null)?.url;
-  const photoFit = typeof l.photo === "object" && (l.photo as { fit?: string } | null)?.fit === "cover" ? "cover" : "";
+  const photo = l?.photo;
+  const photoUrl = typeof photo === "string" ? photo : (photo as { url?: string } | null)?.url;
+  const photoFit = typeof photo === "object" && (photo as { fit?: string } | null)?.fit === "cover" ? "cover" : "";
+  const title = l?.title ?? "Item";
+  const categoryId = l?.categoryId;
+  const ticketInfo = l?.ticketInfo;
+
   if (photoUrl) {
     // eslint-disable-next-line @next/next/no-img-element -- local art and user photos of unknown size, shown with object-fit
-    inner = <img src={photoUrl} alt={l.title ?? "Item"} className={photoFit} loading="lazy" style={zoom ? { transform: zoom } : undefined} />;
-  } else if (l.categoryId === "tickets" && Array.isArray(l.ticketInfo) && l.ticketInfo.length) {
+    inner = <img src={photoUrl} alt={title} className={photoFit} loading="lazy" style={zoom ? { transform: zoom } : undefined} />;
+  } else if (categoryId === "tickets" && Array.isArray(ticketInfo) && ticketInfo.length) {
     inner = (
-      <div className="ticket" role="img" aria-label={l.title ?? "Ticket"}>
+      <div className="ticket" role="img" aria-label={title}>
         <div className="tm">
           <span>I-BAY RESALE</span>
-          <b>{l.ticketInfo[0]}</b>
-          <span>{l.ticketInfo[1]}</span>
+          <b>{ticketInfo[0]}</b>
+          <span>{ticketInfo[1]}</span>
         </div>
-        <div className="ts">{l.ticketInfo[2]}</div>
+        <div className="ts">{ticketInfo[2]}</div>
       </div>
     );
   } else {
-    inner = <Icon name={l.categoryId === "tickets" ? "ticket" : "img"} className="icon i40" label={l.title ?? "Item"} />;
+    inner = <Icon name={categoryId === "tickets" ? "ticket" : "img"} className="icon i40" label={title} />;
   }
   return (
     <div className={className} style={style}>
