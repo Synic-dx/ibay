@@ -23,7 +23,6 @@ describe.skipIf(!apiKey)("Live Gemini Cascade Integration", () => {
     console.log("Cascade completed:", res);
     console.log("Received text preview:", textAcc.slice(0, 100));
 
-    // Either a model succeeded and returned text, or it cleanly returned { success: false } to trigger DB fallback
     expect(res).toBeDefined();
     expect(typeof res.success).toBe("boolean");
   }, 30000);

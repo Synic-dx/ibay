@@ -10,7 +10,7 @@ import { trustLevel } from "@/lib/plume";
 import type { ListingCard } from "../types";
 
 /** Items where age does not apply (food and tickets). */
-export const hasAge = (l: Pick<ListingCard, "categoryId" | "mode">) => !["food", "tickets"].includes(l.categoryId) && l.mode !== "drop";
+export const hasAge = (l: Pick<ListingCard, "categoryId" | "mode"> | null | undefined) => Boolean(l && !["food", "tickets"].includes(l.categoryId) && l.mode !== "drop");
 
 /** The light photo tile: real photo, drawn artwork, a ticket graphic, or an icon. */
 export function PhotoTile({
@@ -27,12 +27,14 @@ export function PhotoTile({
   zoom?: string;
 }) {
   let inner: React.ReactNode;
-  if (l.photo) {
+  const photoUrl = typeof l.photo === "string" ? l.photo : (l.photo as { url?: string } | null)?.url;
+  const photoFit = typeof l.photo === "object" && (l.photo as { fit?: string } | null)?.fit === "cover" ? "cover" : "";
+  if (photoUrl) {
     // eslint-disable-next-line @next/next/no-img-element -- local art and user photos of unknown size, shown with object-fit
-    inner = <img src={l.photo.url} alt={l.title} className={l.photo.fit === "cover" ? "cover" : ""} loading="lazy" style={zoom ? { transform: zoom } : undefined} />;
-  } else if (l.categoryId === "tickets" && l.ticketInfo.length) {
+    inner = <img src={photoUrl} alt={l.title ?? "Item"} className={photoFit} loading="lazy" style={zoom ? { transform: zoom } : undefined} />;
+  } else if (l.categoryId === "tickets" && Array.isArray(l.ticketInfo) && l.ticketInfo.length) {
     inner = (
-      <div className="ticket" role="img" aria-label={l.title}>
+      <div className="ticket" role="img" aria-label={l.title ?? "Ticket"}>
         <div className="tm">
           <span>I-BAY RESALE</span>
           <b>{l.ticketInfo[0]}</b>
@@ -42,7 +44,7 @@ export function PhotoTile({
       </div>
     );
   } else {
-    inner = <Icon name={l.categoryId === "tickets" ? "ticket" : "img"} className="icon i40" label={l.title} />;
+    inner = <Icon name={l.categoryId === "tickets" ? "ticket" : "img"} className="icon i40" label={l.title ?? "Item"} />;
   }
   return (
     <div className={className} style={style}>
@@ -204,5 +206,7 @@ export function TrustLine({ plume, ratedDeals, deals = true }: { plume: number; 
 }
 
 /** Price as plain text, e.g. "₹150/day" (used in lists and chat). */
-export const priceText = (l: Pick<ListingCard, "price" | "mode" | "rentUnit">) =>
-  fmt(l.price) + (l.mode === "rent" && l.rentUnit ? "/" + unitShort(l.rentUnit) : "");
+export const priceText = (l: Pick<ListingCard, "price" | "mode" | "rentUnit"> | null | undefined) => {
+  if (!l || l.price == null) return "";
+  return fmt(l.price) + (l.mode === "rent" && l.rentUnit ? "/" + unitShort(l.rentUnit) : "");
+};
