@@ -9,6 +9,7 @@
  * Pass prefetch={false} or prefetch={true} to override.
  */
 import NextLink, { useLinkStatus } from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState, type ComponentProps } from "react";
 import { navProgress } from "./nav-progress";
 
@@ -26,23 +27,34 @@ function PendingReporter() {
 type Props = ComponentProps<typeof NextLink>;
 
 export default function Link({ prefetch, onMouseEnter, onFocus, onTouchStart, children, ...rest }: Props) {
+  const router = useRouter();
   const [hot, setHot] = useState(false);
-  // null = Next's normal prefetch, switched on only once the pointer comes near.
   const pf = prefetch !== undefined ? prefetch : hot ? null : false;
+
+  const warmup = () => {
+    setHot(true);
+    const target = typeof rest.href === "string" ? rest.href : (rest.href as any)?.pathname;
+    if (target && typeof target === "string" && target.startsWith("/")) {
+      try {
+        router.prefetch(target);
+      } catch {}
+    }
+  };
+
   return (
     <NextLink
       {...rest}
       prefetch={pf}
       onMouseEnter={(e) => {
-        setHot(true);
+        warmup();
         onMouseEnter?.(e);
       }}
       onFocus={(e) => {
-        setHot(true);
+        warmup();
         onFocus?.(e);
       }}
       onTouchStart={(e) => {
-        setHot(true);
+        warmup();
         onTouchStart?.(e);
       }}
     >

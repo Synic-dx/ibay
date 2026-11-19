@@ -121,9 +121,10 @@ export function DesktopHeader({ categories, collections, drops, auctions }: Prop
               name="q"
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Search Yonex racquets, Ray-Ban, whey, sarees and more"
+              placeholder="Search racquets, whey, formals, gadgets, books…"
               aria-label="Search i-bay"
               autoComplete="off"
+              spellCheck={false}
             />
             <button type="submit" aria-label="Search">
               <Icon name="search" />

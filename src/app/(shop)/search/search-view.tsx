@@ -64,7 +64,19 @@ export function SearchView({ initial, categories }: { initial: string; categorie
           >
             <div className="iwrap">
               <Icon name="search" className="icon i18" />
-              <input autoFocus className="input" style={{ minHeight: 44, paddingTop: 8, paddingBottom: 8 }} placeholder="Search i-bay" value={q} onChange={(e) => setQ(e.target.value)} autoComplete="off" aria-label="Search" />
+              <input
+                autoFocus
+                name="q"
+                type="search"
+                className="input"
+                style={{ minHeight: 44, paddingTop: 8, paddingBottom: 8 }}
+                placeholder="Search i-bay…"
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                autoComplete="off"
+                spellCheck={false}
+                aria-label="Search"
+              />
             </div>
           </form>
           <ThemeToggle className="ib thm mthm" />
@@ -110,6 +122,15 @@ export function SearchView({ initial, categories }: { initial: string; categorie
           </>
         ) : (
           <div className="lgroup">
+            {res.cats.length === 0 && res.items.length === 0 && (
+              <div className="empty" style={{ padding: "32px 16px" }}>
+                <span className="ei">
+                  <Icon name="search" />
+                </span>
+                <h3>No instant matches</h3>
+                <p className="sm">Tap below to search full listings, descriptions, and hostel locations across campus.</p>
+              </div>
+            )}
             {res.cats.map((c) => (
               <Link key={c.id} className="lrow" href={`/browse?cat=${c.id}`}>
                 <span className="li">

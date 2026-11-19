@@ -66,7 +66,7 @@ function HandoverSheet({ d, onClose }: { d: Deal; onClose: () => void }) {
             })
           }
         >
-          Confirm
+          {pending ? <span className="spin" /> : "Confirm"}
         </button>
       </div>
     </Sheet>
@@ -140,7 +140,18 @@ function RateSheet({ d, onClose }: { d: Deal; onClose: () => void }) {
               <label className="label" htmlFor="rw">
                 Why this rating? (required)
               </label>
-              <textarea id="rw" className={`input ${err ? "bad" : ""}`} placeholder={v < 0 ? "e.g. Returned the cooler with a broken fan" : "e.g. On time and exactly as shown"} value={why} onChange={(e) => (setWhy(e.target.value), setErr(null))} maxLength={500} aria-invalid={!!err} aria-describedby="rw-hint" />
+              <textarea
+                id="rw"
+                name="reason"
+                className={`input ${err ? "bad" : ""}`}
+                placeholder={v < 0 ? "e.g. Returned the cooler with a broken fan…" : "e.g. On time and exactly as shown…"}
+                value={why}
+                spellCheck={false}
+                onChange={(e) => (setWhy(e.target.value), setErr(null))}
+                maxLength={500}
+                aria-invalid={!!err}
+                aria-describedby="rw-hint"
+              />
               <span className="fhint" id="rw-hint">
                 <span>At least 10 characters</span>
                 <span className="cnt-txt">{why.length}/500</span>
@@ -155,7 +166,7 @@ function RateSheet({ d, onClose }: { d: Deal; onClose: () => void }) {
               </span>
             </div>
             <button type="button" className="btn block" disabled={why.trim().length < 10 || pending} onClick={submit}>
-              {d.myRating ? "Update rating" : "Submit rating"}
+              {pending ? <span className="spin" /> : d.myRating ? "Update rating" : "Submit rating"}
             </button>
           </>
         ) : (
@@ -208,7 +219,12 @@ export function DealsView({ deals, tab }: { deals: Deal[]; tab: string }) {
                   <br />
                   <span className="xs faint">{ago(d.createdAt)}</span>
                 </div>
-                <button type="button" className="ib" onClick={() => openChat(d.other.id, d.listing.id)} aria-label={`Chat with ${d.other.name}`}>
+                <button
+                  type="button"
+                  className="ib"
+                  onClick={() => openChat(d.other.id, d.listing.id, undefined, { other: d.other, listing: d.listing })}
+                  aria-label={`Chat with ${d.other.name}`}
+                >
                   <Icon name="chat" />
                 </button>
               </div>

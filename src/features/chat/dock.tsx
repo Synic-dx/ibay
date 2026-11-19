@@ -15,7 +15,7 @@ import { ago, fmt } from "@/lib/format";
 import { TrustLine } from "@/features/listings/components/parts";
 import { fetchThread, fetchThreads } from "./actions";
 import { ThreadView } from "./thread-view";
-import { OPEN_CHAT_EVENT } from "./use-open-chat";
+import { OPEN_CHAT_EVENT, type OpenChatDetail } from "./use-open-chat";
 
 export function MessagingDock() {
   const { viewer, openAuth, counts } = useApp();
@@ -23,6 +23,15 @@ export function MessagingDock() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [win, setWin] = useState<string | null>(null);
+  const [targetOther, setTargetOther] = useState<{
+    id?: string;
+    name: string;
+    avatarUrl?: string | null;
+    avatarColor?: string;
+    plume?: number;
+    ratedDeals?: number;
+    hostel?: string;
+  } | null>(null);
   const [min, setMin] = useState(false);
   const [q, setQ] = useState("");
   const [desk, setDesk] = useState(false);
@@ -33,8 +42,17 @@ export function MessagingDock() {
     on();
     mq.addEventListener("change", on);
     const handler = (e: Event) => {
-      setWin((e as CustomEvent<{ id: string }>).detail.id);
+      const detail = (e as CustomEvent<OpenChatDetail>).detail;
+      if (!detail || !detail.id) {
+        setWin(null);
+        setTargetOther(null);
+        return;
+      }
+      setWin(detail.id);
       setMin(false);
+      if (detail.other) {
+        setTargetOther(detail.other);
+      }
     };
     window.addEventListener(OPEN_CHAT_EVENT, handler);
     return () => {
@@ -44,7 +62,11 @@ export function MessagingDock() {
   }, []);
 
   const threads = useQuery({ queryKey: ["threads"], queryFn: () => fetchThreads(), enabled: Boolean(viewer && desk && (open || win)) });
-  const thread = useQuery({ queryKey: ["thread", win], queryFn: () => fetchThread(win!), enabled: Boolean(viewer && desk && win) });
+  const thread = useQuery({
+    queryKey: ["thread", win],
+    queryFn: () => (win && win !== "pending" ? fetchThread(win) : null),
+    enabled: Boolean(viewer && desk && win && win !== "pending"),
+  });
 
   if (!desk || path.startsWith("/messages")) return null;
   const list = (threads.data ?? []).filter((t) => !q || t.other.name.toLowerCase().includes(q.toLowerCase()));
@@ -52,27 +74,62 @@ export function MessagingDock() {
 
   return (
     <div className="dock">
-      {viewer && win && t && (
-        <section className={`dk-win ${min ? "min" : ""}`} aria-label={`Chat with ${t.other.name}`}>
+      {viewer && win && (
+        <section className={`dk-win ${min ? "min" : ""}`} aria-label={t ? `Chat with ${t.other.name}` : targetOther ? `Chat with ${targetOther.name}` : "Chat"}>
           <header className="dk-h" onClick={() => setMin(!min)}>
-            <Avatar name={t.other.name} url={t.other.avatarUrl} color={t.other.avatarColor} size={30} />
+            <Avatar
+              name={t?.other.name ?? targetOther?.name ?? "..."}
+              url={t?.other.avatarUrl ?? targetOther?.avatarUrl}
+              color={t?.other.avatarColor ?? targetOther?.avatarColor ?? "var(--brand)"}
+              size={30}
+            />
             <span className="dk-t">
-              <b>{t.other.name}</b>
+              <b>{t?.other.name ?? targetOther?.name ?? "Opening chat…"}</b>
               <span>
-                <TrustLine plume={t.other.plume} ratedDeals={t.other.ratedDeals} deals={false} />
+                {(t?.other || targetOther) ? (
+                  <TrustLine
+                    plume={t?.other.plume ?? targetOther?.plume ?? 50}
+                    ratedDeals={t?.other.ratedDeals ?? targetOther?.ratedDeals ?? 0}
+                    deals={false}
+                  />
+                ) : (
+                  <small style={{ color: "var(--ink-3)" }}>Connecting…</small>
+                )}
               </span>
             </span>
-            <button type="button" className="dk-ib" onClick={(e) => (e.stopPropagation(), router.push(`/messages/${t.id}`))} aria-label="Open full chat" title="Open full chat">
+            <button
+              type="button"
+              className="dk-ib"
+              onClick={(e) => (e.stopPropagation(), win !== "pending" && router.push(`/messages/${win}`))}
+              aria-label="Open full chat"
+              title="Open full chat"
+              disabled={win === "pending"}
+            >
               <Icon name="expand" className="icon i16" />
             </button>
             <button type="button" className="dk-ib" onClick={(e) => (e.stopPropagation(), setMin(!min))} aria-label={min ? "Expand" : "Minimise"}>
               <Icon name={min ? "up" : "min"} className="icon i16" />
             </button>
-            <button type="button" className="dk-ib" onClick={(e) => (e.stopPropagation(), setWin(null))} aria-label="Close chat">
+            <button
+              type="button"
+              className="dk-ib"
+              onClick={(e) => (e.stopPropagation(), setWin(null), setTargetOther(null))}
+              aria-label="Close chat"
+            >
               <Icon name="x" className="icon i16" />
             </button>
           </header>
-          {!min && <ThreadView key={t.id} initial={t} compact />}
+          {!min && (
+            t ? (
+              <ThreadView key={t.id} initial={t} compact />
+            ) : (
+              <div style={{ padding: "16px", display: "flex", flexDirection: "column", gap: "12px", minHeight: "220px", justifyContent: "flex-end" }}>
+                <div className="sk" style={{ height: "36px", width: "65%", borderRadius: "14px" }} />
+                <div className="sk" style={{ height: "46px", width: "80%", alignSelf: "flex-end", borderRadius: "14px" }} />
+                <div className="sk" style={{ height: "32px", width: "55%", borderRadius: "14px" }} />
+              </div>
+            )
+          )}
         </section>
       )}
       <section className={`dk-list ${open && viewer ? "open" : ""}`}>

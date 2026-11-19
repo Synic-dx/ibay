@@ -75,11 +75,11 @@ export function Drawer({ categories, liveDrops }: { categories: Category[]; live
           {dl("book", "Novels & manga", "/browse?cat=reads")}
           {dl("gift", "Free stuff", "/browse?cat=free")}
           {viewer ? (
-            dl("list", "Looking for...", "/requests")
+            dl("list", "Looking for…", "/requests")
           ) : (
             <button type="button" className="dl" onClick={() => openAuth({ reason: "Sign in to see and post requests", next: "/requests" })}>
               <Icon name="list" />
-              <span>Looking for...</span>
+              <span>Looking for…</span>
             </button>
           )}
           <div className="dsec">Categories</div>

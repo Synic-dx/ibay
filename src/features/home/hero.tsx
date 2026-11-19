@@ -45,7 +45,19 @@ export function HeroCarousel() {
 
   return (
     <div className="heromain">
-      <div className="carousel" ref={ref} onScroll={(e) => setIdx(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))} aria-roledescription="carousel" aria-label="Highlights">
+      <div
+        className="carousel"
+        ref={ref}
+        onScroll={(e) => {
+          const w = e.currentTarget.clientWidth || 1;
+          const next = Math.round(e.currentTarget.scrollLeft / w);
+          if (next !== idx && next >= 0 && next < HEROES.length) {
+            setIdx(next);
+          }
+        }}
+        aria-roledescription="carousel"
+        aria-label="Highlights"
+      >
         {HEROES.map((h, i) => (
           <Link
             key={h.cta}
@@ -76,7 +88,7 @@ export function HeroCarousel() {
               {h.pics.map((p) => (
                 <div key={p}>
                   {/* eslint-disable-next-line @next/next/no-img-element -- decorative local images */}
-                  <img src={p} alt="" className={h.cover ? "" : "fit"} />
+                  <img src={p} alt="" className={h.cover ? "" : "fit"} decoding="async" />
                 </div>
               ))}
             </div>

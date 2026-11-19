@@ -202,9 +202,25 @@ export function BrowseControls({ state, sizes, total }: { state: BrowseState; si
               Price
             </span>
             <div className="row">
-              <input className="input" inputMode="numeric" placeholder="Min" value={draft.min} onChange={(e) => setDraft({ ...draft, min: e.target.value.replace(/\D/g, "") })} aria-label="Minimum price" />
+              <input
+                name="min"
+                className="input"
+                inputMode="numeric"
+                placeholder="Min ₹…"
+                value={draft.min}
+                onChange={(e) => setDraft({ ...draft, min: e.target.value.replace(/\D/g, "") })}
+                aria-label="Minimum price"
+              />
               <span className="faint">to</span>
-              <input className="input" inputMode="numeric" placeholder="Max" value={draft.max} onChange={(e) => setDraft({ ...draft, max: e.target.value.replace(/\D/g, "") })} aria-label="Maximum price" />
+              <input
+                name="max"
+                className="input"
+                inputMode="numeric"
+                placeholder="Max ₹…"
+                value={draft.max}
+                onChange={(e) => setDraft({ ...draft, max: e.target.value.replace(/\D/g, "") })}
+                aria-label="Maximum price"
+              />
             </div>
           </div>
           <div className="row" style={{ position: "sticky", bottom: 0, background: "var(--surface)", paddingTop: 10 }}>

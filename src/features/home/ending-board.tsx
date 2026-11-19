@@ -64,14 +64,15 @@ export function EndingBoard({ drops, auctions, allDrops }: { drops: ListingCard[
         <Countdown endsAt={l.endsAt!} hotMin={k === "d" ? 10 : 60} />
       </span>
       {k === "d" ? (
-        <button type="button" className="btn small er-b" onClick={() => claim(l)} disabled={pending}>
-          <Icon name="zap" />
+        <button type="button" className="btn small er-b" onClick={() => claim(l)} disabled={pending} aria-label={`Claim food drop: ${l.title}`}>
+          {pending ? <span className="spin" /> : <Icon name="zap" />}
           Claim
         </button>
       ) : (
         <Link
           className="btn small er-b"
           href={`/item/${l.id}?sheet=bid`}
+          aria-label={`Bid on auction: ${l.title}`}
           onClick={(e) => {
             if (!viewer) {
               e.preventDefault();

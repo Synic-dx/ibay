@@ -189,20 +189,24 @@ export function MyListingsTable({ rows, total, counts, params, guards, categorie
         helper.display({
           id: "select",
           header: () => (
-            <input type="checkbox" aria-label="Select all on this page" checked={allChecked} onChange={(e) => setSelected(e.target.checked ? new Set(rows.map((r) => r.id)) : new Set())} />
+            <label className="tbl-check-wrap" title="Select all on this page">
+              <input type="checkbox" aria-label="Select all on this page" checked={allChecked} onChange={(e) => setSelected(e.target.checked ? new Set(rows.map((r) => r.id)) : new Set())} />
+            </label>
           ),
           cell: ({ row }) => (
-            <input
-              type="checkbox"
-              aria-label={`Select ${row.original.title}`}
-              checked={selected.has(row.original.id)}
-              onChange={(e) => {
-                const s = new Set(selected);
-                if (e.target.checked) s.add(row.original.id);
-                else s.delete(row.original.id);
-                setSelected(s);
-              }}
-            />
+            <label className="tbl-check-wrap" title={`Select ${row.original.title}`}>
+              <input
+                type="checkbox"
+                aria-label={`Select ${row.original.title}`}
+                checked={selected.has(row.original.id)}
+                onChange={(e) => {
+                  const s = new Set(selected);
+                  if (e.target.checked) s.add(row.original.id);
+                  else s.delete(row.original.id);
+                  setSelected(s);
+                }}
+              />
+            </label>
           ),
         }),
         helper.accessor("title", {
@@ -255,7 +259,16 @@ export function MyListingsTable({ rows, total, counts, params, guards, categorie
         </div>
         <div className="iwrap tsearch">
           <Icon name="search" className="icon i16" />
-          <input className="input" placeholder="Search your listings" value={q} onChange={(e) => setQ(e.target.value)} aria-label="Search your listings" />
+          <input
+            name="q"
+            type="search"
+            spellCheck={false}
+            className="input"
+            placeholder="Search your listings…"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            aria-label="Search your listings"
+          />
         </div>
       </div>
       <div className="row" style={{ flexWrap: "wrap", gap: 8, marginBottom: 12 }}>
@@ -292,8 +305,8 @@ export function MyListingsTable({ rows, total, counts, params, guards, categorie
       )}
       {selected.size > 0 && params.tab !== "deleted" && (
         <div className="bulkbar" role="region" aria-label="Bulk actions">
-          <span>{selected.size} selected</span>
-          <span className="row">
+          <span className="mono" style={{ fontWeight: 600 }}>{selected.size} selected</span>
+          <span className="row" style={{ gap: 8 }}>
             <button type="button" className="btn quiet small" onClick={() => setSelected(new Set())}>
               Clear
             </button>
@@ -337,7 +350,9 @@ export function MyListingsTable({ rows, total, counts, params, guards, categorie
           <div className="lgroup mcards">
             {rows.map((l) => (
               <div className="lrow" key={l.id}>
-                <input type="checkbox" aria-label={`Select ${l.title}`} checked={selected.has(l.id)} onChange={(e) => setSelected((s) => { const n = new Set(s); if (e.target.checked) n.add(l.id); else n.delete(l.id); return n; })} />
+                <label className="mcard-check-wrap" title={`Select ${l.title}`}>
+                  <input type="checkbox" aria-label={`Select ${l.title}`} checked={selected.has(l.id)} onChange={(e) => setSelected((s) => { const n = new Set(s); if (e.target.checked) n.add(l.id); else n.delete(l.id); return n; })} />
+                </label>
                 <Link href={`/item/${l.id}`} style={{ width: 52, height: 52, borderRadius: 12, overflow: "hidden", flex: "none" }} aria-hidden="true" tabIndex={-1}>
                   <PhotoTile l={l} style={{ width: 52, height: 52 }} />
                 </Link>
@@ -349,7 +364,7 @@ export function MyListingsTable({ rows, total, counts, params, guards, categorie
                   </span>
                 </Link>
                 {["active", "paused"].includes(l.status) ? (
-                  <button type="button" className="btn sec small" aria-label={`Manage ${l.title}`} onClick={() => setManage(l)}>
+                  <button type="button" className="btn sec small" style={{ minWidth: 44, minHeight: 44, padding: 0, display: "grid", placeItems: "center" }} aria-label={`Manage ${l.title}`} onClick={() => setManage(l)}>
                     <Icon name="more" />
                   </button>
                 ) : (

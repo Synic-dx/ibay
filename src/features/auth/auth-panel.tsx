@@ -131,10 +131,6 @@ export function AuthPanel({
   };
 
   const google = () => {
-    if (!token && !noValidate) {
-      setCapErr("Please complete the security check first.");
-      return;
-    }
     start(() => googleSignIn(next ?? window.location.pathname, up ? "signup" : "signin"));
   };
 
@@ -181,7 +177,6 @@ export function AuthPanel({
               {formErr}
             </div>
           )}
-          <Captcha onVerify={onToken} resetKey={capReset} error={capErr} id="auth-captcha" />
           {googleEnabled && (
             <>
               <button type="button" className="gbtn" onClick={google} disabled={pending}>
@@ -259,6 +254,7 @@ export function AuthPanel({
                 </button>
               )}
             </div>
+            <Captcha onVerify={onToken} resetKey={capReset} error={capErr} id="auth-captcha" />
             <button className="btn block" type="submit" disabled={pending}>
               {pending ? <span className="spin" /> : null}
               {up ? "Create account" : "Send sign-in code"}
@@ -482,14 +478,34 @@ export function Onboarding({ onFinish }: { onFinish: () => void }) {
       <div className="field">
         <div className="iwrap">
           <Icon name="key" className="icon i18" />
-          <input className="input" placeholder="Room number, e.g. 212" value={room} onChange={(e) => setRoom(e.target.value)} aria-label="Room number" aria-invalid={!!errs.room} />
+          <input
+            name="room"
+            className="input"
+            placeholder="Room number, e.g. 212…"
+            value={room}
+            spellCheck={false}
+            onChange={(e) => setRoom(e.target.value)}
+            aria-label="Room number"
+            aria-invalid={!!errs.room}
+          />
         </div>
         {errs.room && <span className="ferr" role="alert"><Icon name="alert" className="icon i14" />{errs.room}</span>}
       </div>
       <div className="field">
         <div className="iwrap">
           <Icon name="chat" className="icon i18" />
-          <input className="input" type="tel" placeholder="WhatsApp (optional)" value={wa} onChange={(e) => setWa(e.target.value)} aria-label="WhatsApp number" aria-invalid={!!errs.whatsapp} />
+          <input
+            name="whatsapp"
+            className="input"
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            placeholder="WhatsApp (optional)…"
+            value={wa}
+            onChange={(e) => setWa(e.target.value)}
+            aria-label="WhatsApp number"
+            aria-invalid={!!errs.whatsapp}
+          />
         </div>
         {errs.whatsapp && <span className="ferr" role="alert"><Icon name="alert" className="icon i14" />{errs.whatsapp}</span>}
       </div>

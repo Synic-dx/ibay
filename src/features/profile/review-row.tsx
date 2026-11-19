@@ -9,8 +9,8 @@ export function ReviewRow({ r }: { r: ReviewItem }) {
         {r.score > 0 ? "+" : ""}
         {r.score}
       </span>
-      <div className="sm" style={{ flex: 1 }}>
-        <div>{r.reason}</div>
+      <div className="sm" style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ lineHeight: 1.45, textWrap: "pretty" }}>{r.reason}</div>
         {r.tags.length > 0 && (
           <div className="chips" style={{ marginTop: 6, gap: 4 }}>
             {r.tags.map((t) => (

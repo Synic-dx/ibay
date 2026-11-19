@@ -45,7 +45,7 @@ export async function fetchThread(convId: string): Promise<Thread | null> {
  * Opens (or reuses) the chat with a seller, optionally about an item and with a first message.
  * @returns the conversation id
  */
-export async function openChat(otherId: string, listingId?: string | null, prefill?: string): Promise<ActionResult<{ id: string }>> {
+export async function openChat(otherId: string, listingId?: string | null, prefill?: string): Promise<ActionResult<{ id: string; thread: Thread | null }>> {
   const viewer = await getViewer();
   if (!viewer) return fail("Sign in to chat with sellers.", undefined, "AUTH");
   if (!z.uuid().safeParse(otherId).success || otherId === viewer.id) return fail("You can't message yourself.");
@@ -54,8 +54,9 @@ export async function openChat(otherId: string, listingId?: string | null, prefi
   if (!(await rateLimit(`chat:${viewer.id}`, 60, 30))) return fail("Slow down a little. Try again in a minute.");
   const id = await startConversation(viewer.id, otherId, listingId, prefill?.trim() || undefined);
   if (!id) return fail("Couldn't open the chat.");
+  const thread = await getThread(id, viewer.id);
   revalidatePath("/messages");
-  return ok({ id });
+  return ok({ id, thread });
 }
 
 /** Sends a text message. */

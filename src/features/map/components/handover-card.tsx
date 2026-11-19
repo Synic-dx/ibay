@@ -26,7 +26,7 @@ const CampusMap = dynamic(() => import("./campus-map"), {
         borderRadius: "10px",
       }}
     >
-      Loading route map...
+      Loading route map…
     </div>
   ),
 });
@@ -139,21 +139,21 @@ export default function HandoverCard({ deal, viewerHostel, currentUserId }: Hand
         <div
           style={{
             padding: "8px 10px",
-            background: "#eff6ff",
-            border: "1px solid #bfdbfe",
+            background: "var(--brand-soft)",
+            border: "1px solid var(--line-2)",
             borderRadius: "8px",
             fontSize: "12px",
-            color: "#1e3a8a",
+            color: "var(--ink)",
             display: "flex",
             flexDirection: "column",
             gap: "3px",
           }}
         >
-          <span style={{ fontWeight: 600, fontSize: "11px", color: "#1d4ed8", display: "flex", alignItems: "center", gap: 5 }}>
+          <span style={{ fontWeight: 600, fontSize: "11px", color: "var(--brand-ink)", display: "flex", alignItems: "center", gap: 5 }}>
             <Icon name="lock" className="icon i14" />
             Seller Handover Instructions
           </span>
-          <span>{deal.handoverNote}</span>
+          <span style={{ color: "var(--ink)" }}>{deal.handoverNote}</span>
         </div>
       )}
 

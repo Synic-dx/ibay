@@ -116,9 +116,10 @@ export function BidSheet({ open, onOpenChange, l }: Base & { l: ListingDetail })
         >
           <div className="row">
             <input
+              name="bidAmount"
               className={`input ${err ? "bad" : ""}`}
               inputMode="numeric"
-              placeholder={`${fmt(nb)} or more`}
+              placeholder={`${fmt(nb)} or more…`}
               aria-label="Custom bid"
               aria-invalid={!!err}
               aria-describedby={err ? "bid-err" : undefined}
@@ -126,7 +127,7 @@ export function BidSheet({ open, onOpenChange, l }: Base & { l: ListingDetail })
               onChange={(e) => (setAmt(e.target.value), setErr(null))}
             />
             <button className="btn" type="submit" disabled={pending}>
-              Bid
+              {pending ? <span className="spin" /> : "Bid"}
             </button>
           </div>
           {err && (
@@ -215,19 +216,19 @@ export function BuySheet({ open, onOpenChange, l }: Base & { l: ListingCard }) {
           <div
             style={{
               padding: "12px 14px",
-              borderRadius: 10,
-              background: "var(--tint, rgba(2, 80, 95, 0.08))",
-              border: "1px solid var(--brand, #02505F)",
+              borderRadius: 12,
+              background: "var(--brand-soft)",
+              border: "1px solid var(--brand-pale, var(--line))",
               display: "flex",
               alignItems: "flex-start",
               gap: 10,
             }}
           >
-            <span style={{ color: "var(--brand, #02505F)", marginTop: 2 }}>
+            <span style={{ color: "var(--brand-ink)", marginTop: 2 }}>
               <Icon name="clock" className="icon i16" />
             </span>
             <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
-              <strong style={{ fontSize: 13, color: "var(--brand, #02505F)" }}>Immediate Pickup · Ready Now</strong>
+              <strong style={{ fontSize: 13, color: "var(--brand-ink)" }}>Immediate Pickup · Ready Now</strong>
               <span style={{ fontSize: 12, color: "var(--ink)", lineHeight: 1.4 }}>
                 Food drops expire quickly. Please meet {first} at {l.pickupHostel} right away after confirming.
               </span>

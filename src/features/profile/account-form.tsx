@@ -133,7 +133,15 @@ export function AccountForm({ me }: { me: Me }) {
             <Icon name="key" />
             Room
           </label>
-          <input id="a-room" className={`input ${e.room ? "bad" : ""}`} placeholder="e.g. 212 or B204" aria-invalid={!!e.room} aria-describedby={e.room ? "a-room-err" : undefined} {...register("room")} />
+          <input
+            id="a-room"
+            className={`input ${e.room ? "bad" : ""}`}
+            placeholder="e.g. 212 or B204…"
+            spellCheck={false}
+            aria-invalid={!!e.room}
+            aria-describedby={e.room ? "a-room-err" : undefined}
+            {...register("room")}
+          />
           {err("room")}
         </div>
         <div className="field">
@@ -141,7 +149,17 @@ export function AccountForm({ me }: { me: Me }) {
             <Icon name="chat" />
             WhatsApp
           </label>
-          <input id="a-wa" type="tel" className={`input ${e.whatsapp ? "bad" : ""}`} placeholder="+91" aria-invalid={!!e.whatsapp} aria-describedby={e.whatsapp ? "a-whatsapp-err" : "a-wa-hint"} {...register("whatsapp")} />
+          <input
+            id="a-wa"
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            className={`input ${e.whatsapp ? "bad" : ""}`}
+            placeholder="+91…"
+            aria-invalid={!!e.whatsapp}
+            aria-describedby={e.whatsapp ? "a-whatsapp-err" : "a-wa-hint"}
+            {...register("whatsapp")}
+          />
           <span className="xs faint" id="a-wa-hint">
             Only shown to people you are already chatting with.
           </span>

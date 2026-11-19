@@ -184,7 +184,7 @@ export async function browseListings(p: BrowseParams, viewer: Viewer | null): Pr
 export async function visibleCatalogue(viewer: Viewer | null): Promise<ListingCard[]> {
   const nowIso = new Date().toISOString();
   const [{ data }, saved] = await Promise.all([
-    db().from("listings").select(CARD_SELECT).eq("status", "active").is("deleted_at", null).order("created_at", { ascending: false }).limit(500),
+    db().from("listings").select(CARD_SELECT).eq("status", "active").is("deleted_at", null).order("created_at", { ascending: false }).limit(150),
     savedIds(viewer?.id),
   ]);
   const cards = (data ?? [])

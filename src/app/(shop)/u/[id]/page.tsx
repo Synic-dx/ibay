@@ -81,20 +81,20 @@ export default async function ProfilePage({
             >
               <div style={{ flex: 1 }}>
                 <div className="faint xs">Plume</div>
-                <b style={{ fontSize: 20 }}>
+                <b style={{ fontSize: 20, fontVariantNumeric: "tabular-nums" }}>
                   {u.plume > 0 ? "+" : ""}
                   {Math.round(u.plume)}
                 </b>
               </div>
               <div style={{ flex: 1 }}>
                 <div className="faint xs">Level</div>
-                <b className={`trust ${t.tone}`} style={{ fontSize: 13 }}>
+                <span className={`trust pill ${t.tone}`} style={{ fontSize: 12 }}>
                   {t.label}
-                </b>
+                </span>
               </div>
               <div style={{ flex: 1 }}>
                 <div className="faint xs">Deals</div>
-                <b style={{ fontSize: 20 }}>{u.ratedDeals}</b>
+                <b style={{ fontSize: 20, fontVariantNumeric: "tabular-nums" }}>{u.ratedDeals}</b>
               </div>
             </div>
             {viewer?.id !== u.id && (
@@ -122,28 +122,7 @@ export default async function ProfilePage({
                   aria-current={
                     (k === "reviews") === showReviews ? "page" : undefined
                   }
-                  style={{
-                    flex: 1,
-                    minHeight: 38,
-                    borderRadius: 999,
-                    fontWeight: 600,
-                    fontSize: 13,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color:
-                      (k === "reviews") === showReviews
-                        ? "var(--brand-ink)"
-                        : "var(--ink-2)",
-                    background:
-                      (k === "reviews") === showReviews
-                        ? "var(--surface)"
-                        : undefined,
-                    boxShadow:
-                      (k === "reviews") === showReviews
-                        ? "var(--shr)"
-                        : undefined,
-                  }}
+                  className={(k === "reviews") === showReviews ? "on" : ""}
                 >
                   {n}
                 </Link>
@@ -167,11 +146,12 @@ export default async function ProfilePage({
                 ))}
               </div>
             ) : (
-              <div className="empty">
+              <div className="empty" style={{ margin: "32px auto" }}>
                 <span className="ei">
                   <Icon name="store" />
                 </span>
                 <h3>Nothing listed</h3>
+                <p className="sm">{u.name} has no active listings on campus right now.</p>
               </div>
             )}
           </div>
