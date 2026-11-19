@@ -4,7 +4,7 @@
 -- listings or deals are seeded: everything else comes from real accounts.
 -- =====================================================================
 insert into public.categories (id, name, short_name, "group", description, icon, cover_url, cover_fit, sort) values
-  ('preprocess', 'Preprocess Store', 'Preprocess', 'Seasons', 'Wigs, costumes, loud outfits for club inductions', 'drama', '/img/kurta-pink.webp', 'cover', 0),
+  ('preprocess', 'Getups & Costumes', 'Getups', 'Seasons', 'Wigs, costumes and props for club and committee interviews, preprocesses, class presentations and theme nights. Rent by the hour.', 'drama', '/img/kurta-pink.webp', 'cover', 0),
   ('formals', 'Placement Formals', 'Formals', 'Seasons', 'Suits, blazers, formal shoes, belts', 'shirt', '/img/blazer.webp', 'contain', 1),
   ('ethnic', 'Ethnic & Festive', 'Ethnic', 'Seasons', 'Kurtas, sarees for cultural nights', 'sparkles', '/img/kurta-cream.webp', 'cover', 2),
   ('events', 'Fest & Event Gear', 'Event gear', 'Seasons', 'For Atharv Ranbhoomi and club events: cameras, speakers, lights, props', 'party', '/img/speaker.webp', 'contain', 3),

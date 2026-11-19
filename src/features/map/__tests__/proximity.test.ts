@@ -20,8 +20,8 @@ describe("Campus Residence Proximity", () => {
     expect(nearby).not.toContain("SR 14");
   });
 
-  it("handles unknown or Day scholar gracefully", () => {
-    const nearby = getNearbyResidences("Day scholar");
-    expect(nearby).toEqual(["Day scholar"]);
+  it("handles an unknown or missing residence gracefully", () => {
+    expect(getNearbyResidences("Somewhere else")).toEqual(["Somewhere else"]);
+    expect(getNearbyResidences("")).toEqual([]);
   });
 });

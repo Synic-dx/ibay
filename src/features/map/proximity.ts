@@ -26,7 +26,7 @@ const residenceLocations = locations.filter(
 );
 
 export function getResidenceCoordinates(residenceName: string): { lat: number; lng: number } | null {
-  if (!residenceName || residenceName === "Day scholar") return null;
+  if (!residenceName) return null;
   const target = residenceName.trim().toLowerCase().replace(/[^a-z0-9]/g, "");
   const found = residenceLocations.find(
     (r) => r.name.toLowerCase().replace(/[^a-z0-9]/g, "") === target
@@ -35,9 +35,7 @@ export function getResidenceCoordinates(residenceName: string): { lat: number; l
 }
 
 export function getNearbyResidences(residenceName: string, radiusMeters = 250): string[] {
-  if (!residenceName || residenceName === "Day scholar") {
-    return [residenceName || "Day scholar"];
-  }
+  if (!residenceName) return [];
 
   const origin = getResidenceCoordinates(residenceName);
   if (!origin) return [residenceName];
@@ -87,7 +85,7 @@ export function calculateWalkingEffort(
   destLat: number,
   destLng: number
 ): WalkingEffort | null {
-  if (!viewerHostel || viewerHostel === "Day scholar") return null;
+  if (!viewerHostel) return null;
   const origin = getResidenceCoordinates(viewerHostel);
   if (!origin) return null;
   const dist = calculateDistanceMeters(origin.lat, origin.lng, destLat, destLng);

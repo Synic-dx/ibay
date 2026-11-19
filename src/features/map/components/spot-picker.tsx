@@ -141,7 +141,7 @@ export default function SpotPicker({
             Drop or drag a pin where the buyer can meet you for handover.
           </p>
         </div>
-        {initialHostel && initialHostel !== "Day scholar" && (
+        {initialHostel && (
           <button
             type="button"
             className={styles.snapBtn}

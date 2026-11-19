@@ -35,7 +35,6 @@ export const HOSTELS = [
   "Executive Residence 03",
   "Executive Residence 04",
   "Married Residence 01",
-  "Day scholar",
 ] as const;
 export type Hostel = (typeof HOSTELS)[number];
 

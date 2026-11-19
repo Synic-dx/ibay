@@ -73,7 +73,7 @@ export default async function BrowsePage({ searchParams }: { searchParams: SP })
           <div className="panel note" style={{ padding: "10px 14px", marginBottom: 12 }}>
             <Icon name="clock" />
             <span>
-              Rented <b>by the hour</b>. Open an outfit, pick a day, book the free hours.
+              For club and committee interviews, preprocesses, class presentations and theme nights. Rented <b>by the hour</b>: open an item, pick a day, book the free hours.
             </span>
           </div>
         )}

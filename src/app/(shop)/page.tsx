@@ -27,7 +27,7 @@ import { RequestLink } from "@/features/requests/request-link";
 import { SetupNotice } from "@/components/setup-notice";
 
 const STORIES: [string, string, boolean, string][] = [
-  ["preprocess", "Preprocess", true, "/browse?cat=preprocess"],
+  ["preprocess", "Getups", true, "/browse?cat=preprocess"],
   ["gym", "Gym", true, "/browse?cat=gym"],
   ["food", "Food drops", true, "/browse?cat=food"],
   ["auction", "Auctions", false, "/browse?modes=auction"],
@@ -189,7 +189,7 @@ export default async function HomePage() {
         </section>
 
         <Rail icon="tag" title="Big brands, small prices" sub="Original price vs what it is going for now" items={deals.slice(0, 10)} more="/browse?sort=off" />
-        <Rail icon="drama" title="Preprocess Store" sub="Rent by the hour for club and committee preprocesses" items={act.filter((l) => l.categoryId === "preprocess")} more="/browse?cat=preprocess" />
+        <Rail icon="drama" title="Getups & Costumes" sub="For club and committee interviews, preprocesses and presentations. Rent by the hour." items={act.filter((l) => l.categoryId === "preprocess")} more="/browse?cat=preprocess" />
         <Rail icon="dumbbell" title="Gym Corner" items={act.filter((l) => l.categoryId === "gym")} more="/browse?cat=gym" />
         <Rail icon="book" title="Novels, comics & manga" sub="Buy or rent by the week" items={act.filter((l) => l.categoryId === "reads")} more="/browse?cat=reads" />
         <Rail icon="repeat" title="Rent, don't buy" sub="Coolers, calculators, speakers, cycles" items={rent} more="/browse?modes=rent" />

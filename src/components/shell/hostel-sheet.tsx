@@ -28,7 +28,7 @@ export function HostelSheet({ open, onOpenChange, current }: { open: boolean; on
         {HOSTELS.map((h) => (
           <button key={h} type="button" className="lrow" onClick={() => pick(h)} disabled={pending}>
             <span className="li">
-              <Icon name={h === "Day scholar" ? "home" : "bed"} />
+              <Icon name="bed" />
             </span>
             <span className="lt">
               <b>{h}</b>

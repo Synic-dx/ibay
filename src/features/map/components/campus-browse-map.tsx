@@ -97,7 +97,6 @@ export default function CampusBrowseMap({ listings }: CampusBrowseMapProps) {
     }> = [];
 
     for (const h of HOSTELS) {
-      if (h === "Day scholar") continue;
       const coords = getResidenceCoordinates(h);
       if (!coords) continue;
 

@@ -15,8 +15,8 @@ describe("Handover Privacy & Walking Effort", () => {
     }
   });
 
-  it("handles day scholar or missing origin gracefully", () => {
-    const effort = calculateWalkingEffort("Day scholar", 22.6272, 75.7892);
+  it("handles an unknown or missing origin gracefully", () => {
+    const effort = calculateWalkingEffort("Somewhere else", 22.6272, 75.7892);
     expect(effort).toBeNull();
   });
 });

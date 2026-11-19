@@ -24,7 +24,7 @@ import type { ListingCard } from "@/features/listings/types";
 const GROUPS = ["Seasons", "Study", "Hostel life", "Play"];
 const GROUP_ICON: Record<string, string> = { Seasons: "cal", Study: "grad", "Hostel life": "bed", Play: "trophy" };
 const QUICK: [string, string][] = [
-  ["preprocess", "Preprocess"], ["formals", "Formals"], ["ethnic", "Ethnic"], ["clothing", "Fashion"], ["gadgets", "Gadgets"],
+  ["preprocess", "Getups"], ["formals", "Formals"], ["ethnic", "Ethnic"], ["clothing", "Fashion"], ["gadgets", "Gadgets"],
   ["sports", "Sports"], ["gym", "Gym Corner"], ["books", "Books"], ["exam", "CFA & CAT"], ["reads", "Manga & Novels"],
   ["room", "Room"], ["appliances", "Appliances"], ["food", "Food drops"], ["free", "Free"],
 ];

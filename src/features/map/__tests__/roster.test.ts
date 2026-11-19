@@ -2,7 +2,7 @@ import { describe, it, expect } from "vitest";
 import { HOSTELS, profileSchema } from "@/lib/validation/auth";
 
 describe("IIM Indore Residence Roster", () => {
-  it("includes all official campus residences and day scholar", () => {
+  it("includes all official campus residences (no day scholars at IIM Indore)", () => {
     // Must include SR residences
     expect(HOSTELS).toContain("SR 01");
     expect(HOSTELS).toContain("SR 16A");
@@ -14,7 +14,7 @@ describe("IIM Indore Residence Roster", () => {
     expect(HOSTELS).toContain("DPM Residence");
     expect(HOSTELS).toContain("Married Residence 01");
     expect(HOSTELS).toContain("Executive Residence 01");
-    expect(HOSTELS).toContain("Day scholar");
+    expect(HOSTELS).not.toContain("Day scholar");
     // Must NOT contain old placeholder hostels
     expect(HOSTELS).not.toContain("Hostel 1");
     expect(HOSTELS).not.toContain("Hostel 6");

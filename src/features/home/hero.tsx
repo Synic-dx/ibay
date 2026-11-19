@@ -15,7 +15,7 @@ import { useApp } from "@/components/app-context";
 type Slide = { eb: [string, string]; t: string; p: string; href: string; cta: string; pics: string[]; cover?: boolean; gated?: string };
 
 const HEROES: Slide[] = [
-  { eb: ["drama", "Preprocess season"], t: "Got a wild dress code for preprocesses? Rent it by the hour.", p: "Wigs, neon suits, loud shirts, sarees. Book only the hours you need.", href: "/browse?cat=preprocess", cta: "Preprocess Store", pics: ["/img/kurta-pink.webp", "/img/blouse-green.webp"], cover: true },
+  { eb: ["drama", "Getups & Costumes"], t: "Got a wild dress code for preprocesses? Rent it by the hour.", p: "Wigs, neon suits, loud shirts, sarees. Book only the hours you need.", href: "/browse?cat=preprocess", cta: "Shop Getups & Costumes", pics: ["/img/kurta-pink.webp", "/img/blouse-green.webp"], cover: true },
   { eb: ["tag", "Big brands, small prices"], t: "Ray-Ban, Yonex, Nike, Apple. Up to 70% off.", p: "Every listing shows the original price and how old it is.", href: "/browse?sort=off", cta: "See the deals", pics: ["/img/af1.webp", "/img/smartwatch.webp"] },
   { eb: ["sparkles", "Garba Night & Diwali"], t: "Chaniya cholis, kurtas and dandiya, ready to rent.", p: "Plus fairy lights and diyas for your room.", href: "/browse?coll=garba", cta: "Shop festive", pics: ["/img/chaniya.webp", "/img/kurta-cream.webp"] },
   { eb: ["hammer", "Live auctions"], t: "Bid on jackets, racquets and kurtas. Highest bid wins.", p: "Every auction shows the top bid and a live timer.", href: "/browse?modes=auction", cta: "See live auctions", pics: ["/img/puffer.webp", "/img/racquet.webp"] },
