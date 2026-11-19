@@ -11,7 +11,7 @@
  */
 import { z } from "zod";
 import { getViewer } from "@/lib/auth/session";
-import { db } from "@/lib/supabase/server";
+import { db, dbReady } from "@/lib/supabase/server";
 import { clientIp, rateLimit } from "@/lib/security/guard";
 import { fallbackAnswer } from "@/features/mayu/fallback";
 import { runGeminiCascade } from "@/features/mayu/cascade";
@@ -70,19 +70,32 @@ export async function POST(req: Request) {
 
       // Fallback: local database keyword search over the same listings if no AI response
       if (!answer) {
-        const fb = await fallbackAnswer(question, viewer);
-        answer = fb.text;
-        send({ t: "text", v: fb.text });
-        if (fb.cards.length) send({ t: "cards", v: fb.cards });
+        try {
+          if (dbReady()) {
+            const fb = await fallbackAnswer(question, viewer);
+            answer = fb.text;
+            send({ t: "text", v: fb.text });
+            if (fb.cards.length) send({ t: "cards", v: fb.cards });
+          } else {
+            answer = "I am ready to help, but the database connection is currently pending. Please check back shortly.";
+            send({ t: "text", v: answer });
+          }
+        } catch (err) {
+          console.warn("[Mayu Route] Fallback answer error:", err);
+          answer = "I could not find matches right now. Please try asking again.";
+          send({ t: "text", v: answer });
+        }
       }
 
       try {
-        await db().from("ai_conversations").insert({
-          user_id: viewer?.id ?? null,
-          question,
-          answer: answer.slice(0, 2000),
-          tool_calls: [...cards.keys()],
-        });
+        if (dbReady()) {
+          await db().from("ai_conversations").insert({
+            user_id: viewer?.id ?? null,
+            question,
+            answer: answer.slice(0, 2000),
+            tool_calls: [...cards.keys()],
+          });
+        }
       } catch (err) {
         console.warn("[Mayu Route] Failed to log conversation:", err);
       }
