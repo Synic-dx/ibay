@@ -444,9 +444,11 @@ input[type=range]{width:100%;accent-color:var(--brand);height:28px}
 .typing span{display:inline-block;width:6px;height:6px;border-radius:99px;background:var(--ink-3);margin-right:3px;animation:bl 1s infinite}
 .typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
 @keyframes bl{50%{opacity:.2}}
-.empty{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:40px 20px;color:var(--ink-2)}
-.empty .ei{width:72px;height:72px;border-radius:24px;background:var(--surface);box-shadow:var(--shr);display:grid;place-items:center;color:var(--brand-ink)}
+.empty{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:48px 24px;color:var(--ink-2)}
+.empty .ei{width:72px;height:72px;border-radius:24px;background:var(--surface);box-shadow:var(--shr);border:1px solid var(--line-2);display:grid;place-items:center;color:var(--brand-ink)}
 .empty .ei .icon{width:32px;height:32px}
+.empty h3{font-size:18px;font-weight:700;color:var(--ink);margin:0;text-wrap:balance}
+.empty p{font-size:13.5px;color:var(--ink-3);max-width:340px;margin:0;text-wrap:pretty;line-height:1.45}
 .agekey{display:flex;gap:10px;flex-wrap:wrap;font-size:11px;color:var(--ink-2);margin-bottom:10px}
 .agekey span{display:inline-flex;align-items:center;gap:4px}.agekey i{width:9px;height:9px;border-radius:99px;display:inline-block}
 .stat{padding:14px 16px;display:flex;flex-direction:column;gap:6px;text-align:left;border-radius:18px;position:relative;background:var(--surface);box-shadow:var(--shr);transition:transform .15s ease,box-shadow .15s ease}
@@ -468,8 +470,8 @@ a.stat:active{transform:scale(.98)}
     font-size: 24px;
   }
 }
-.plumebar{height:8px;border-radius:99px;background:var(--sunken);box-shadow:var(--shw);overflow:hidden}
-.plumebar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--mint),var(--brand))}
+.plumebar{height:8px;border-radius:99px;background:var(--sunken);box-shadow:var(--shw);overflow:hidden;border:1px solid var(--line-2)}
+.plumebar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--mint),var(--brand));transition:width .4s cubic-bezier(.2,.8,.3,1)}
 
 /* ================= responsive: tablet + desktop ================= */
 .itemcols{display:block}
