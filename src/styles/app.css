@@ -54,9 +54,12 @@ body { background: var(--bg); }
 .thumbs .th .cv { position: absolute; left: 4px; bottom: 4px; }
 
 /* Bulk action bar on My listings. */
-.bulkbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; border-radius: 16px; background: var(--brand-soft); color: var(--brand-ink); font-weight: 600; font-size: 13px; margin-bottom: 10px; }
-.tbl input[type=checkbox], .mcards input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--brand); }
-.pager { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 12px; font-size: 13px; color: var(--ink-2); }
+.bulkbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 16px; border-radius: 16px; background: var(--brand-soft); border: 1px solid var(--brand-pale, var(--glass-edge)); color: var(--brand-ink); font-weight: 600; font-size: 13.5px; margin-bottom: 12px; animation: slideDown .2s cubic-bezier(.2,.8,.3,1); }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+.tbl-check-wrap { display: inline-flex; align-items: center; justify-content: center; min-width: 32px; min-height: 32px; cursor: pointer; }
+.mcard-check-wrap { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; margin: -10px -4px -10px -10px; cursor: pointer; flex: none; }
+.tbl input[type=checkbox], .mcards input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--brand); cursor: pointer; }
+.pager { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 14px; font-size: 13px; color: var(--ink-2); }
 
 /* Mayu tool-result cards stay inside the bubble. */
 .bm .mini { color: inherit; }

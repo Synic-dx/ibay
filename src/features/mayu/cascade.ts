@@ -20,12 +20,16 @@ import type { ListingCard } from "@/features/listings/types";
  * available"), 1.5 / 3 flash ("not found"), 3.6 / 3.8 flash (never answered,
  * which is what made Mayu spin forever).
  */
-export const GEMINI_FALLBACK_MODELS = ["gemini-3.1-flash-lite", "gemini-3.5-flash-lite"];
+export const GEMINI_FALLBACK_MODELS = [
+  "gemini-3.5-flash-lite",
+  "gemini-flash-lite-latest",
+  "gemini-3.1-flash-lite",
+];
 
 /** A model that hasn't started answering within this time is skipped. */
-const FIRST_RESPONSE_MS = 12_000;
+const FIRST_RESPONSE_MS = 5_000;
 /** Hard cap for the whole cascade; after this the keyword answer is used. */
-const TOTAL_DEADLINE_MS = 25_000;
+const TOTAL_DEADLINE_MS = 12_000;
 
 export function isRateLimitOrModelError(err: unknown): boolean {
   if (!err) return false;
@@ -99,8 +103,6 @@ export async function runGeminiCascade({
         stopWhen: isStepCount(4),
         maxRetries: 0,
         abortSignal: AbortSignal.any([firstResponse.signal, deadline]),
-        // "low" thinking was the fastest consistent setting in our tests.
-        providerOptions: { google: { thinkingConfig: { thinkingLevel: "low" } } },
       });
 
       for await (const part of result.stream) {

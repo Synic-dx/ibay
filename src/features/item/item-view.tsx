@@ -12,7 +12,7 @@
  */
 import Link from "@/components/ui/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState, useMemo, useTransition } from "react";
+import { useEffect, useState, useMemo, useTransition, useRef } from "react";
 import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
 import { Avatar } from "@/components/brand";
@@ -86,9 +86,20 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
   const [saved, setSaved] = useState(l.saved);
   const [slide, setSlide] = useState(0);
   const [pending, start] = useTransition();
+  const trackRef = useRef<HTMLDivElement>(null);
   const mine = viewer?.id === l.seller.id;
   const s = l.seller;
   const first = s.name.split(" ")[0];
+
+  const scrollToSlide = (idx: number) => {
+    setSlide(idx);
+    if (trackRef.current) {
+      trackRef.current.scrollTo({
+        left: idx * trackRef.current.clientWidth,
+        behavior: "smooth",
+      });
+    }
+  };
 
   const effectivePickupHostel = useMemo(() => {
     if (l.pickupLat && l.pickupLng) {
@@ -343,7 +354,7 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
         <div className="itemcols">
           <div className="itemleft">
             <div className="gal">
-              <div className="gtrack" onScroll={(e) => setSlide(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))} aria-label="Photos">
+              <div className="gtrack" ref={trackRef} onScroll={(e) => setSlide(Math.round(e.currentTarget.scrollLeft / e.currentTarget.clientWidth))} aria-label="Photos">
                 {slides.map(({ p, zoom }, i) => (
                   <div className="gslide" key={i}>
                     {p ? (
@@ -358,21 +369,31 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
               <button type="button" className="fbtn" style={{ left: 12 }} onClick={() => (window.history.length > 1 ? router.back() : router.push("/"))} aria-label="Back">
                 <Icon name="back" />
               </button>
-              <button type="button" className="fbtn" style={{ right: 108 }} onClick={share} aria-label="Share">
+              <button type="button" className="fbtn" style={{ right: 116 }} onClick={share} aria-label="Share">
                 <Icon name="share" />
               </button>
-              <button type="button" className={`fbtn ${saved ? "on" : ""}`} style={{ right: 60 }} onClick={heart} aria-label={saved ? "Remove from saved" : "Save"} aria-pressed={saved}>
+              <button type="button" className={`fbtn ${saved ? "on" : ""}`} style={{ right: 64 }} onClick={heart} aria-label={saved ? "Remove from saved" : "Save"} aria-pressed={saved}>
                 <Icon name="heart" />
               </button>
               <ThemeToggle className="fbtn mthm" style={{ right: 12 }} />
               <div className="gtag">
                 <ModeBadge l={l} />
               </div>
-              <div className="gdots" aria-hidden="true">
-                {slides.map((_, i) => (
-                  <i key={i} className={i === slide ? "on" : ""} />
-                ))}
-              </div>
+              {slides.length > 1 && (
+                <div className="gdots" role="tablist" aria-label="Photos carousel navigation">
+                  {slides.map((_, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      role="tab"
+                      aria-selected={i === slide}
+                      aria-label={`Photo ${i + 1} of ${slides.length}`}
+                      className={`gdot ${i === slide ? "on" : ""}`}
+                      onClick={() => scrollToSlide(i)}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 

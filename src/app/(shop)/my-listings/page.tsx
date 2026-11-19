@@ -45,15 +45,19 @@ export default async function MyListingsPage({ searchParams }: { searchParams: P
           {tiles.map(([i, n, v, href]) =>
             href ? (
               <Link key={n} className="panel stat" href={href}>
-                <Icon name={i} />
+                <div className="stat-head">
+                  <Icon name={i} />
+                  <span className="xs muted">{n}</span>
+                </div>
                 <b>{v}</b>
-                <span className="xs muted">{n}</span>
               </Link>
             ) : (
               <div key={n} className="panel stat">
-                <Icon name={i} />
+                <div className="stat-head">
+                  <Icon name={i} />
+                  <span className="xs muted">{n}</span>
+                </div>
                 <b>{v}</b>
-                <span className="xs muted">{n}</span>
               </div>
             ),
           )}
