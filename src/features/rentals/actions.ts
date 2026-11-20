@@ -15,6 +15,7 @@ import { fail, ok, type ActionResult } from "@/lib/action-result";
 import { friendlyDbError } from "@/lib/db-errors";
 import { startConversation } from "@/features/chat/service";
 import { generateOtp, hashOtp } from "@/features/deals/actions";
+import { refreshListingPages } from "@/features/listings/actions/shared";
 
 const schema = z
   .object({
@@ -57,7 +58,9 @@ export async function bookRental(input: { listingId: string; start: string; end:
 
   const { data: l } = await db().from("listings").select("seller_id").eq("id", listingId).single();
   const conv = l ? await startConversation(viewer.id, l.seller_id, listingId, message, res.transaction_id) : null;
-  revalidatePath(`/item/${listingId}`);
+  refreshListingPages(listingId);
   revalidatePath("/deals");
+  revalidatePath("/my-listings");
+  revalidatePath("/you");
   return ok({ conversationId: conv, amount: res.amount }, "Request sent");
 }

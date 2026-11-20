@@ -18,6 +18,7 @@ import { rateLimit } from "@/lib/security/guard";
 import { getThread, listThreads, type Thread, type ThreadSummary } from "./queries";
 import { notify, ping, startConversation } from "./service";
 import { generateOtp, hashOtp } from "@/features/deals/otp-crypto";
+import { refreshListingPages } from "@/features/listings/actions/shared";
 
 /** Loads a conversation and checks the viewer is in it. */
 async function membership(convId: string) {
@@ -45,16 +46,22 @@ export async function fetchThread(convId: string): Promise<Thread | null> {
  * Opens (or reuses) the chat with a seller, optionally about an item and with a first message.
  * @returns the conversation id
  */
-export async function openChat(otherId: string, listingId?: string | null, prefill?: string): Promise<ActionResult<{ id: string; thread: Thread | null }>> {
+export async function openChat(
+  otherId: string,
+  listingId?: string | null,
+  prefill?: string,
+  transactionId?: string | null,
+): Promise<ActionResult<{ id: string; thread: Thread | null }>> {
   const viewer = await getViewer();
   if (!viewer) return fail("Sign in to chat with sellers.", undefined, "AUTH");
   if (!z.uuid().safeParse(otherId).success || otherId === viewer.id) return fail("You can't message yourself.");
   if (listingId && !z.uuid().safeParse(listingId).success) return fail("Listing not found.");
+  if (transactionId && !z.uuid().safeParse(transactionId).success) return fail("Deal not found.");
   if (prefill && prefill.length > 1000) return fail("Keep messages under 1,000 characters.");
   if (!(await rateLimit(`chat:${viewer.id}`, 60, 30))) return fail("Slow down a little. Try again in a minute.");
-  const id = await startConversation(viewer.id, otherId, listingId, prefill?.trim() || undefined);
+  const id = await startConversation(viewer.id, otherId, listingId, prefill?.trim() || undefined, transactionId);
   if (!id) return fail("Couldn't open the chat.");
-  const thread = await getThread(id, viewer.id);
+  const thread = await getThread(id, viewer.id, transactionId);
   revalidatePath("/messages");
   return ok({ id, thread });
 }
@@ -131,5 +138,10 @@ export async function respondOffer(messageId: string, accept: boolean): Promise<
   }
   await notify(m.other, "offer", "tag", `${viewer.name.split(" ")[0]} ${accept ? "accepted" : "declined"} your offer of ${fmt(msg.offer_amount)}.`, `/messages/${m.conv.id}`);
   revalidatePath("/deals");
+  revalidatePath("/my-listings");
+  revalidatePath("/you");
+  if (m.conv.listing_id) {
+    refreshListingPages(m.conv.listing_id);
+  }
   return ok((await getThread(m.conv.id, viewer.id))!);
 }

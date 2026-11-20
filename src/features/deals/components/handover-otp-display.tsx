@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useTransition } from "react";
 import { toast } from "sonner";
 import { Icon } from "@/components/ui/icon";
+import { triggerHaptic } from "@/lib/haptics";
 import { getHandoverOtp, regenerateHandoverOtp } from "../actions";
 
 interface HandoverOtpDisplayProps {
@@ -55,6 +56,7 @@ export default function HandoverOtpDisplay({
 
   const handleCopy = () => {
     if (!currentCode) return;
+    triggerHaptic("medium");
     navigator.clipboard.writeText(currentCode);
     setCopied(true);
     toast.success("Verification code copied to clipboard");

@@ -135,6 +135,30 @@ export default async function BrowsePage({ searchParams }: { searchParams: SP })
               </Link>
             )}
           </>
+        ) : s.q ? (
+          <div className="empty-search-card">
+            <div className="empty-search-badge">
+              <Icon name="messagePlus" className="icon i16" />
+              <span>Campus Request Board</span>
+            </div>
+            <h3>Can&apos;t find &ldquo;{s.q}&rdquo; on campus?</h3>
+            <p>
+              Students across all 18 hostels might have what you need sitting in their room. Post a quick request and they can reply with photos and prices.
+            </p>
+            <div className="row" style={{ gap: 10, justifyContent: "center", flexWrap: "wrap", marginTop: 8 }}>
+              <RequestLink
+                href={`/requests?new=1&text=${encodeURIComponent(s.q)}`}
+                className="btn mint"
+                style={{ padding: "10px 20px" }}
+              >
+                <Icon name="plus" />
+                Post request for &ldquo;{s.q}&rdquo;
+              </RequestLink>
+              <Link href="/browse" className="btn sec" style={{ padding: "10px 18px" }}>
+                Browse all items
+              </Link>
+            </div>
+          </div>
         ) : (
           <div className="empty">
             <span className="ei">
@@ -142,7 +166,7 @@ export default async function BrowsePage({ searchParams }: { searchParams: SP })
             </span>
             <h3>No matches yet</h3>
             <p className="sm">Post a request and people who have it can reply.</p>
-            <RequestLink href={`/requests?new=1${s.q ? `&text=${encodeURIComponent(s.q)}` : ""}`} className="btn">
+            <RequestLink href="/requests?new=1" className="btn">
               <Icon name="plus" />
               Post &quot;I am looking for...&quot;
             </RequestLink>

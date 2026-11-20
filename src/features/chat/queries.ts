@@ -98,7 +98,7 @@ export async function listThreads(me: string): Promise<ThreadSummary[]> {
  * One thread. Marks the other person's messages as read.
  * @returns null if it doesn't exist or you are not a member (the page shows 404)
  */
-export async function getThread(id: string, me: string): Promise<Thread | null> {
+export async function getThread(id: string, me: string, dealId?: string | null): Promise<Thread | null> {
   if (!/^[0-9a-f-]{36}$/i.test(id)) return null;
   const { data: c } = await db()
     .from("conversations")
@@ -107,27 +107,43 @@ export async function getThread(id: string, me: string): Promise<Thread | null> 
     .maybeSingle();
   const conv = c as any;
   if (!conv || (conv.user_a !== me && conv.user_b !== me)) return null;
+
+  let activeTx = conv.tx;
+  let activeListingId = conv.listing_id;
+  if (dealId && /^[0-9a-f-]{36}$/i.test(dealId) && conv.transaction_id !== dealId) {
+    const { data: specifiedTx } = await db()
+      .from("transactions")
+      .select("id,amount,stage,kind,buyer_id,seller_id,listing_id,handover_scheduled_at,handover_status,handover_proposed_by,delivery_otp_plain,return_otp_plain")
+      .eq("id", dealId)
+      .maybeSingle();
+    if (specifiedTx && (specifiedTx.buyer_id === me || specifiedTx.seller_id === me)) {
+      activeTx = specifiedTx;
+      if (specifiedTx.listing_id) activeListingId = specifiedTx.listing_id;
+      await db().from("conversations").update({ transaction_id: dealId, ...(specifiedTx.listing_id ? { listing_id: specifiedTx.listing_id } : {}) }).eq("id", id);
+    }
+  }
+
   const [{ data: msgs }, listingRes] = await Promise.all([
     db().from("messages").select("id,kind,body,offer_amount,offer_status,sender_id,created_at,read_at").eq("conversation_id", id).order("created_at").limit(500),
-    conv.listing_id ? db().from("listings").select(CARD_SELECT).eq("id", conv.listing_id).maybeSingle() : Promise.resolve({ data: null }),
+    activeListingId ? db().from("listings").select(CARD_SELECT).eq("id", activeListingId).maybeSingle() : Promise.resolve({ data: null }),
   ]);
   await db().from("messages").update({ read_at: new Date().toISOString() }).eq("conversation_id", id).neq("sender_id", me).is("read_at", null);
   return {
     id,
     other: person(conv.user_a === me ? conv.b : conv.a, true),
     listing: listingRes.data ? mapCard(listingRes.data) : null,
-    deal: conv.tx
+    deal: activeTx
       ? {
-          id: conv.tx.id,
-          amount: conv.tx.amount,
-          stage: conv.tx.stage,
-          kind: conv.tx.kind,
-          handoverScheduledAt: conv.tx.handover_scheduled_at ?? null,
-          handoverStatus: conv.tx.handover_status ?? "proposed",
-          handoverProposedBy: conv.tx.handover_proposed_by ?? null,
-          deliveryOtp: conv.tx.buyer_id === me ? (conv.tx.delivery_otp_plain ?? null) : null,
-          returnOtp: conv.tx.buyer_id === me ? (conv.tx.return_otp_plain ?? null) : null,
-          isBuyer: conv.tx.buyer_id === me,
+          id: activeTx.id,
+          amount: activeTx.amount,
+          stage: activeTx.stage,
+          kind: activeTx.kind,
+          handoverScheduledAt: activeTx.handover_scheduled_at ?? null,
+          handoverStatus: activeTx.handover_status ?? "proposed",
+          handoverProposedBy: activeTx.handover_proposed_by ?? null,
+          deliveryOtp: activeTx.buyer_id === me ? (activeTx.delivery_otp_plain ?? null) : null,
+          returnOtp: activeTx.buyer_id === me ? (activeTx.return_otp_plain ?? null) : null,
+          isBuyer: activeTx.buyer_id === me,
         }
       : null,
     messages: (msgs ?? []).map((m: any) => ({

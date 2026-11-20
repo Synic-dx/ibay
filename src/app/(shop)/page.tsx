@@ -16,6 +16,7 @@ import { EndingBoard } from "@/features/home/ending-board";
 import { CategoryPic } from "@/features/home/category-pic";
 import { MomentRail } from "@/features/home/moment-rail";
 import { ProductRail } from "@/features/home/product-rail";
+import { RequestRail } from "@/features/home/request-rail";
 import { ProductCard } from "@/features/listings/components/product-card";
 import { canSeeDrop, visibleCatalogue } from "@/features/listings/queries";
 import { getCategories, getCollections, getLiveItems, inCollection } from "@/features/shell/queries";
@@ -159,46 +160,7 @@ export default async function HomePage() {
         <ProductRail icon="book" title="Novels, comics & manga" sub="Buy or rent by the week" items={act.filter((l) => l.categoryId === "reads")} more="/browse?cat=reads" />
         <ProductRail icon="repeat" title="Rent, don't buy" sub="Coolers, calculators, speakers, suits" items={rent} more="/browse?modes=rent" />
 
-        {requests.length > 0 && (
-          <section className="sec">
-            <div className="sh">
-              <h2>
-                <Icon name="list" />
-                People are looking for
-              </h2>
-              <RequestLink href="/requests" className="">
-                All
-                <Icon name="chev" />
-              </RequestLink>
-            </div>
-            <div className="hrail reqrail" style={{ gridAutoColumns: "78%" }}>
-              {requests.slice(0, 4).map((r) => {
-                const off = r.neededBy ? dayOffsetOf(r.neededBy) : null;
-                return (
-                  <RequestLink key={r.id} href={`/requests/${r.id}`} className="panel pad stack" style={{ gap: 6, textAlign: "left" }}>
-                    <div className="row xs faint">
-                      <Avatar name={r.author.name} url={r.author.avatarUrl} color={r.author.avatarColor} size={20} />
-                      {r.author.name.split(" ")[0]} · {r.author.hostel}
-                    </div>
-                    <b style={{ fontSize: 14 }}>&quot;{r.text}&quot;</b>
-                    <div className="row" style={{ gap: 6, flexWrap: "wrap" }}>
-                      {off != null && (
-                        <span className={`badge ${off <= 2 ? "b-drop" : "b-neutral"}`}>
-                          <Icon name="cal" />
-                          By {dayLabel(off, true)}
-                        </span>
-                      )}
-                      <span className="faint xs">{r.budget}</span>
-                    </div>
-                    <span className="sm" style={{ color: "var(--brand-ink)", fontWeight: 600 }}>
-                      I have this ›
-                    </span>
-                  </RequestLink>
-                );
-              })}
-            </div>
-          </section>
-        )}
+        <RequestRail requests={requests.slice(0, 8)} />
 
         <section className="sec">
           <div className="sh">

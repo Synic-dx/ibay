@@ -15,10 +15,17 @@ import { ReportButton } from "@/features/admin/report-sheet";
 
 export const metadata: Metadata = { title: "Chat" };
 
-export default async function ThreadPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ThreadPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ id: string }>;
+  searchParams?: Promise<{ deal?: string }>;
+}) {
   const { id } = await params;
+  const { deal } = (await searchParams) ?? {};
   const viewer = await requireViewer(`/messages/${id}`);
-  const t = await getThread(id, viewer.id);
+  const t = await getThread(id, viewer.id, deal);
   if (!t) notFound();
   return (
     <>

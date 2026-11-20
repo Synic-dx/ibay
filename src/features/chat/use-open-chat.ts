@@ -47,7 +47,7 @@ export function useOpenChat() {
   const [pending, start] = useTransition();
 
   const open = useCallback(
-    (otherId: string, listingId?: string | null, prefill?: string, meta?: OpenChatMeta) => {
+    (otherId: string, listingId?: string | null, prefill?: string, meta?: OpenChatMeta, transactionId?: string | null) => {
       if (!viewer) return openAuth({ reason: "Sign in to chat with sellers" });
 
       // Optimistic dock open on desktop: show window immediately in loading/skeleton state
@@ -60,7 +60,7 @@ export function useOpenChat() {
       }
 
       start(async () => {
-        const r = await openChat(otherId, listingId, prefill);
+        const r = await openChat(otherId, listingId, prefill, transactionId);
         if (!r.ok) {
           if (typeof window !== "undefined" && window.innerWidth >= 1080) {
             window.dispatchEvent(new CustomEvent<OpenChatDetail>(OPEN_CHAT_EVENT, { detail: { id: null } }));
@@ -80,7 +80,14 @@ export function useOpenChat() {
             })
           );
         } else {
-          router.push(`/messages/${r.data.id}`);
+          const targetUrl = `/messages/${r.data.id}${transactionId ? `?deal=${transactionId}` : ""}`;
+          try {
+            router.push(targetUrl);
+          } catch {
+            if (typeof window !== "undefined") {
+              window.location.assign(targetUrl);
+            }
+          }
         }
       });
     },

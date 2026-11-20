@@ -85,10 +85,17 @@ export function HeroCarousel() {
               </span>
             </div>
             <div className="pics">
-              {h.pics.map((p) => (
+              {h.pics.map((p, pIdx) => (
                 <div key={p}>
                   {/* eslint-disable-next-line @next/next/no-img-element -- decorative local images */}
-                  <img src={p} alt="" className={h.cover ? "" : "fit"} decoding="async" />
+                  <img
+                    src={p}
+                    alt=""
+                    className={h.cover ? "" : "fit"}
+                    decoding="async"
+                    loading={i === 0 && pIdx === 0 ? "eager" : "lazy"}
+                    fetchPriority={i === 0 && pIdx === 0 ? "high" : "auto"}
+                  />
                 </div>
               ))}
             </div>

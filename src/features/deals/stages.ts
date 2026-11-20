@@ -22,6 +22,7 @@ export type Deal = {
   otpLockedUntil?: string | null;
   other: { id: string; name: string; plume: number; ratedDeals: number; hostel: string };
   myRating: { score: number; editableUntil: string; reason: string; tags: string[] } | null;
+  conversationId?: string | null;
 };
 
 /** Step names for a deal kind. */

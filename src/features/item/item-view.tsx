@@ -28,6 +28,7 @@ import { DeleteDialog } from "@/features/listings/delete-dialog";
 import { setPaused, relistListing } from "@/features/listings/actions/update";
 import { toggleSave } from "@/features/listings/actions/save";
 import { claimDrop } from "@/features/drops/actions";
+import { triggerHaptic } from "@/lib/haptics";
 import { useOpenChat } from "@/features/chat/use-open-chat";
 import { DatesSheet, HoursSheet } from "@/features/rentals/booking-sheets";
 import { ReportButton } from "@/features/admin/report-sheet";
@@ -35,6 +36,7 @@ import { BidSheet, BuySheet, CloseAuctionSheet, OfferSheet, SoldSheet } from "./
 import { AuctionLive, useAuctionLive } from "@/features/auctions/auction-live";
 import PickupSnippet from "@/features/map/components/pickup-snippet";
 import { findNearestResidence, getResidenceCoordinates, calculateDistanceMeters } from "@/features/map/proximity";
+import { Lightbox } from "@/components/ui/lightbox";
 import type { ListingCard, ListingDetail } from "@/features/listings/types";
 
 export type Review = { id: string; score: number; reason: string; tags: string[]; raterName: string; createdAt: string };
@@ -87,6 +89,7 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
   const [sheet, setSheet] = useState<SheetKey>((["bid", "buy", "offer", "dates", "hours", "close", "sold"].includes(initialSheet ?? "") ? initialSheet : null) as SheetKey);
   const [saved, setSaved] = useState(l.saved);
   const [slide, setSlide] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const [pending, start] = useTransition();
   const trackRef = useRef<HTMLDivElement>(null);
   const mine = viewer?.id === l.seller.id;
@@ -145,18 +148,20 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
   }, [l.id, l.mode, router]);
 
   const gate = (reason: string, fn: () => void) => () => (viewer ? fn() : openAuth({ reason, next: `/item/${l.id}` }));
-  const heart = gate("Sign in to save items and get price drop alerts", () =>
+  const heart = gate("Sign in to save items and get price drop alerts", () => {
+    triggerHaptic("light");
     start(async () => {
       setSaved(!saved);
       const r = await toggleSave(l.id);
       if (r.ok) toast(r.message);
       else setSaved(saved);
-    }),
-  );
+    });
+  });
   const claim = gate("Sign in to claim this food drop", () =>
     start(async () => {
       const r = await claimDrop(l.id);
       if (!r.ok) return void toast.error(r.formError);
+      triggerHaptic("success");
       toast(r.message);
       router.push(r.data.conversationId ? `/messages/${r.data.conversationId}` : "/deals");
     }),
@@ -246,7 +251,13 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
       )
     ) : (
       <button type="button" className="btn block" disabled>
-        {l.status === "deleted" ? "This listing was deleted" : "No longer available"}
+        {l.status === "claimed"
+          ? "Claimed by someone else"
+          : l.status === "sold"
+          ? "Sold"
+          : l.status === "deleted"
+          ? "This listing was deleted"
+          : "No longer available"}
       </button>
     );
   } else if (mine) {
@@ -378,7 +389,13 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
                 aria-label="Photos"
               >
                 {slides.map(({ p, zoom }, i) => (
-                  <div className="gslide" key={i}>
+                  <div
+                    className="gslide"
+                    key={i}
+                    onClick={() => p && setLightboxOpen(true)}
+                    style={{ cursor: p ? "zoom-in" : "default" }}
+                    title={p ? "Click to view fullscreen photo" : undefined}
+                  >
                     {p ? (
                       // eslint-disable-next-line @next/next/no-img-element -- gallery photo, object-fit handled in CSS
                       <img src={p.url} alt={i === 0 ? l.title : ""} className={p.fit === "cover" ? "cover" : ""} style={zoom ? { transform: zoom } : undefined} decoding="async" />
@@ -802,6 +819,15 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
           <SoldSheet open={sheet === "sold"} onOpenChange={(o) => setSheet(o ? "sold" : null)} l={l} chatters={chatters} />
         </>
       )}
+
+      <Lightbox
+        open={lightboxOpen}
+        images={slides.map((s) => s.p?.url).filter(Boolean) as string[]}
+        currentIndex={slide}
+        alt={l.title}
+        onClose={() => setLightboxOpen(false)}
+        onIndexChange={setSlide}
+      />
     </>
   );
 }

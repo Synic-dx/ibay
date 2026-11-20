@@ -243,3 +243,349 @@ html[data-nav="busy"] main { opacity: .55; }
 .actbar .btn.actbid { flex: none; padding: 0 18px; white-space: nowrap; }
 /* Phone bottom bar: solid, so page text never shows through and looks overlapped. */
 @media (max-width: 1079px) { .actbar { background: var(--surface); } }
+
+/* ==========================================================================
+   Speed & UI/UX Delight: Search Autocomplete, Lightbox, Card Micro-Interactions
+   ========================================================================== */
+
+/* Search Autocomplete Dropdown */
+.dsearch-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  background: var(--surface);
+  border-radius: 18px;
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.28), 0 0 0 1px var(--line);
+  padding: 12px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: slideDown .16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.dsearch-sec { display: flex; flex-direction: column; gap: 4px; }
+.dsearch-sec-title {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 6px;
+}
+.dsearch-items { display: flex; flex-direction: column; gap: 2px; }
+.dsearch-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 12px;
+  text-align: left;
+  font-size: 13.5px;
+  color: var(--ink);
+  transition: background .12s ease;
+  cursor: pointer;
+}
+.dsearch-item:hover, .dsearch-item:focus-visible {
+  background: var(--sunken);
+  outline: none;
+}
+.dsearch-item.highlight {
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+}
+.dsearch-item.highlight:hover {
+  background: var(--brand-soft);
+  filter: brightness(0.96);
+}
+.dsearch-ic { color: var(--brand-ink); flex: none; }
+.dsearch-arrow { margin-left: auto; color: var(--ink-3); opacity: 0.7; }
+.dsearch-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 2px 4px;
+}
+.dsearch-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: var(--sunken);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--ink-2);
+  transition: all .14s ease;
+  cursor: pointer;
+}
+.dsearch-chip:hover {
+  background: var(--line);
+  color: var(--ink);
+  transform: translateY(-1px);
+}
+.dsearch-chip.pop {
+  background: rgba(31, 201, 178, 0.09);
+  color: var(--brand-ink);
+  box-shadow: inset 0 0 0 1px rgba(31, 201, 178, 0.22);
+}
+.dsearch-chip.pop:hover {
+  background: rgba(31, 201, 178, 0.18);
+}
+
+/* Card Micro-interactions: Photo Zoom & Heart Pop */
+.pc {
+  transition: transform .22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow .22s ease;
+  will-change: transform;
+}
+.pc .ph { overflow: hidden; border-radius: inherit; }
+.pc .ph img {
+  transition: transform .3s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+.pc:hover .ph img {
+  transform: scale(1.035);
+}
+@keyframes heartPop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.35); }
+  65% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+.fbtn.on .icon, .hbtn.on .icon {
+  animation: heartPop .32s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Fullscreen Image Lightbox */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: lbFadeIn .18s ease-out;
+}
+@keyframes lbFadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+.lightbox-topbar {
+  position: absolute;
+  top: 16px;
+  left: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+}
+.lightbox-counter {
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-family: var(--font-jetbrains), monospace;
+}
+.lightbox-close {
+  width: 42px;
+  height: 42px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+.lightbox-viewport {
+  max-width: min(92vw, 1100px);
+  max-height: min(84vh, 850px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-img {
+  max-width: 100%;
+  max-height: 84vh;
+  object-fit: contain;
+  border-radius: 16px;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7);
+  animation: lbZoomIn .22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes lbZoomIn {
+  from { transform: scale(0.94); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.lightbox-nav {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+.lightbox-nav-btn {
+  pointer-events: auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all .15s ease;
+}
+.lightbox-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.32);
+  transform: scale(1.08);
+}
+@media (max-width: 768px) {
+  .lightbox-nav-btn { width: 38px; height: 38px; }
+}
+
+/* Dark Mode Calibration: Deep OLED Contrast */
+[data-theme=dark] .dsearch-dropdown {
+  background: #0f1416;
+  box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+[data-theme=dark] .dsearch-item:hover {
+  background: #182023;
+}
+[data-theme=dark] .dsearch-chip {
+  background: #182023;
+  color: var(--ink-2);
+}
+[data-theme=dark] .dsearch-chip:hover {
+  background: #222c30;
+  color: #fff;
+}
+
+/* Zero-Search Request Fallback Card */
+.empty-search-card {
+  background: var(--surface);
+  border-radius: 24px;
+  padding: 36px 24px;
+  text-align: center;
+  box-shadow: var(--shr);
+  border: 1px solid var(--line);
+  max-width: 540px;
+  margin: 32px auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.empty-search-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--brand-soft);
+  color: var(--brand-ink);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+.empty-search-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.empty-search-card p {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.5;
+  max-width: 440px;
+}
+
+/* "People are looking for" Request Rail Responsive Sizing */
+.hrail.reqrail {
+  grid-auto-flow: column;
+  /* Mobile: 1 card with peak preview of next (~80vw) */
+  grid-auto-columns: min(82vw, 320px);
+  gap: 14px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 6px 4px 18px;
+  margin: 0 -4px;
+  scrollbar-width: none;
+}
+.hrail.reqrail::-webkit-scrollbar {
+  display: none;
+}
+
+/* Tablet (2 at once view) */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .hrail.reqrail {
+    grid-auto-columns: calc((100% - 14px) / 2);
+  }
+}
+
+/* Desktop (2-3 at once view) */
+@media (min-width: 1024px) {
+  .hrail.reqrail {
+    grid-auto-columns: clamp(300px, calc((100% - 28px) / 3), 390px);
+  }
+}
+
+.req-card {
+  display: flex !important;
+  flex-direction: column;
+  justifyContent: space-between;
+  min-height: 136px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shr);
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.16s ease, border-color 0.16s ease;
+  scroll-snap-align: start;
+  text-decoration: none;
+}
+.req-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shg);
+  border-color: var(--line-strong, var(--brand-soft));
+}
+.req-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  line-height: 1.45;
+  color: var(--ink);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 4px 0;
+}
+.req-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--brand-ink);
+  transition: gap 0.15s ease;
+}
+.req-card:hover .req-cta {
+  gap: 7px;
+}

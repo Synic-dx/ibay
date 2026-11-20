@@ -40,10 +40,12 @@ const mono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: { default: "i-bay · IIM Indore campus marketplace", template: "%s · i-bay" },
   description: "Buy, rent, bid and grab food drops from people in your own hostel. Only for @iimidr.ac.in accounts.",
-  icons: {
-    icon: [{ url: "/icon.svg", type: "image/svg+xml" }],
-    shortcut: "/icon.svg",
-    apple: [{ url: "/icon.svg" }],
+  icons: { icon: "/icon.svg", apple: "/icon.svg" },
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "i-bay",
   },
 };
 

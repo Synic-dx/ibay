@@ -4,7 +4,7 @@
  *       pages that show listings after a change.
  */
 import "server-only";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag, updateTag } from "next/cache";
 import { NO_VALUE_CHECK, type ListingData } from "@/lib/validation/listing";
 
 /** "2025-03" -> "2025-03-01". */
@@ -54,12 +54,23 @@ export function columnsFor(d: ListingData) {
   };
 }
 
-/** Refreshes every page that lists listings (home, browse, My listings, the item). */
+/** Refreshes every page that lists listings (home, browse, My listings, the item, deals, profile). */
 export function refreshListingPages(id?: string) {
+  try {
+    if (typeof updateTag === "function") {
+      updateTag("listings");
+    } else {
+      revalidateTag("listings", { expire: 0 });
+    }
+  } catch {
+    // Gracefully handle in non-cache or test mock environments
+  }
   revalidatePath("/");
   revalidatePath("/browse");
   revalidatePath("/map");
   revalidatePath("/my-listings");
+  revalidatePath("/deals");
+  revalidatePath("/you");
   revalidatePath("/saved");
   if (id) {
     revalidatePath(`/item/${id}`);

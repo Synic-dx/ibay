@@ -179,11 +179,30 @@ function RateSheet({ d, onClose }: { d: Deal; onClose: () => void }) {
   );
 }
 
-export function DealsView({ deals, tab }: { deals: Deal[]; tab: string }) {
+export function DealsView({
+  deals,
+  tab,
+  initialVerifyDealId,
+}: {
+  deals: Deal[];
+  tab: string;
+  initialVerifyDealId?: string;
+}) {
   const { viewer } = useApp();
   const { open: openChat } = useOpenChat();
   const [handover, setHandover] = useState<Deal | null>(null);
-  const [otpModal, setOtpModal] = useState<{ deal: Deal; step: "pickup" | "return" } | null>(null);
+  const [otpModal, setOtpModal] = useState<{ deal: Deal; step: "pickup" | "return" } | null>(() => {
+    if (initialVerifyDealId) {
+      const target = deals.find((d) => d.id === initialVerifyDealId && d.role === "seller");
+      if (target) {
+        return {
+          deal: target,
+          step: target.kind === "rental" && target.stage === 1 ? "return" : "pickup",
+        };
+      }
+    }
+    return null;
+  });
   const [rate, setRate] = useState<Deal | null>(null);
   const tabs = { all: deals, buying: deals.filter((d) => d.role === "buyer"), selling: deals.filter((d) => d.role === "seller") };
   const list = tabs[(tab as keyof typeof tabs) in tabs ? (tab as keyof typeof tabs) : "all"];
@@ -218,14 +237,22 @@ export function DealsView({ deals, tab }: { deals: Deal[]; tab: string }) {
                   <br />
                   <span className="xs faint">{ago(d.createdAt)}</span>
                 </div>
-                <button
-                  type="button"
+                <Link
+                  href={d.conversationId ? `/messages/${d.conversationId}?deal=${d.id}` : "/messages"}
                   className="ib"
-                  onClick={() => openChat(d.other.id, d.listing.id, undefined, { other: d.other, listing: d.listing })}
                   aria-label={`Chat with ${d.other.name}`}
+                  onClick={(e) => {
+                    if (typeof window !== "undefined" && window.innerWidth >= 1080) {
+                      e.preventDefault();
+                      openChat(d.other.id, d.listing.id, undefined, { other: d.other, listing: d.listing }, d.id);
+                    } else if (!d.conversationId) {
+                      e.preventDefault();
+                      openChat(d.other.id, d.listing.id, undefined, { other: d.other, listing: d.listing }, d.id);
+                    }
+                  }}
                 >
                   <Icon name="chat" />
-                </button>
+                </Link>
               </div>
               <ol className="steps" aria-label="Deal progress">
                 {st.map((s, i) => {

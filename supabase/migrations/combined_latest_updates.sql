@@ -169,6 +169,8 @@ BEGIN
 
   IF v_step_name = 'Returned' THEN
     UPDATE public.rental_bookings SET status = 'completed' WHERE transaction_id = p_tx;
+  ELSIF v_step_name = 'Handed over' AND t.kind = 'sale' THEN
+    UPDATE public.listings SET status = 'sold' WHERE id = t.listing_id AND status = 'active';
   END IF;
 
   RETURN t.stage + 1;

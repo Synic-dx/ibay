@@ -15,6 +15,7 @@ import { friendlyDbError } from "@/lib/db-errors";
 import { fmt } from "@/lib/format";
 import { ratingSchema, type RatingInput } from "@/lib/validation/market";
 import { notify, startConversation } from "@/features/chat/service";
+import { refreshListingPages } from "@/features/listings/actions/shared";
 import { formatHandoverSchedule } from "./scheduling";
 import { generateOtp, hashOtp } from "./otp-crypto";
 export { generateOtp, hashOtp };
@@ -100,6 +101,10 @@ export async function requestBuy(
     conv ? `/messages/${conv}` : "/deals"
   );
   revalidatePath("/deals");
+  revalidatePath("/messages");
+  revalidatePath("/my-listings");
+  revalidatePath("/you");
+  refreshListingPages(l.id);
   return ok({ conversationId: conv }, "Request sent");
 }
 
@@ -198,9 +203,18 @@ export async function advanceDeal(txId: string, photos: boolean, money: boolean)
   if (!z.uuid().safeParse(txId).success) return fail("Deal not found.");
   const { data, error } = await db().rpc("advance_deal", { p_tx: txId, p_actor: viewer.id, p_photos: photos, p_money: money });
   if (error) return fail(friendlyDbError(error).message);
-  const { data: t } = await db().from("transactions").select("buyer_id,seller_id").eq("id", txId).single();
-  if (t) await notify(t.buyer_id === viewer.id ? t.seller_id : t.buyer_id, "deal", "check", `${viewer.name.split(" ")[0]} confirmed the handover. You can rate the deal now.`, "/deals");
+  const { data: t } = await db().from("transactions").select("buyer_id,seller_id,listing_id,kind").eq("id", txId).single();
+  if (t) {
+    if (t.kind === "sale" && Number(data) >= 1) {
+      await db().from("listings").update({ status: "sold" }).eq("id", t.listing_id);
+      refreshListingPages(t.listing_id);
+    }
+    await notify(t.buyer_id === viewer.id ? t.seller_id : t.buyer_id, "deal", "check", `${viewer.name.split(" ")[0]} confirmed the handover. You can rate the deal now.`, "/deals");
+  }
   revalidatePath("/deals");
+  revalidatePath("/messages");
+  revalidatePath("/my-listings");
+  revalidatePath("/you");
   return ok({ stage: data as number }, "Confirmed");
 }
 
@@ -347,11 +361,16 @@ export async function verifyHandoverOtp(
 
   const { data: t } = await db()
     .from("transactions")
-    .select("buyer_id, seller_id, kind")
+    .select("buyer_id, seller_id, kind, listing_id")
     .eq("id", txId)
     .single();
 
   if (t) {
+    // When a sale is handed over, update the listing status to sold so it no longer shows as selling!
+    if (t.kind === "sale" && step === "pickup") {
+      await db().from("listings").update({ status: "sold" }).eq("id", t.listing_id);
+      refreshListingPages(t.listing_id);
+    }
     const isReturn = step === "return";
     const notifyMsg = isReturn
       ? `${viewer.name.split(" ")[0]} verified the return OTP. Rental complete. You can rate the deal now.`
@@ -362,6 +381,11 @@ export async function verifyHandoverOtp(
 
   revalidatePath("/deals");
   revalidatePath("/messages");
+  revalidatePath("/my-listings");
+  revalidatePath("/you");
+  if (t?.listing_id) {
+    refreshListingPages(t.listing_id);
+  }
   return ok({ stage: newStage, step }, step === "return" ? "Return verified" : "Handover verified");
 }
 
