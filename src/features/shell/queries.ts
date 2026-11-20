@@ -70,7 +70,7 @@ export const getLiveItems = cache(async (viewer: Viewer | null): Promise<LiveIte
     .order("ends_at")
     .limit(60);
   const cards = (data ?? []).filter((r) => !r.seller?.banned).map((r) => mapCard(r));
-  const allD = cards.filter((c) => c.mode === "drop" && c.seller.id !== viewer?.id);
+  const allD = cards.filter((c) => c.mode === "drop");
   return {
     drops: viewer ? allD.filter((c) => c.pickupHostel === viewer.hostel) : [],
     auctions: cards.filter((c) => c.mode === "auction"),
