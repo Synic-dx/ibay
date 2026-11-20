@@ -195,7 +195,7 @@ const fetchRawActiveListings = unstable_cache(
       .eq("status", "active")
       .is("deleted_at", null)
       .order("created_at", { ascending: false })
-      .limit(150);
+      .limit(500);
     return data ?? [];
   },
   ["raw-active-listings-cache"],
