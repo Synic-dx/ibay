@@ -15,7 +15,6 @@ import { friendlyDbError } from "@/lib/db-errors";
 import { fmt, nextBid } from "@/lib/format";
 import { bidSchema } from "@/lib/validation/market";
 import { rateLimit } from "@/lib/security/guard";
-import { sendNoticeEmail } from "@/lib/email";
 import { ping, pingListing, startConversation } from "@/features/chat/service";
 import { generateOtp, hashOtp } from "@/features/deals/actions";
 import { refreshListingPages } from "@/features/listings/actions/shared";
@@ -40,14 +39,8 @@ export async function placeBid(listingId: string, amount: number | string): Prom
   const { data, error } = await db().rpc("place_bid", { p_listing: listingId, p_bidder: viewer.id, p_amount: parsed.data.amount });
   if (error) return fail(friendlyDbError(error).message, { amount: friendlyDbError(error).message });
   const res = data as { amount: number; extended: boolean; outbid_user: string | null };
-  // 4. Tell the person who was outbid (bell + email if they allow it) and the seller.
-  if (res.outbid_user) {
-    await ping([res.outbid_user], "bid");
-    const { data: o } = await db().from("profiles").select("email,notify_prefs").eq("id", res.outbid_user).single();
-    if (o && o.notify_prefs?.email !== false && o.notify_prefs?.outbid !== false) {
-      await sendNoticeEmail(o.email, `You were outbid on ${l.title}`, `Someone bid ${fmt(res.amount)} on ${l.title}. Bid again before the timer runs out.`, `/item/${listingId}`);
-    }
-  }
+  // 4. Tell the person who was outbid and the seller (in the app only, no email).
+  if (res.outbid_user) await ping([res.outbid_user], "bid");
   await ping([l.seller_id], "bid");
   refreshListingPages(listingId);
   await pingListing(listingId);
