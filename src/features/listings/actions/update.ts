@@ -21,7 +21,7 @@ import { friendlyDbError } from "@/lib/db-errors";
 import { fmt } from "@/lib/format";
 import { verifyPhotos } from "@/lib/uploads";
 import { listingSchema, quickPriceSchema, type ListingInput } from "@/lib/validation/listing";
-import { notify, startConversation } from "@/features/chat/service";
+import { notify, startConversation, pingListing } from "@/features/chat/service";
 import { generateOtp, hashOtp } from "@/features/deals/actions";
 import { findNearestResidence } from "@/features/map/proximity";
 import { columnsFor, refreshListingPages } from "./shared";
@@ -233,6 +233,7 @@ export async function closeAuction(id: string, bidId: string | null): Promise<Ac
     if (b) conv = await startConversation(viewer.id, b.bidder_id, id, `Hi! You won "${l?.title}" at ${fmt(b.amount)}. When can you pick it up?`, tx as string);
   }
   refreshListingPages(id);
+  await pingListing(id);
   return ok({ conversationId: conv }, bidId ? "Sold. We opened a chat with the buyer." : "Auction ended without a sale");
 }
 

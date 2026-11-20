@@ -236,7 +236,7 @@ export async function getListingDetail(id: string, viewer: Viewer | null): Promi
   }
 
   const [{ data: bids }, bookings, bundleItems, partOf] = await Promise.all([
-    db().from("bids").select("id,amount,created_at,bidder:profiles(id,name)").eq("listing_id", id).order("amount", { ascending: false }).limit(20),
+    db().from("bids").select("id,amount,created_at,bidder:profiles(id,name)").eq("listing_id", id).order("amount", { ascending: false }).limit(500),
     card.mode === "rent" ? upcomingBookings([id]) : Promise.resolve(new Map()),
     (row.bundle_items as string[] | null)?.length ? cardsByIds(row.bundle_items as string[], viewer?.id) : Promise.resolve([]),
     db().from("listings").select(CARD_SELECT).contains("bundle_items", [id]).eq("status", "active").is("deleted_at", null).limit(1),

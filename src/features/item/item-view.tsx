@@ -8,7 +8,8 @@
  *       Owners get Edit / Pause / Delete instead of buying.
  *       Below: seller card, quick questions, bundles, edit history, details,
  *       description, reviews and similar items. Phones get a sticky action bar.
- * LIVE: auctions refresh instantly when anyone bids (Supabase Realtime).
+ * LIVE: auctions refresh instantly when anyone bids (Supabase Realtime + a broadcast
+ *       from the server), show where you stand and the full bid history.
  */
 import Link from "@/components/ui/link";
 import { useRouter } from "next/navigation";
@@ -31,6 +32,7 @@ import { useOpenChat } from "@/features/chat/use-open-chat";
 import { DatesSheet, HoursSheet } from "@/features/rentals/booking-sheets";
 import { ReportButton } from "@/features/admin/report-sheet";
 import { BidSheet, BuySheet, CloseAuctionSheet, OfferSheet, SoldSheet } from "./sheets";
+import { AuctionLive, useAuctionLive } from "@/features/auctions/auction-live";
 import PickupSnippet from "@/features/map/components/pickup-snippet";
 import { findNearestResidence, getResidenceCoordinates, calculateDistanceMeters } from "@/features/map/proximity";
 import type { ListingCard, ListingDetail } from "@/features/listings/types";
@@ -126,13 +128,15 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
   const available = l.status === "active" || (mine && l.status === "paused");
   const m = ageMonths(l.purchasedOn);
 
-  // Live auctions and timers: refresh when a bid lands or the listing changes.
+  // Live auctions: new bids, your standing and toasts (features/auctions/auction-live.tsx).
+  useAuctionLive({ listingId: l.id, enabled: l.mode === "auction", active: l.status === "active", bids: l.bids, viewerId: viewer?.id });
+
+  // Food drops: refresh when the drop is claimed or changes.
   useEffect(() => {
     const sb = browserClient();
-    if (!sb || (l.mode !== "auction" && l.mode !== "drop")) return;
+    if (!sb || l.mode !== "drop") return;
     const ch = sb
       .channel(`listing-${l.id}`)
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "bids", filter: `listing_id=eq.${l.id}` }, () => router.refresh())
       .on("postgres_changes", { event: "UPDATE", schema: "public", table: "listings", filter: `id=eq.${l.id}` }, () => router.refresh())
       .subscribe();
     return () => {
@@ -544,6 +548,10 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
               </div>
             )}
 
+            {l.mode === "auction" && (
+              <AuctionLive bids={l.bids} viewerId={viewer?.id} sellerId={s.id} onBid={available && !mine ? gate("Sign in to bid", () => setSheet("bid")) : undefined} />
+            )}
+
             <Link className="panel sellerc" href={`/u/${s.id}`}>
               <Avatar name={s.name} url={s.avatarUrl} color={s.avatarColor} size={46} />
               <span style={{ flex: 1, minWidth: 0 }}>
@@ -765,10 +773,17 @@ export function ItemView({ l, similar, typical, reviews, reviewCount, categorySh
                     {l.mode === "rent" ? `${fmt(l.price)}/${unitShort(l.rentUnit)}` : l.price === 0 ? "Free" : fmt(l.price)}
                   </b>
                   <span>
-                    {l.mode === "rent" ? "Pay the rent at pickup" : l.mode === "auction" && l.endsAt ? <><Countdown endsAt={l.endsAt} /> left</> : l.mode === "drop" ? "First to claim gets it" : "Just pick it up"}
+                    {l.mode === "rent" ? "Pay the rent at pickup" : l.mode === "auction" && l.bids[0]?.bidderId === viewer?.id ? <><Icon name="trophy" className="icon i12" /> You&apos;re the highest bidder</> : l.mode === "auction" && l.endsAt ? <><Countdown endsAt={l.endsAt} /> left · {l.bidCount} bid{l.bidCount === 1 ? "" : "s"}</> : l.mode === "drop" ? "First to claim gets it" : "Just pick it up"}
                   </span>
                 </div>
-                {primary}
+                {l.mode === "auction" ? (
+                  <button type="button" className="btn actbid" onClick={gate("Sign in to bid", () => setSheet("bid"))}>
+                    <Icon name="hammer" />
+                    Bid {fmt(nextBid(l.bidCount ? l.price : 0, l.reservePrice ?? l.price))}
+                  </button>
+                ) : (
+                  primary
+                )}
               </>
             )}
           </>

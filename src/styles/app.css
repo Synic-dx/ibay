@@ -222,3 +222,24 @@ html[data-nav="busy"] main { opacity: .55; }
 .photoadd .drop { width: 100%; text-align: left; font: inherit; color: inherit; }
 .photoadd .drop:disabled { opacity: .5; cursor: not-allowed; }
 @media (max-width: 360px) { .photoadd { grid-template-columns: 1fr; } }
+
+/* Live auction panel on the item page (features/auctions/auction-live.tsx). */
+.aucstat { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: flex-start; padding: 10px 12px; border-radius: 14px; font-size: 13px; line-height: 1.45; }
+.aucstat > .icon { flex: none; width: 18px; height: 18px; margin-top: 1px; }
+.aucstat > span { flex: 1; min-width: 0; }
+.aucstat.lead { background: var(--good-soft); color: var(--good); }
+.aucstat.out { background: var(--warn-soft); color: var(--warn-ink); }
+.aucstat.out .btn { margin-left: auto; }
+.aucstat.seller { background: var(--brand-soft); color: var(--brand-ink); }
+.bidlist { list-style: none; margin: 0; padding: 0; display: grid; }
+.bidlist li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; gap: 10px; align-items: center; padding: 8px 6px; border-top: 1px solid var(--line); }
+.bidlist li:first-child { border-top: 0; }
+.bidlist .who { display: flex; flex-direction: column; min-width: 0; }
+.bidlist .who b { font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bidlist .amt { font-variant-numeric: tabular-nums; font-size: 14.5px; }
+.bidlist li.top .amt { color: var(--brand-ink); }
+.bidlist li.you { background: var(--brand-soft); border-radius: 12px; border-top-color: transparent; }
+/* Phone bar: the bid button keeps its own width so the price and timer stay visible. */
+.actbar .btn.actbid { flex: none; padding: 0 18px; white-space: nowrap; }
+/* Phone bottom bar: solid, so page text never shows through and looks overlapped. */
+@media (max-width: 1079px) { .actbar { background: var(--surface); } }

@@ -61,6 +61,8 @@ export function BidSheet({ open, onOpenChange, l }: Base & { l: ListingDetail })
       setAmt("");
       onOpenChange(false);
       router.refresh();
+      // WHY: a live update from this same bid can race the first refresh; one more makes sure you see your bid.
+      setTimeout(() => router.refresh(), 1200);
     });
   const buy = () =>
     start(async () => {

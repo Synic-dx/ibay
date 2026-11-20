@@ -16,7 +16,7 @@ import { fmt, nextBid } from "@/lib/format";
 import { bidSchema } from "@/lib/validation/market";
 import { rateLimit } from "@/lib/security/guard";
 import { sendNoticeEmail } from "@/lib/email";
-import { ping, startConversation } from "@/features/chat/service";
+import { ping, pingListing, startConversation } from "@/features/chat/service";
 import { generateOtp, hashOtp } from "@/features/deals/actions";
 
 /**
@@ -49,6 +49,7 @@ export async function placeBid(listingId: string, amount: number | string): Prom
   }
   await ping([l.seller_id], "bid");
   revalidatePath(`/item/${listingId}`);
+  await pingListing(listingId);
   revalidatePath("/");
   return ok({ amount: res.amount, extended: res.extended }, res.extended ? "Bid placed. Timer extended by 2 minutes." : "Bid placed. You are the highest bidder.");
 }
@@ -74,6 +75,7 @@ export async function buyNow(listingId: string): Promise<ActionResult<{ conversa
   const { data: l } = await db().from("listings").select("seller_id,price").eq("id", listingId).single();
   const conv = l ? await startConversation(viewer.id, l.seller_id, listingId, `Hi! I used Buy it now at ${fmt(l.price)}. When can I pick it up?`, tx as string) : null;
   revalidatePath(`/item/${listingId}`);
+  await pingListing(listingId);
   revalidatePath("/");
   return ok({ conversationId: conv }, "It is yours. Arrange pickup in chat.");
 }

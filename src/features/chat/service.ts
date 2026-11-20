@@ -26,6 +26,20 @@ export async function ping(userIds: string[], kind: "message" | "notification" |
 }
 
 /**
+ * Tells everyone viewing an auction page that something changed (new bid,
+ * bought, ended). Content-free: their browser re-fetches the page.
+ * @param listingId the auction
+ */
+export async function pingListing(listingId: string): Promise<void> {
+  if (!env.supabaseUrl || !env.supabaseServiceKey) return;
+  await fetch(`${env.supabaseUrl}/realtime/v1/api/broadcast`, {
+    method: "POST",
+    headers: { apikey: env.supabaseServiceKey, Authorization: `Bearer ${env.supabaseServiceKey}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ messages: [{ topic: `listing-${listingId}`, event: "bid", payload: {} }] }),
+  }).catch(() => undefined);
+}
+
+/**
  * The thread between two people (created on first contact).
  * @param me the signed-in user (already authenticated by the caller)
  * @param other the person they are talking to
