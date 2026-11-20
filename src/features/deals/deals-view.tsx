@@ -237,14 +237,22 @@ export function DealsView({
                   <br />
                   <span className="xs faint">{ago(d.createdAt)}</span>
                 </div>
-                <button
-                  type="button"
+                <Link
+                  href={d.conversationId ? `/messages/${d.conversationId}?deal=${d.id}` : "/messages"}
                   className="ib"
-                  onClick={() => openChat(d.other.id, d.listing.id, undefined, { other: d.other, listing: d.listing })}
                   aria-label={`Chat with ${d.other.name}`}
+                  onClick={(e) => {
+                    if (typeof window !== "undefined" && window.innerWidth >= 1080) {
+                      e.preventDefault();
+                      openChat(d.other.id, d.listing.id, undefined, { other: d.other, listing: d.listing }, d.id);
+                    } else if (!d.conversationId) {
+                      e.preventDefault();
+                      openChat(d.other.id, d.listing.id, undefined, { other: d.other, listing: d.listing }, d.id);
+                    }
+                  }}
                 >
                   <Icon name="chat" />
-                </button>
+                </Link>
               </div>
               <ol className="steps" aria-label="Deal progress">
                 {st.map((s, i) => {
