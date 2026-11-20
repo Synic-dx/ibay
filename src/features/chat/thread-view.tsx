@@ -161,56 +161,58 @@ export function ThreadView({ initial, compact = false }: { initial: Thread; comp
         <div ref={end} />
       </div>
       <div className={compact ? "" : "composer"}>
-        <div className={`qr ${compact ? "dk-qr" : ""}`}>
-          {viewer?.hostel && t.other.hostel && (
-            <button
-              type="button"
-              style={{
-                background: "var(--brand-soft)",
-                color: "var(--brand-ink)",
-                fontWeight: 600,
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 5,
-              }}
-              onClick={() => setHalfwayOpen(true)}
-            >
-              <Icon name="compass" className="icon i14" />
-              Meet Halfway
+        <div className={compact ? "" : "composer-in"}>
+          <div className={`qr ${compact ? "dk-qr" : ""}`}>
+            {viewer?.hostel && t.other.hostel && (
+              <button
+                type="button"
+                style={{
+                  background: "var(--brand-soft)",
+                  color: "var(--brand-ink)",
+                  fontWeight: 600,
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 5,
+                }}
+                onClick={() => setHalfwayOpen(true)}
+              >
+                <Icon name="compass" className="icon i14" />
+                Meet Halfway
+              </button>
+            )}
+            {quick.slice(0, compact ? 2 : 3).map((q) => (
+              <button key={q} type="button" onClick={() => send(q)}>
+                {q}
+              </button>
+            ))}
+          </div>
+          <form
+            className={`cin ${compact ? "dk-cin" : ""}`}
+            onSubmit={(e) => {
+              e.preventDefault();
+              send();
+            }}
+          >
+            {t.listing && (
+              <button type="button" className="rb ofb" onClick={offer} aria-label="Send amount as an offer" title="Send as offer">
+                <Icon name="rupee" />
+              </button>
+            )}
+            <input
+              id={inputId}
+              name="message"
+              placeholder="Message, or an amount to offer…"
+              aria-label="Message"
+              autoComplete="off"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              maxLength={1000}
+            />
+            <button className="rb send" type="submit" aria-label="Send">
+              <Icon name="send" />
             </button>
-          )}
-          {quick.slice(0, compact ? 2 : 3).map((q) => (
-            <button key={q} type="button" onClick={() => send(q)}>
-              {q}
-            </button>
-          ))}
+          </form>
         </div>
-        <form
-          className={`cin ${compact ? "dk-cin" : ""}`}
-          onSubmit={(e) => {
-            e.preventDefault();
-            send();
-          }}
-        >
-          {t.listing && (
-            <button type="button" className="rb ofb" onClick={offer} aria-label="Send amount as an offer" title="Send as offer">
-              <Icon name="rupee" />
-            </button>
-          )}
-          <input
-            id={inputId}
-            name="message"
-            placeholder="Message, or an amount to offer…"
-            aria-label="Message"
-            autoComplete="off"
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-            maxLength={1000}
-          />
-          <button className="rb send" type="submit" aria-label="Send">
-            <Icon name="send" />
-          </button>
-        </form>
       </div>
 
       {halfwayOpen && viewer?.hostel && t.other.hostel && (

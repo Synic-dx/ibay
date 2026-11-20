@@ -44,7 +44,7 @@ export default async function ThreadPage({
         }
         actions={<ReportButton userId={t.other.id} label="Report this person" compact />}
       />
-      <main style={{ padding: "0 0 calc(150px + var(--safe-b))" }}>
+      <main className="chatpage" style={{ padding: "0 0 calc(150px + var(--safe-b))" }}>
         <ThreadView initial={t} />
       </main>
     </>

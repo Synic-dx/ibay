@@ -410,7 +410,8 @@ input[type=range]{width:100%;accent-color:var(--brand);height:28px}
 .msg.them{align-self:flex-start;background:var(--surface);box-shadow:var(--shr);border-bottom-left-radius:6px}
 .ofr{align-self:center;width:90%;border-radius:18px;padding:12px 14px;font-size:12.5px;display:flex;flex-direction:column;gap:6px;background:var(--surface);box-shadow:var(--shr)}
 .ofr b{font-size:18px}
-.composer{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateZ(0);-webkit-transform:translateX(-50%) translateZ(0);will-change:transform;width:min(100%,var(--col));z-index:45;background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--glass-edge);padding:8px 10px calc(8px + var(--safe-b))}
+.composer{position:fixed;bottom:0;left:0;right:0;width:100%;z-index:45;background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid var(--glass-edge);padding:8px 16px calc(12px + var(--safe-b));box-sizing:border-box}
+.composer-in,.composer .qr,.composer .cin{max-width:960px;width:100%;margin-left:auto;margin-right:auto;box-sizing:border-box}
 .qr{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:0 0 8px}
 .qr::-webkit-scrollbar{display:none}
 .qr button{white-space:nowrap;font-size:12.5px;padding:6px 12px;border-radius:999px;background:var(--surface);box-shadow:var(--shr);color:var(--ink-2)}
@@ -530,7 +531,7 @@ a.stat:active{transform:scale(.98)}
  :root{--col:1600px;--wmax:1600px;--gut:clamp(24px,3.8vw,64px)}
  #shell{max-width:none;background:var(--bg)}
  .dh-in{max-width:var(--wmax);margin:0 auto;padding:0 var(--gut)}
- main,#shell>.tb,.composer .qr,.msgs{max-width:var(--wmax);margin-left:auto;margin-right:auto}
+ main,#shell>.tb,.msgs{max-width:var(--wmax);margin-left:auto;margin-right:auto}
  main{padding:20px var(--gut) 48px}
  main.withbar{padding-bottom:48px}
  #shell>.tabbar,.tb.root,.tb .mthm,.tb .ib[aria-label="Open menu"],.fbtn.mthm{display:none!important}
@@ -588,8 +589,8 @@ a.stat:active{transform:scale(.98)}
  .buybox .actbar .btn:last-child{flex:1}
  .bbnote{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--ink-3);margin-top:10px}
  /* fixed bars and overlays sized to the content width */
- .actbar,.composer{width:min(var(--wmax),100vw)}
- .actbar{padding-left:var(--gut);padding-right:var(--gut)}
+ .actbar{width:min(var(--wmax),100vw);padding-left:var(--gut);padding-right:var(--gut)}
+ .composer{padding:10px clamp(16px,2.5vw,32px) calc(14px + var(--safe-b))}
  .sheet{top:50%;bottom:auto;transform:translate(-50%,-50%);width:min(560px,92vw);max-height:86dvh;border-radius:26px;animation:popc .22s cubic-bezier(.2,.9,.3,1)}
  .sheet.tall{height:min(720px,86dvh)}
  .sheet .grab{display:none}
@@ -608,7 +609,8 @@ a.stat:active{transform:scale(.98)}
  .dfabout>span{display:flex;gap:6px;align-items:center;color:#9FB6BA}
  .dfbot{display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,.1);padding:16px 0 22px;font-size:12px;color:#8FA6AA}
  /* thread page */
- .ctxbar,.dealbar{max-width:var(--wmax);margin:0 auto}
+ main.chatpage,#shell>.tb:has(+ main.chatpage){max-width:960px;margin-left:auto;margin-right:auto;width:100%}
+ .chatpage .ctxbar,.chatpage .dealbar{max-width:960px;margin:4px auto 8px;border-radius:14px}
 }
 @keyframes popc{from{opacity:0;transform:translate(-50%,-46%) scale(.97)}}
 @media (min-width:1080px){
